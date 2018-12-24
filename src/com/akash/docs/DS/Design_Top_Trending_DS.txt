@@ -1,0 +1,28 @@
+Given 2 parameters as input:
+Parameter 1: String Username
+Parameter 2: Array of String containing the keywords tweeted by the user.
+Function declaration: function tweet(username, keywords[]){};
+
+Example 1:
+tweet("User1",["love","dog"])
+tweet("User2",["cat"])
+tweet("User3",["walk","cat"])
+tweet("User2",["dog"])
+tweet("User3",["like","dog"])
+
+top trending keyword : Dog
+
+Example 2:
+tweet("User1",["Dog"])
+tweet("User1",["like","Dog"])
+tweet("User1",["love","Dog"])
+tweet("User1",["walk","Dog"])
+tweet("User1",["hate","Dog"])
+tweet("User2",["like","cat"])
+tweet("User3",["cat"])
+
+top trending keyword: cat
+
+explanation: Only consider the number of unique users who tweeted a particular keyword while calculating the top trending keyword.
+
+Follow up question: Given the timestamp of each tweet, design the data structure such that it is able to return the top trending keyword between a range of timestamps. Range can be of any granularity: Months, Days, hours, minutes, etc.
