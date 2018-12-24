@@ -1,0 +1,8 @@
+security Questions
+
+(Q) how https works , who encrypts data for https
+(Q) When to use spring security and when to use oauth
+(Q) What measures would you apply to secure a rest service over json
+(Q) How reverse indexing in lucene is better than indexing in DB
+(Q) When not to use hibernate with relational DB
+(Q) how to make rest service as https
