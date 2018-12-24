@@ -1,0 +1,228 @@
+Root WebApplicationContext
+Web WebApplicationContext
+
+
+(1) load Spring root WebApplicationContext
+	<context-param>
+		contextConfigLocation		-- configuration file
+	
+	ContextLoaderListener
+
+
+	
+(2)
+
+<servlet>
+	<servlet-name>dispatcher</servlet-name>
+	<servlet-class>
+		org.springframework.web.servlet.DispatcherServlet
+	</servlet-class>
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/dispatcher-config.xml</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>dispatcher</servlet-name>
+	<url-pattern>/</url-pattern>
+</servlet-mapping>
+ 
+ 
+public class MyWebAppInitializer implements WebApplicationInitializer {
+
+	@Override
+	public void onStartup(ServletContext container) {
+		XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+		appContext.setConfigLocation("/WEB-INF/spring/dispatcher-config.xml");
+
+		ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher", new DispatcherServlet(appContext));
+		dispatcher.setLoadOnStartup(1);
+		dispatcher.addMapping("/");
+	}
+}
+
+
+======================================================
+
+
+BeanFactory
+	|
+ApplicationContext	(event publication, resolving messages and internationalization)
+	|
+WebApplicationContext
+	|
+XmlWebApplicationContext
+
+
+InitializingBean
+DisposableBean
+BeanPostProcessor
+
+
+(3)
+<mvc:annotation-driven />													@EnableWebMvc
+
+<context:annotation-config/>
+	
+<context:component-scan base-package="com.akash"/>							@ComponentScan(basePackages = "com.akash")
+																		@Component, @Service @Controller  @Repository
+																		This will also include annotation-config
+																		
+<tx:annotation-driven transaction-manager="transactionManager"/>		@EnableTransactionManagement
+
+
+<mvc:interceptors> ... </mvc:interceptors>
+
+<mvc:resources mapping="/resources/**" location="classpath:JS/resources/" />
+
+<global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+
+																		@EnableGlobalMethodSecurity(prePostEnabled = true)
+
+
+-------------------------------------------------------------
+
+
+
+@Required
+@Autowired
+@Qualifier
+@Resourse
+@Value
+@Inject
+
+
+@Component, @Service @Controller  @Repository
+
+
+@Configuration
+@Bean
+
+@EnableWebMvc
+@ComponentScan
+
+@RequestMapping
+@RequestBody
+@ResponseBody
+@RestController
+@PathVariable
+
+
+@Transactional()
+
+	noRollbackFor = {}, 
+	noRollbackForClassName = {}, 
+	propagation = Propagation.REQUIRED,  REQUIRES_NEW
+	readOnly = false, 
+	rollbackFor = {}, 
+	isolation = Isolation.READ_COMMITTED
+	
+@RequestMapping(value = "/myAction1/{param1}")
+public @ResponseBody String myAction1( @PathVariable("param1") String param1) {
+	return "abc";
+}
+
+
+redirect
+	Get to Get
+	Get to Post		-- not allowed
+	Post to Post	-- not allowed
+	Post to Get
+forward
+	Get to Get
+	Get to Post		-- not allowed
+	Post to Post
+	Post to Get		-- not allowed
+	
+
+(Q) Diff bw filter and interceptors ?
+
+Servlet filter :
+	init()
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain chain)
+	destroy()
+	
+interceptors :
+	HandlerInterceptor
+		boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception;
+		
+		void postHandle(
+			HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+			throws Exception;
+			
+		void afterCompletion(
+			HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception;
+=>	
+filter is configured in web.xml
+interceptors are configured in application context xml
+
+=>
+interceptors
+	fine grained task are handled in interceptors, 
+	like taking out common code for views
+	adding some generic content to view
+	
+filter 
+	is good for request content handling or view content handling
+	gzip
+	authentication
+	
+	
+(Q) Diff bw @SessionAttributes vs HttpSession in Spring ?
+
+	ModelAttribute to HttpServletRequest
+	similarly
+	SessionAttributes to HttpSession
+	
+	A conversational state that is greater than request and less than session.
+	
+	https://www.intertech.com/Blog/understanding-spring-mvc-model-and-session-attributes/
+
+Spring scope :
+	singleton
+	prototype
+	request
+	session
+	application(servletContext)
+
+session bean in singleton :	
+AOP
+	<bean name="singletonBean" class="somepkg.SingletonBean">
+		<property name="someProperty" ref="sessionBean"/>
+	</bean>
+	
+	<bean name="sessionBean" class="somepkg.SessionBean" scope="session">
+		<aop:scoped-proxy/>
+	</bean>
+	
+prototype bean in singleton :
+CGLIB
+	<bean name="singletonBean" class="somepkg.SingletonBean">
+		<lookup-method name="someProperty" bean="prototypeBean"/>
+	</bean>
+	
+	<bean name="prototypeBean" class="PrototypeBean" scope="prototype">
+		
+	</bean>
+----------------------------------------------------
+
+java proxy classes
+CGLIB
+
+AOP in spring
+	@Before(execution("public com.akash.MyClass.myMethod(..)"))
+	@AfterReturning
+	@AfterThrowing
+	@After
+
+
+How @Transactional annotation works
+	Transaction Manager
+	@Around AOP -- @Transactional
+	Transaction Proxy
+	
+How Gzip works 
