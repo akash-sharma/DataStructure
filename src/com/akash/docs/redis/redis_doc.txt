@@ -1,0 +1,154 @@
+Why to use?
+When to use?
+
+https://stackoverflow.com/questions/10558465/memcached-vs-redis
+
+==> Redis vs Memcache
+-> both acts as a key-value cache (fast in read/write), but
+	Memcached has no mechanisms for dumping data to disk without 3rd party tools.
+	i.e. if server gets down in memcache then data is lost.
+	Redis dumps data on disk.
+	redis persists your data to disk using a mechanism called snapshotting.
+-> Redis is highly scalable, memcache is not.
+	memcache does not support replication.
+-> it has in build data structures like :
+	String, hash, set, list, sorted list, geo-spatial indexes, Stream
+-> Redis supports 'pipelining', in which multiple commands can be fired at once
+-> Both are atomic.
+	In Redis as soon as you write a value to redis that value is visible to all clients connected to redis.
+
+==> Redis use case :
+-> session data cache
+-> full page cache
+-> Leaderboards/Counting of an online game
+-> geo search
+
+
+===> Redis 
+
+In memory key value store with persistence.
+
+It can be used 
+as a cache
+as a database (NoSql DB)
+as a message broker
+
+Remote Dictionary Server
+
+
+Data structures :
+String, hash, list, set, sortedSet
+
+cached data in redis can viewed via redis client.
+
+-> redis installation 
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+
+
+-> spring boot - redis project
+https://www.journaldev.com/18141/spring-boot-redis-cache
+
+
+set abc "hello"
+get abc
+del abc
+
+set ab 1
+get ab
+incr ab
+del ab
+
+
+NOTE : Every key in redis has an expiry time
+By default expiry time for a key is infinite
+
+
+redis> expire abc 10
+redis> TTL abc
+
+it will set expiry time of given key as 10 seconds
+TTL of infinite is -1
+TTL is -2 means key does not exist
+
+------------------------
+
+=> ordered list operation :
+
+RPUSH
+LPUSH
+RPOP
+LPOP
+LLEN
+LRANGE
+
+RPUSH list "20"
+RPUSH list "25"
+LPUSH list "15"
+
+LLEN list 
+	//3
+
+LRANGE list 0 2
+	//15 , 20 , 25
+LRANGE list 0 5
+	//15 , 20 , 25
+
+NOTE : Every addition operation of list returns size of list
+
+
+------------------------
+
+=> Unordered Set :
+
+SADD
+SREM
+SISMEMBERS
+SMEMBERS
+SUNION
+
+
+SADD set "1"
+SADD set "4"
+SADD set "10"
+SADD set "abc"
+
+SREM set "1"
+
+SMEMBERS set 
+	//4, 10, abc
+
+NOTE : Every addition operation of Set returns 0 or 1, if this element added or not
+
+SUNION combines two or more sets and returns the list of all elements.
+
+Sets are not sorted
+To sort sets we use SortedSets
+
+------------------------
+
+=> Sorted Set operation :
+
+each value has an associated score
+
+ZADD hackers 1940 "Alan Kay"
+ZADD hackers 1906 "Grace Hopper"
+ZADD hackers 1953 "Richard Stallman"
+ZADD hackers 1965 "Yukihiro Matsumoto"
+ZADD hackers 1916 "Claude Shannon"
+ZADD hackers 1969 "Linus Torvalds"
+ZADD hackers 1957 "Sophie Wilson"
+ZADD hackers 1912 "Alan Turing"
+
+
+the scores are years of birth and the values are the names of famous hackers.
+
+ZRANGE hackers 2 4 => 1) "Claude Shannon", 2) "Alan Kay", 3) "Richard Stallman"
+
+
+
+------------------------
+
+=> Hashes  (similar to map with where value contains group of key-value pair)
+
+
+
