@@ -1,7 +1,22 @@
+java path 
+
+export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_191
+export PATH=${PATH}:${JAVA_HOME}/bin
+
+/opt/gradle/gradle-3.4.1
+
+
+-> Spring boot
+-> Redis
+-> Cassandra
+-> Kafka
+-> Elastic Search
+
+==============================================
+https://stackoverflow.com/questions/10558465/memcached-vs-redis
+
 Why to use?
 When to use?
-
-https://stackoverflow.com/questions/10558465/memcached-vs-redis
 
 ==> Redis vs Memcache
 -> both acts as a key-value cache (fast in read/write), but
@@ -59,6 +74,10 @@ incr ab
 del ab
 
 
+KEYS *
+//get all keys
+
+
 NOTE : Every key in redis has an expiry time
 By default expiry time for a key is infinite
 
@@ -92,6 +111,9 @@ LRANGE list 0 2
 	//15 , 20 , 25
 LRANGE list 0 5
 	//15 , 20 , 25
+
+LRANGE list 0 -1
+	// get all elements of list
 
 NOTE : Every addition operation of list returns size of list
 
@@ -149,6 +171,5 @@ ZRANGE hackers 2 4 => 1) "Claude Shannon", 2) "Alan Kay", 3) "Richard Stallman"
 ------------------------
 
 => Hashes  (similar to map with where value contains group of key-value pair)
-
 
 

@@ -65,14 +65,18 @@ Consumer group
 				Consumer request broker to get data from a particular consumer
 
 =>Topic 		: unique name for a kafka stream, it signifies type of data inside it
+                    Topics in Kafka are always multi-subscriber; that is,
+                    a topic can have zero, one, or many consumers that subscribe to the data written to it.
 
 =>Cluster 	: running multiple instances of same application
 =>Partition 	: Topic can be broken and stored on diff systems known as partitions
 				It is like sharding of Topic, which is done by producers.
 				topics in a partition are ordered but there is no global ordering of topic in different partitions.
 				For global ordering of topics in different partitions, developer can add shard keys
+				Each partition is an ordered, immutable sequence of records that
+				 is continually appended to—a structured commit log
 
-=>Offset 		: messages in a broker as stored as an array in an order arrival time
+=>Offset 		: messages in a broker are stored as an array in an order arrival time
 				old messages to new messages (0 to N)
 				this an array number which is immutable
 
@@ -132,6 +136,11 @@ Kafka, Storm, HBase, SolrCloud uses zookeper
 mongodb and elasticsearch created their own in house product for this.
 
 ==============================================
+
+https://www.javainuse.com/spring/spring-boot-apache-kafka-hello-world
+
+https://docs.spring.io/spring-kafka/reference/html/index.html
+
 
 3 paradigms of programming :
 -> request response
