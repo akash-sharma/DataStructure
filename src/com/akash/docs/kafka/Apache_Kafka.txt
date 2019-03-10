@@ -19,6 +19,12 @@ https://data-flair.training/blogs/zookeeper-in-kafka/
 
 (Q) Diff bw kafka and rabbitmq
 
+https://content.pivotal.io/blog/understanding-when-to-use-rabbitmq-or-apache-kafka
+
+https://www.youtube.com/watch?v=lwMjjTT1Q-Q&list=PLSWDCWn6N_eF4mAt2O_VhTWUrj-kTQe48
+
+https://content.pivotal.io/blog/understanding-when-to-use-rabbitmq-or-apache-kafka
+
 ==============================================
 Apache kafka  : distributed streaming platform
 
@@ -62,7 +68,7 @@ Consumer group
 =>Broker 		: kafka Server that keeps data in the form of array of bytes
 				message do not contain consumers address, 
 				producer just send relevant message to the broker without any consumer information
-				Consumer request broker to get data from a particular consumer
+				Consumer request broker to get data from a particular Producer
 
 =>Topic 		: unique name for a kafka stream, it signifies type of data inside it
                     Topics in Kafka are always multi-subscriber; that is,
@@ -73,8 +79,6 @@ Consumer group
 				It is like sharding of Topic, which is done by producers.
 				topics in a partition are ordered but there is no global ordering of topic in different partitions.
 				For global ordering of topics in different partitions, developer can add shard keys
-				Each partition is an ordered, immutable sequence of records that
-				 is continually appended to—a structured commit log
 
 =>Offset 		: messages in a broker are stored as an array in an order arrival time
 				old messages to new messages (0 to N)
@@ -152,3 +156,123 @@ large scale data
 multiple processes are communicating with multiple other processes
 Scalability and partitioning
 fault tolerance
+
+----------------------------------------------------------------
+
+Installation : 
+
+https://dzone.com/articles/kafka-setup
+
+-----------------------------------------------------------------
+
+// start zookeper
+// default port 2181
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+// start kafka server
+
+bin/kafka-server-start.sh config/server.properties
+
+
+// topic creation 
+// 2181 is zookeper port
+
+bin/kafka-topics.sh --create 
+
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+
+// show topics
+bin/kafka-topics.sh --list 
+
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+// sending data from producer to a topic
+// 9092 is kafka broker port
+
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+
+
+// start a consumer with a given topic
+
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+NOTE : broker stores data by producer for a given time.Once you read data from a consumer it is still managed by broker.
+Now if you create new consumer and want to read data from same topic it will get full data.
+
+
+-> bin/kafka-topics.sh 
+	--describe
+	--create
+	--list
+	--delete
+
+-> bin/kafka-server-start.sh
+-> bin/kafka-console-producer.sh
+-> bin/kafka-console-consumer.sh
+
+
+
+---------------------------------------------------
+
+Kafka with java
+
+https://dzone.com/articles/kafka-producer-and-consumer-example
+
+Book : 
+https://www.cloudera.com/documentation/enterprise/6/latest/PDF/cloudera-kafka.pdf
+
+---------------------------------------------------
+
+Record: Producer sends messages to Kafka in the form of records. 
+A record is a key-value pair. It contains the topic name and partition number to be sent. 
+Kafka broker keeps records inside topic partitions. 
+Records sequence is maintained at the partition level. 
+You can define the logic on which basis partition will be determined. 
+
+
+Partition: A topic partition is a unit of parallelism in Kafka, i.e. 
+two consumers cannot consume messages from the same partition at the same time.
+ A consumer can consume from multiple partitions at the same time.
+
+After a topic is created you can increase the partition count but it cannot be decreased
+
+Consumer is subscribed to a topic
+
+
+ENABLE_AUTO_COMMIT_CONFIG: When the consumer from a group receives a message it must commit the offset of that record. 
+If this configuration is set to be true then, periodically, offsets will be committed, 
+but, for the production level, this should be false and an offset should be committed manually.
+
+Key Value pair in kafka :
+Keys are used to determine the partition within a log to which a message get's appended to. 
+While the value is the actual payload of the message.
+
+
+** The Kafka cluster durably persists all published records—whether or not they have been consumed
+Kafka's performance is effectively constant with respect to data size so storing data for a long time is not a problem.
+
+
+** Offset is controlled by the consumer.
+A consumer can reset to an older offset to reprocess data from the past or
+ skip ahead to the most recent record and start consuming from "now".
+We use kafka command line tools to "tail" the contents of any topic without changing 
+what is consumed by any existing consumers.
+
+
+** The producer is responsible for choosing which record to assign to which partition within the topic.
+
+
+** Consumers label themselves with a consumer group name
+Each record published to a topic is delivered to one consumer instance within each subscribing consumer group
+Each group is composed of many consumer instances for scalability and fault tolerance
+
+
+** Order of records is maintained within a partition
+no order of records is maintained in multiple partitions
+every partition is assigned a key
+if you require a total order over records this can be achieved with a topic that has only one partition,
+ though this will mean only one consumer process per consumer group.
+
+
+

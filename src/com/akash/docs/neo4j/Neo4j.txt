@@ -1,0 +1,256 @@
+Neo4j
+
+=>Node variable
+	actual data -- ram,shyam
+
+=>Lable
+	similar to mysql table -- Person, Employee
+
+()                  //anonymous node (no label or variable) can refer to any node in the database
+(p:Person)          //using variable p and label Person
+(:Technology)       //no variable, label Technology
+(work:Company) 		//using variable work and label Company
+
+
+=>Relationship
+
+	Directed
+	-->  <-- 
+
+	Undirected : relationship can be traversed in either direction
+	--
+	
+If data is stored with one relationship direction, and a query specifies the wrong direction, 
+Cypher will not return 
+
+
+//data stored with this direction
+CREATE (p:Person)-[:LIKES]->(t:Technology)
+
+//query relationship backwards will not return results
+MATCH (p:Person)<-[:LIKES]-(t:Technology)
+
+//better to query with undirected relationship unless sure of direction
+MATCH (p:Person)-[:LIKES]-(t:Technology)
+
+=> Relationship Types
+
+
+=> Relationship Variables
+
+=> Node or Relationship Properties
+
+Node property
+	(p:Person {name: 'Jennifer'})
+
+Relationship property
+	 -[rel:IS_FRIENDS_WITH {since: 2018}]->
+
+
+(p:Person {name: "Jennifer"})-[rel:LIKES]->(g:Technology {type: "Graphs"})
+
+
+MATCH
+RETURN
+
+---------------------------
+
+// Question 8 has a child question 11
+CREATE (q8:Question{sqlId:8,priority:4, level:1 })-[rel:CHILDREN{option:"YES"}]->(q11:Question{sqlId:11,priority:1, level:2 })
+
+
+// find Question having sqlId:8
+MATCH (q10:Question {sqlId:8}) return q10
+
+
+// find Question having level:1 
+MATCH (q10:Question {level:1}) return q10
+
+
+// find Question with level = 1 AND priority = 4
+MATCH (q11:Question {level:1,priority:4}) return q11
+
+
+// link Question with sqlId = 11 to new Question with sql = 9
+MATCH (q11:Question {sqlId:11})
+CREATE (q9:Question{sqlId:9,priority:6, level:1 })<-[rel:REQUIRED_PARENT{option:"YES"}]-(q11)
+
+
+//find all Questions
+match(q:Question) return q
+
+
+// get all parents of Question having sqlId = 6
+MATCH (q:Question)-[r:CHILDREN]->(q1:Question {sqlId:11}) RETURN q,r
+
+// delete all relations
+match () -[r:CHILDREN]->() delete r
+
+// delete all nodes
+match (n) delete n;
+
+
+// get by id
+
+MATCH (s)
+WHERE ID(s) = 65110
+RETURN s
+
+
+// unique constraint on property
+CREATE CONSTRAINT ON (q:Question) ASSERT q.sqlId IS UNIQUE
+
+// to show schema
+:schema
+
+
+//delete constraint
+DROP CONSTRAINT ON (a:Question) ASSERT a.sqlId IS UNIQUE
+
+// update properties of a node
+match(n:Question{sqlId:36}) set n.priority=4
+
+
+
+// fetch children upto a n variable level
+MATCH (q:Question)<-[r:CHILDREN*2]-(q1:Question {sqlId:37}) RETURN q,r
+
+
+
+============================================
+
+*** Neo4j with Java
+
+@Bean("neo4jDriver")
+public Driver getDriver() {
+	Driver driver = GraphDatabase.driver(neoConfig.getServerUrl(), AuthTokens.basic(neoConfig.getUsername(),
+		neoConfig.getPassword()));
+	addConstraints(driver);
+	return driver;
+}
+
+private void addConstraints(Driver driver) {
+	Session session = driver.session(AccessMode.WRITE);
+	session.run("CREATE CONSTRAINT ON (q:CsQuestion) ASSERT q.sqlId IS UNIQUE");
+	session.close();
+}
+
+------------------------
+
+
+@Autowired
+    private Driver driver;
+
+    @Override
+    public List<QuestionRelation> getParentQuestions(long childId){
+        Session session = driver.session(AccessMode.READ);
+        StatementResult results = session.run("MATCH (q:CsQuestion)-[r:CHILDREN]->(q1:CsQuestion {sqlId:"+childId+"}) RETURN q,r");
+        session.close();
+
+        return parseNeoQueryResults(results,"q","r");
+
+    }
+
+    @Override
+    public List<QuestionRelation> getRequiredParents(long childId){
+        Session session = driver.session(AccessMode.READ);
+        StatementResult results = session.run("MATCH (q1:CsQuestion {sqlId:"+childId+"})-[r1:REQUIRED_PARENT]->(q2:CsQuestion) RETURN q2,r1");
+        session.close();
+        return parseNeoQueryResults(results,"q2","r1");
+    }
+
+    private List<QuestionRelation> parseNeoQueryResults(StatementResult results, String key1, String key2){
+        List<QuestionRelation> questionRelationList = new ArrayList<>();
+        while( results.hasNext() ) {
+            Record next = results.next();
+            QuestionRelation questionRelation = new QuestionRelation();
+            String type = next.get(key2).asRelationship().type();
+            if(CsConstants.NEO_RELATION_REQUIRED_PARENT.equals(type)) {
+                questionRelation.setRelation(QuestionRelation.Relation.REQUIRED);
+            } else {
+                questionRelation.setRelation(QuestionRelation.Relation.CAN_ASK);
+            }
+            questionRelation.setSqlId(next.get(key1).get("sqlId").asLong());
+            questionRelation.setOption(CsOption.Answer.getInstance(next.get(key2).get("option").asString()));
+            questionRelationList.add(questionRelation);
+        }
+        return questionRelationList;
+    }
+
+    @Override
+    public void createQuestion(long sqlId, int priority,int level) {
+        Session session = driver.session(AccessMode.WRITE);
+        session.run("CREATE(q1:CsQuestion{sqlId:"+sqlId+",priority:"+priority+",level:"+level+"})");
+        session.close();
+    }
+
+    @Override
+    public void createRelation(QuestionRelationCreationData questionRelationCreationData) {
+        Session session = driver.session(AccessMode.WRITE);
+        session.run("MATCH (q1:CsQuestion {sqlId: "+questionRelationCreationData.getQuestionFrom()+" })\n" +
+                "MATCH (q2:CsQuestion {sqlId: "+questionRelationCreationData.getQuestionTo()+" })\n" +
+                "CREATE (q1)-[rel:"+questionRelationCreationData.getRelation()+"{option:\""+questionRelationCreationData.getOption().getText()+"\"}]->(q2)");
+        session.close();
+    }
+
+
+
+----------------------------------------
+
+Neo4j Spring Entity
+
+
+@NodeEntity
+public class Question {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private Long sqlId;
+
+    private int priority;
+
+    private int level;
+
+    @Relationship(type = CsConstants.NEO_RELATION_CHILDREN)
+    private List<Children> childrenOutgoing = new ArrayList<>();
+
+}
+
+
+@RelationshipEntity(type = CsConstants.NEO_RELATION_CHILDREN)
+public class Children {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private CsOption.Answer option;
+
+    @StartNode
+    private Question parentQues;
+
+    @EndNode
+    private Question childQues;
+
+}
+
+
+
+
+@Bean
+    public Configuration getConfiguration() {
+        return new Configuration.Builder().credentials(neoConfig.getUsername(), neoConfig.getPassword())
+                .uri(neoConfig.getServerUrl()).build();
+    }
+
+    @Bean
+    public SessionFactory getSessionFactory() {
+        return new SessionFactory(getConfiguration(),neoConfig.getEntityPackage());
+    }
+
+    @Bean("Neo4jTransactionManager")
+    public Neo4jTransactionManager transactionManager() {
+        return new Neo4jTransactionManager(getSessionFactory());
+    }

@@ -1,0 +1,81 @@
+opid count(opid) 	-> mid qid 		GRP opid	(checkAndUpdateMerchantFinalisedQuestion() )
+
+1			-> mid uid qid 				(createUserViewedQuestion() )
+
+qid			-> mid uid				(userViewedQuestions )
+
+qid opid		-> mid uid (opid!=null)			(userAnsweredQuestions )
+
+qid opid count(opid)	-> mid 			GRP qid,opid	(merchant finalised)
+
+
+==========================
+
+
+viewed					(2,3)
+-> ((mid uid) qid created_at)			
+
+
+answered				(4)
+-> ((mid uid) qid opid created_at)	
+
+// single and multi select
+// same mid,uid,qid,oid more than once
+
+merchant finalised			(1,5)
+-> ((mid) qid opid) count	// valid
+-> (mid qid opid) count		// valid
+-> ((mid qid) oid) count	// Invalid
+
+
+==========================
+
+create table user_viewed (mid text, uid int, qid int, created_at timestamp , PRIMARY KEY((mid,uid),qid,created_at) );
+
+insert into user_viewed (mid,uid,qid,created_at) values('1',2,1,toTimestamp(now()) );
+
+select qid,count(*) from user_viewed where mid='1' and uid=1 group by qid;
+
+select * from user_viewed where mid='1' and uid=1 and qid=1 ;
+
+----------------
+
+-> create table merchant_finalised (mid text, qid int, oid int, count counter , PRIMARY KEY((mid),qid,oid) );
+
+update merchant_finalised SET count = count +1 WHERE mid='2' and qid=1 and oid=2;
+
+select * FROM merchant_finalised WHERE mid='2' and qid=2 ;
+
+select * FROM merchant_finalised WHERE mid='2' ;
+
+
+-------------------
+
+CREATE TABLE user_answers (mid text, uid int, qid int, oid int ,created_at timestamp, PRIMARY KEY((mid,uid),qid,oid,created_at));
+
+insert into user_answers (mid,uid,qid,oid,created_at) values('1',1,1,1, toUnixTimestamp(now()));
+insert into user_answers (mid,uid,qid,oid,created_at) values('1',1,1,1, toUnixTimestamp(now()));
+insert into user_answers (mid,uid,qid,oid,created_at) values('1',1,1,2, toUnixTimestamp(now()));
+
+select * from user_answers where mid='1' and uid=1;
+
+==========================
+
+
+https://www.baeldung.com/spring-data-cassandra-tutorial
+
+https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
+
+** imagine Cassandra as a giant HashMap
+the Partition keys play the role of that key in map,So each query needs to have them specified. 
+clustering keys (columns, which are optional) help in further narrowing your query search 
+
+** One table can have only one combination of same partition key and clustering key
+
+https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlWriteUpdate.html
+
+==========================
+
+desc user_viewed;
+
+
