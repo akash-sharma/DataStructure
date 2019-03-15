@@ -256,7 +256,7 @@ Kafka's performance is effectively constant with respect to data size so storing
 ** Offset is controlled by the consumer.
 A consumer can reset to an older offset to reprocess data from the past or
  skip ahead to the most recent record and start consuming from "now".
-We use kafka command line tools to "tail" the contents of any topic without changing 
+We can use kafka command line tools to "tail" the contents of any topic without changing 
 what is consumed by any existing consumers.
 
 
@@ -266,6 +266,9 @@ what is consumed by any existing consumers.
 ** Consumers label themselves with a consumer group name
 Each record published to a topic is delivered to one consumer instance within each subscribing consumer group
 Each group is composed of many consumer instances for scalability and fault tolerance
+If all the consumer instances have the same consumer group, then the records will effectively be load balanced over the consumer instances.
+If all the consumer instances have different consumer groups, then each record will be broadcast to all the consumer processes.
+
 
 
 ** Order of records is maintained within a partition
@@ -275,4 +278,67 @@ if you require a total order over records this can be achieved with a topic that
  though this will mean only one consumer process per consumer group.
 
 
+===========================
+
+Topic T has 3 partitions
+P0
+P1
+P2
+
+
+Consumer Group CG1, CG2
+
+CG1 -> C1, C2
+CG2 -> C3, C4
+
+
+when a new consumer is created, it subscribe itself with a topic partition
+P0 -> C1, C2   		// invalid
+C1 <- P0, P1, P2	// valid
+
+
+(4 partitions and 3 consumers in 1 consumer group)
+
+producer	->	Topic		->	Consumer Group
+
+producer	->	partition1	->	consumer1
+			partition2	->	consumer2
+			partition3	->	consumer3
+			partition4	->	consumer1
+
+
+each partition is consumed by exactly one consumer in the group
+there cannot be more consumer instances in a consumer group than partitions.
+===========================
+
+
+Kafka allows producers to wait on acknowledgement so that a write isn't considered complete 
+until it is fully replicated and guaranteed to persist even if the server written to fails.
+
+
+Producer  Consumer
+   |	     |
+   |	     |
+pushes     pulls
+   |	     |
+   |	     |
+  Broker-Server
+
+
+producer pushes data to broker
+consumer pulls data from broker
+
+A pull-based system has the nicer property that the consumer simply falls behind and catches up when it can
+ it lends itself to aggressive batching of data sent to the consumer
+kafka have parameters in their pull request that allow the consumer request to block in a "long poll" waiting until data arrives
+
+
+broker will only store data, it will not be responsible for sending any data.
+
+
+The leader keeps track of the set of "in sync" nodes. If a follower dies, gets stuck, or falls behind, 
+the leader will remove it from the list of in sync replicas
+
+Log compaction gives us a more granular retention mechanism so that we are guaranteed 
+to retain at least the last update for each primary key  (e.g. bill@gmail.com).
 
