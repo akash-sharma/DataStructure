@@ -342,3 +342,103 @@ the leader will remove it from the list of in sync replicas
 Log compaction gives us a more granular retention mechanism so that we are guaranteed 
 to retain at least the last update for each primary key  (e.g. bill@gmail.com).
 
+
+
+==========================
+
+=> start zookeper:
+
+bin/zkServer.sh start
+
+bin/zkServer.sh status
+
+bin/zkServer.sh stop
+
+
+=> check port 
+
+netstat -tulpn | grep 2181
+
+
+=============================
+
+
+//@Configuration
+public class CsKafkaConfig {
+
+    @Value("${kafka.cs_answer_topic}")
+    private String csAnswerTopic;
+
+    //@Bean
+    public NewTopic newTopic() {
+        int partitions = 1;
+        short replicationFactor = 1;
+        return new NewTopic(csAnswerTopic, partitions, replicationFactor);
+    }
+}
+
+
+
+
+//@Service
+public class AnswerProducer {
+
+    /*private static final Logger LOG = LogManager.getLogger(AnswerProducer.class);
+
+    @Autowired
+    private CsKafkaConfig csKafkaConfig;
+
+    @Value("${kafka.cs_answer_topic}")
+    private String csAnswerTopic;
+
+    @Autowired
+    private KafkaTemplate<String, AnswerDetail> kafkaTemplate;
+
+    public void send(AnswerDetail message) throws Exception {
+        LOG.info("sending message='{}' to topic='{}'", message, csAnswerTopic);
+        kafkaTemplate.send(csAnswerTopic, message);
+    }*/
+}
+
+
+
+
+//@Service
+public class AnswerConsumer {
+
+    /*private static final Logger logger = LogManager.getLogger(AnswerConsumer.class);
+
+    @Autowired
+    private KafkaTemplate<String, AnswerDetail> kafkaTemplate;
+
+    @Autowired
+    private AnswerService answerService;
+
+    @KafkaListener(topics = "${kafka.cs_answer_topic}")
+    public void processMessage(AnswerDetail answerDetail) {
+        logger.info("answer payload received : {}", answerDetail.toString());
+        try {
+            answerService.saveAnswer(answerDetail);
+        } catch (Exception e) {
+            logger.error("Exception occured while saving answer :{}",answerDetail.toString(), e);
+        }
+    }*/
+}
+
+
+
+
+#kafka producer properties
+kafka.cs_answer_topic=cs_answer
+spring.kafka.producer.bootstrap-servers=localhost:9092
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+#kafka consumer properties
+spring.kafka.consumer.bootstrap-servers=localhost:9092
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+spring.kafka.consumer.group-id=cs_answer_grp
+
+
+=============================
