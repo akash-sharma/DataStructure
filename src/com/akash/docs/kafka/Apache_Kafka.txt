@@ -1,3 +1,8 @@
+Java api for kafka
+https://static.javadoc.io/org.apache.kafka/kafka-clients/2.1.1/org/apache/kafka/clients/producer/KafkaProducer.html
+https://static.javadoc.io/org.apache.kafka/kafka-clients/2.1.1/org/apache/kafka/clients/consumer/KafkaConsumer.html
+
+
 Apache Kafka
 
 https://www.youtube.com/watch?v=el-SqcZLZlI
@@ -442,3 +447,43 @@ spring.kafka.consumer.group-id=cs_answer_grp
 
 
 =============================
+
+
+**The consumer maintains TCP connections to the necessary brokers to fetch data
+The consumer is not thread-safe.
+
+**Consumer is subscribed to a topic
+A topic can have one or more than one partitions
+Kafka will deliver each message in the subscribed topics to one process in each consumer group. 
+This is achieved by balancing the partitions between all members in the consumer group 
+so that each partition is assigned to exactly one consumer in the group. 
+So if there is a topic with four partitions, and a consumer group with two processes, 
+each process would consume from two partitions.
+
+Membership in a consumer group is maintained dynamically: 
+if a process fails, the partitions assigned to it will be reassigned to other consumers in the same group. 
+Similarly, if a new consumer joins the group, partitions will be moved from existing consumers to the new one. 
+This is known as rebalancing the group
+Group rebalancing is also used when new partitions are added to one of the subscribed topics 
+
+It is also possible for the consumer to manually assign specific partitions
+In this case, dynamic partition assignment and consumer group coordination will be disabled.
+
+
+**As part of group management, the consumer will keep track of the list of consumers that belong
+ to a particular group and will trigger a rebalance operation if any one of the following events are triggered:
+->Number of partitions change for any of the subscribed topics
+->A subscribed topic is created or deleted
+->An existing member of the consumer group is shutdown or fails
+->A new member is added to the consumer group
+
+When any of these events are triggered, the provided listener will be invoked first to indicate that 
+the consumer's assignment has been revoked, and then again when the new assignment has been received. 
+Note that rebalances will only occur during an active call to poll(Duration), 
+so callbacks will also only be invoked during that time.
+
+
+
+Setting enable.auto.commit true means that offsets are committed automatically
+ with a frequency controlled by the config auto.commit.interval.ms.
+
