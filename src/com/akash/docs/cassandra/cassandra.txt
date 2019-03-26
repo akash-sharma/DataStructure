@@ -75,6 +75,7 @@ https://github.com/eugenp/tutorials/tree/master/persistence-modules/java-cassand
 https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
 https://teddyma.gitbooks.io/learncassandra/content/model/cql_and_data_structure.html
 https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlDatabaseInternalsTOC.html
+https://www.guru99.com/cassandra-architecture.html
 
 
 ** imagine Cassandra as a giant HashMap
@@ -277,5 +278,32 @@ To flush the data, Cassandra sorts memtables by partition key and then writes th
 
 -> Client read or write requests can go to any node in the cluster because all nodes in Cassandra are peers.
 
-As long as all replica nodes are up and available, they will get the write regardless of the consistency level specified by the client. The write consistency level determines how many replica nodes must respond with a success acknowledgment in order for the write to be considered successful.
+When a client connects to a node and issues a read or write request, 
+that node serves as the coordinator for that particular client operation.
+The job of the coordinator is to act as a proxy between the client application and the nodes (or replicas) 
+
+
+As long as all replica nodes are up and available, they will get the write regardless of the 
+consistency level specified by the client. 
+The write consistency level determines how many replica nodes must respond with a success acknowledgment
+ in order for the write to be considered successful.
+When a node writes and responds, that means it has written to the commit log and puts the mutation into a memtable.
+
+The consistency level defaults to ONE for all write and read operations.
+
+
+=> Node : 
+	Node is the place where data is stored. It is the basic component of Cassandra.
+
+=> Data Center : 
+	A collection of nodes are called data center. Many nodes are categorized as a data center.
+
+=> quorum = (sum_of_replication_factors / 2) + 1
+
+=> sum_of_replication_factors = datacenter1_RF + datacenter2_RF + . . . + datacentern_RF
+
+=> LOCAL_QUORUM level is calculated based on the replication factor of the same datacenter as the coordinator node
+
+=> EACH_QUORUM
+	every datacenter in the cluster must reach a quorum based on that datacenter's replication factor in order for the write request to succeed.
 
