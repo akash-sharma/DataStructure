@@ -67,10 +67,15 @@ select * from user_answers where mid='1' and uid=1;
 https://www.codingame.com/playgrounds/13642/getting-started-with-spring-data-cassandra
 https://github.com/lankydan/spring-data-cassandra/tree/master/src/main
 
+
 => Java api 
 https://github.com/eugenp/tutorials/tree/master/persistence-modules/java-cassandra
 
+
 https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
+https://teddyma.gitbooks.io/learncassandra/content/model/cql_and_data_structure.html
+https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlDatabaseInternalsTOC.html
+
 
 ** imagine Cassandra as a giant HashMap
 the Partition keys play the role of that key in map,So each query needs to have them specified. 
@@ -213,3 +218,64 @@ public class UserViewedRepoImpl implements UserViewedRepo {
 }
 
 ==========================
+
+tableX
+((col1 col2) col3 col4) col5
+
+
+select * from tableX where col1='';	//invalid
+
+select * from tableX where col2='';	//invalid
+
+select * from tableX where col1='' and col2='';		//valid
+
+
+-> Cassandra is a partitioned row store. Rows are organized into tables with a required primary key.
+-> persistent multi-dimensional sorted map
+-> Data is denormalized, queries should be one per table
+-> tables are designed according to our quiries
+-> faster for writes, as it is represented as a Map of key value , (update is upsert)
+-> stores parts of a data entity or “row” in separate column-families, and has the ability to access these column-families separately. This means that not all parts of a row are picked up in a single I/O operation from storage, which is considered a good thing if only a subset of a row is relevant for a particular query. 
+
+-> data is transparently partitioned across all nodes in a cluster.
+   The architecture of Cassandra is “masterless”, meaning all nodes are the same
+   if any node in a cluster goes down, one or more copies of that node’s data is available on other machines in the cluster
+
+	
+-> data replication
+-> AP system in CAP
+	choose availability and forgo consistency
+
+Nested Sorted Map data structure
+
+Database	-- Keyspace
+Table		-- column family
+primary key	-- row key
+column name	-- column name/key
+column value	-- column value
+
+	Map<RowKey, SortedMap<ColumnKey, ColumnValue>>
+
+A map gives efficient key lookup, and the sorted nature gives efficient scans. 
+The number of column keys is unbounded
+
+Partition key and clustering keys
+
+
+-> For each column family, there are 3 layer of data stores: memtable, commit log and SSTable.
+
+When a write occurs, Cassandra stores the data in a structure in memory, the memtable, 
+and also appends writes to the commit log on disk.
+The memtable is a write-back cache of data partitions that Cassandra looks up by key.
+
+When memtable contents exceed a configurable threshold, the memtable data, which includes indexes,
+ is put in a queue to be flushed to disk. 
+To flush the data, Cassandra sorts memtables by partition key and then writes the data to disk sequentially. 
+
+
+-> All replicas are equally important; there is no primary or master replica
+
+-> Client read or write requests can go to any node in the cluster because all nodes in Cassandra are peers.
+
+As long as all replica nodes are up and available, they will get the write regardless of the consistency level specified by the client. The write consistency level determines how many replica nodes must respond with a success acknowledgment in order for the write to be considered successful.
+
