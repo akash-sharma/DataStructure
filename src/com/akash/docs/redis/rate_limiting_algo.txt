@@ -1,0 +1,12 @@
+redis key = user_id + api_url
+value (sorted set) = time_in_ms : time_in_ms
+
+
+(1) ZREMRANGEBYSCORE  key  '-inf' (currentTime - window)
+
+(2) ZCOUNT  key  '-inf'  '+inf'
+
+(3) ZADD  key  currentTime  currentTime
+
+
+
