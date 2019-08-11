@@ -1119,29 +1119,29 @@ void printSpiralForm(Node root, boolean isEven) {
 	Stack s3 = new Stack();
 	s1.push(root);
 	while(s1.size() != 0 || s2.size() != 0) {
-		while(s1.size() != 0) {
-			Node temp = s1.pop();
-			s3.push(temp);
-			if(isEven) {
+        while(s1.size() != 0) {
+            Node temp = s1.pop();
+            s3.push(temp);
+            if(isEven) {
                 if(temp.right != null) {
                     s2.push(temp.right);
                 }
                 if(temp.left != null) {
                     s2.push(temp.left);
                 }
-			} else {
+            } else {
                 if(temp.left != null) {
                     s2.push(temp.left);
                 }
                 if(temp.right != null) {
                     s2.push(temp.right);
                 }
-			}
-		}
-		while(s2.size() != 0) {
-			Node temp = s2.pop();
-			s3.push(temp);
-			if(!isEven) {
+            }
+        }
+        while(s2.size() != 0) {
+            Node temp = s2.pop();
+            s3.push(temp);
+            if(!isEven) {
                 if(temp.right != null) {
                     s1.push(temp.right);
                 }
@@ -1156,11 +1156,11 @@ void printSpiralForm(Node root, boolean isEven) {
                     s1.push(temp.right);
                 }
             }
-		}
+        }
 	}
-	while(s3.size() != 0) {
-	    print(s3.pop());
-	}
+    while(s3.size() != 0) {
+        print(s3.pop());
+    }
 }
 
 
