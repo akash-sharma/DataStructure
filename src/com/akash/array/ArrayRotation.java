@@ -1,6 +1,7 @@
 package com.akash.array;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class ArrayRotation {
 
@@ -8,6 +9,7 @@ public class ArrayRotation {
 		int arr[] = { 1, 2, 3, 4, 5, 6, 7 };
 		leftRotateArray(arr, arr.length, 3);
 		System.out.println(Arrays.toString(arr));
+		Collections.sort(null);
 	}
 
 	private static void leftRotateArray(int arr[], int n, int d) {

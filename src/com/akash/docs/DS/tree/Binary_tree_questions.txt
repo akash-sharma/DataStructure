@@ -594,27 +594,39 @@ private void printBottomView(Node root, int level) {
 
 ------------------------
 
-// print vertical order sum in binary tree
+// print nodes of binary tree in vertical order
 // can also be written in iterative way,
 // each node has to store its level
 
-private Map<Integer,Integer> map = new TreeMap<>();
+private Map<Integer, List<Node>> map = new HashMap<>();
 
-void printVerticalOrderSum(Node root) {
-	printVerticalOrderSum(root, 0);
-	map.values().iterator().forEachRemaining(value -> SOP(value));
+private void addToMap(Node node, Integer vertical) {
+	List<Node> nodes = map.get(vertical);
+	if(nodes == null) {
+		nodes = new ArrayList<>();
+		map.put(vertical, nodes);
+	}
+	nodes.add(node);
 }
 
-private void printVerticalOrderSum(Node root, int level) {
+public void printVerticalOrder(Node root) {
 	if(root != null) {
-		Integer value = map.get(level);
-		if(value == null) {
-			map.put(level, root.value);
-		} else {
-			map.put(level, value + root.value);
-		}
-		printVerticalOrderSum(root.left, level - 1);
-		printVerticalOrderSum(root.right, level + 1);
+		verticalOrder(root, 0);
+	}
+	Set<Integer> verticals = map.keySet();
+	Collections.sort(verticals);
+	for(int vertical : verticals) {
+		SOP(map.get(vertical));
+	}
+}
+
+private void verticalOrder(Node node, int vertical) {
+	addToMap(node, vertical);
+	if(node.left != null) {
+		verticalOrder(node.left, vertical-1);
+	}
+	if(node.right != null) {
+		verticalOrder(node.right, vertical+1);
 	}
 }
 
