@@ -31,9 +31,11 @@ Print Level order traversal in spiral form starting from left most leaf node
     1
 
 Print Level order traversal in spiral form starting from right most leaf node
+(mirror image of above)
     7 6 5 4
     2 3
     1
+
 Reverse Level Order Traversal (L to R)
 	4 5 6 7
 	2 3
@@ -1102,9 +1104,69 @@ void printSpiralForm(Node root) {
 	}
 }
 
+
+-----------------------
+// Print Level order traversal in spiral form starting from left most leaf node
+// different height for odd and even height
+
+int height = height(root);
+printSpiralForm(root, height % 2 == 0);
+
+
+void printSpiralForm(Node root, boolean isEven) {
+	Stack s1 = new Stack();
+	Stack s2 = new Stack();
+	Stack s3 = new Stack();
+	s1.push(root);
+	while(s1.size() != 0 || s2.size() != 0) {
+		while(s1.size() != 0) {
+			Node temp = s1.pop();
+			s3.push(temp);
+			if(isEven) {
+                if(temp.right != null) {
+                    s2.push(temp.right);
+                }
+                if(temp.left != null) {
+                    s2.push(temp.left);
+                }
+			} else {
+                if(temp.left != null) {
+                    s2.push(temp.left);
+                }
+                if(temp.right != null) {
+                    s2.push(temp.right);
+                }
+			}
+		}
+		while(s2.size() != 0) {
+			Node temp = s2.pop();
+			s3.push(temp);
+			if(!isEven) {
+                if(temp.right != null) {
+                    s1.push(temp.right);
+                }
+                if(temp.left != null) {
+                    s1.push(temp.left);
+                }
+            } else {
+                if(temp.left != null) {
+                    s1.push(temp.left);
+                }
+                if(temp.right != null) {
+                    s1.push(temp.right);
+                }
+            }
+		}
+	}
+	while(s3.size() != 0) {
+	    print(s3.pop());
+	}
+}
+
+
 ------------------------
 
-// Reverse Level Order Traversal (RL order)
+// Reverse Level Order Traversal (L to R)
 
 4 5 6 7
 2 3
@@ -1126,6 +1188,43 @@ void printReverseOrder(Node root) {
 			if(temp.left != null) {
 				queue.offer(temp.left);
 			}
+		}
+		stack.push(null);
+	}
+	while(stack.size() != 0) {
+		Node temp = stack.pop();
+		if(temp != null) {
+			print(temp);
+		} else {
+			println();
+		}
+	}
+}
+
+
+------------------------
+
+
+Reverse Level Order Traversal (R to L)
+    7 6 5 4
+    3 2
+    1
+
+void printReverseOrder(Node root) {
+	Queue queue = new ArrayList<>();
+	Stack stack = new Stack();
+	queue.offer(root);
+	while(queue.size() != 0) {
+		int size = queue.size();
+		while(size > 0) {
+			Node temp = queue.poll();
+			stack.push(temp);
+			if(temp.left != null) {
+				queue.offer(temp.left);
+			}
+			if(temp.right != null) {
+                queue.offer(temp.right);
+            }
 		}
 		stack.push(null);
 	}
