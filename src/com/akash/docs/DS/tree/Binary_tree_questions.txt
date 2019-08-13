@@ -76,7 +76,9 @@ convert a binary tree into its mirror
 
 sorted linked list to BST
 	->O(nlog(n)) mid of linked list will be root, use recursive for left and right
-	->O(n) 
+	->O(n)
+	    -> convert linked list to array
+	    -> create empty BST with size of linked list,iterate through list and do inorder traverse to fill BST
 sorted array to balanced BST
 	->mid of array will be root, use recursive for left and right
 binary tree to doubly linked list
@@ -1288,3 +1290,50 @@ void printStackData(Stack stack) {
 }
 
 ------------------------
+// sorted linked list to BST
+-> n log(n)
+
+TNode getBst(LNode node) {
+	if(node == null) {
+		return null;
+	}
+	CompositeNode compositeNode = getMiddle(node);
+	TNode root = new TNode(compositeNode.middle);
+	root.left = getBst(compositeNode.first);
+	root.right = getBst(compositeNode.nextToMiddle);
+	return root;
+}
+
+CompositeNode getMiddle(LNode node) {
+	LNode slow = node;
+	LNode fast = node;
+	LNode pre = null;
+	while(fast.next != null && fast.next.next != null) {
+		pre = slow;
+		slow = slow.next;
+		fast = fast.next.next;
+	}
+	if(pre != null) {
+		pre.next = null;
+	}
+	LNode nextToMiddle = slow.next;
+	slow.next = null;
+	return new CompositeNode(node, slow, nextToMiddle);
+}
+
+
+
+class CompositeNode {
+	LNode first;
+	LNode middle;
+	LNode nextToMiddle;
+
+	CompositeNode(LNode first,LNode middle,LNode nextToMiddle) {
+		this.first = first;
+		this.middle = middle;
+		this.nextToMiddle = nextToMiddle;
+	}
+}
+
+------------------------
+
