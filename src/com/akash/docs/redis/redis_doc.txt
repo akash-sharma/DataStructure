@@ -63,6 +63,8 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-re
 -> spring boot - redis project
 https://www.journaldev.com/18141/spring-boot-redis-cache
 
+-> leaderboard implementation in redis
+*** https://www.ionos.com/community/hosting/redis/how-to-implement-a-simple-redis-leaderboard/
 
 set abc "hello"
 get abc
