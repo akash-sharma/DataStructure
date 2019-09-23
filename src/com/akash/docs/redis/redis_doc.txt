@@ -64,21 +64,22 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-re
 https://www.journaldev.com/18141/spring-boot-redis-cache
 
 -> leaderboard implementation in redis
-*** https://www.ionos.com/community/hosting/redis/how-to-implement-a-simple-redis-leaderboard/
+** https://www.ionos.com/community/hosting/redis/how-to-implement-a-simple-redis-leaderboard/
 
-set abc "hello"
-get abc
-del abc
+-------------
 
-set ab 1
-get ab
-incr ab
-del ab
+-> Issues with Redis
+*** https://tech.trivago.com/2017/01/25/learn-redis-the-hard-way-in-production/
 
+Redis is single threaded
+Must not be shared bw teams
+disable persistence of data if not required
+close connection after request completion
+Sharding will help you :
+    1) avoid hitting query like KEYS *
+    2) RAM consumption and high read/write requests can be handled via consistent hashing
 
-KEYS *
-//get all keys
-
+--------------------
 
 NOTE : Every key in redis has an expiry time
 By default expiry time for a key is infinite
