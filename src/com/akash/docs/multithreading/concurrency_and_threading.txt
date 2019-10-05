@@ -772,7 +772,7 @@ The iterators returned by the synchronized collections are not designed to deal 
  and they are fail-fast—meaning that if they detect that the collection has changed since iteration began,
  they throw the unchecked ConcurrentModificationException. 
 **classes that throw ConcurrentModificationException :
-	HashMap, HashSet, ArrayList, LinkedList, TreeMap, TreeSet
+	HashMap, HashSet, ArrayList, LinkedList, TreeMap, TreeSet, Collections.synchronizedList, synchronizedMap
 
 
 to avoid ConcurrentModificationException, a lock should be applied before iterator
