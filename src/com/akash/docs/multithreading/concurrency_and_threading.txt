@@ -785,10 +785,35 @@ locking cost time wait for other threads
 
 =>Hidden iterators
 
+public class HiddenIterator {
+    @GuardedBy("this")
+    private final Set<Integer> set = new HashSet<Integer>();
+
+    public synchronized void add(Integer i) { set.add(i); }
+
+    public synchronized void remove(Integer i) { set.remove(i); }
+
+    public void addTenThings() {
+        Random r = new Random();
+        for (int i = 0; i < 10; i++)
+            add(r.nextInt());
+        System.out.println("DEBUG: added ten elements to " + set);
+    }
+}
+
+The addTenThings method could throw ConcurrentModificationException ,
+because the collection is being iterated by toString in the process of preparing
+the debugging message. Of course, the real problem is that HiddenIterator is
+not thread-safe; the HiddenIterator lock should be acquired before using set in
+the println call,
+
 greater the distance between the state and the synchronization that guards it, 
 the more likely that someone will forget to use proper synchronization when accessing that state. 
 
-methods like toString(), equals(), hashcode() or any other
+Iteration is also indirectly invoked by the collection’s hashCode and equals methods,
+Similarly, the containsAll , removeAll , and retainAll methods,
+as well as the constructors that take collections as arguments, also iterate the collection.
+All of these indirect uses of iteration can cause ConcurrentModificationException .
 
 
 =>Concurrent Collection
