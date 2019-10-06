@@ -768,6 +768,45 @@ when there is a gap b/w locking state of object and synchronization methods
 The standard way to iterate a Collection is with an Iterator, 
 either explicitly or through the for-each loop syntax introduced in Java 5.0.
 
+-->
+for (int i = 0; i < list.size(); i++) {
+    Thing t = list.get(i);
+    ...
+}
+This kind of loop isn't always possible.For example,
+** Lists have indices, but Sets don't, because they're unordered collections.
+
+-->
+for (Thing thing : list) {
+    ...
+}
+This works with every kind of Iterable collection (or array)
+
+-->
+for (Iterator<Thing> it = list.iterator(); it.hasNext(); ) {
+    Thing t = it.next();
+    ...
+}
+
+for (Iterator<Thing> it = list.iterator(); it.hasNext(); ) {
+    Thing t = it.next();
+    if (shouldBeDeleted(thing) {
+        it.remove();
+    }
+}
+
+An Iterator can do things that a foreach loop can't. For example,
+** you can remove/add elements while you're iterating, if the iterator supports it
+** Lists also offer iterators that can iterate in both directions.
+    A foreach loop only iterates from the beginning to an end.
+** using list.get(index) in for loop for LinkedList is not good for performance.
+
+Iterators has been provided with methods : add, remove, set
+Once an iterator is created for traversing a collection,
+you cannot modify that collection by some another thread (ConcurrentModificationException).
+You can modify that collection by iterator.
+
+
 The iterators returned by the synchronized collections are not designed to deal with concurrent modification,
  and they are fail-fast—meaning that if they detect that the collection has changed since iteration began,
  they throw the unchecked ConcurrentModificationException. 
@@ -911,7 +950,8 @@ weakly consistent
     }
 	
 	// the output list is [a, b, c, c, d, e]
-	
+
+*** Try to avoid traversing list via index, as it will not throw ConcurrentModificationException.
 	 
 	Weakly consistent iteration provides guarantees against repeated elements and 
 	against a variety of errors or infinite loops that can occur. 
