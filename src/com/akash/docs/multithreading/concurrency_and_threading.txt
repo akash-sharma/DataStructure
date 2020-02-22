@@ -433,6 +433,14 @@ ____________			_____________________
 
 When not using volatile variable, we do not know when cpu cache value is written back to main memory.
 
+=> happens before relationship
+The results of a write by one thread are guaranteed to be visible to a read by another thread only if
+the write operation "happens-before" the read operation. The synchronized and volatile constructs,
+as well as the Thread.start() and Thread.join() methods, can form happens-before relationships.
+
+https://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html#jls-17.4.5
+
+
 NOTE :
 Making a variable volatile is not enough.
 If a variable is read and written by many threads, then we may fall in a race condition.
