@@ -203,7 +203,9 @@ http://stackoverflow.com/questions/26534489/unsafe-park-vs-object-wait
 
 https://dzone.com/articles/interruptedexception-and
 
-
+@Contended in java 8
+https://stackoverflow.com/questions/1970345/what-is-thread-contention
+https://www.javaspecialists.eu/archive/Issue249.html
 ========================================
 
 Difference b/w fair and non-fair sync is that :
