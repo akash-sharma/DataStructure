@@ -40,7 +40,7 @@ Rearrange array such that arr[i] >= arr[j] if i is even and arr[i]<=arr[j] if i 
 Convert array into Zig-Zag fashion
 Rearrange array in alternating positive & negative items with O(1) extra space  -> quick sort logic
 Rearrange array such that even positioned are greater than odd
-Rearrange an array such that ‘arr[j]’ becomes ‘i’ if ‘arr[i]’ is ‘j’
+Rearrange an array such that ï¿½arr[j]ï¿½ becomes ï¿½iï¿½ if ï¿½arr[i]ï¿½ is ï¿½jï¿½
 Arrange given numbers to form the biggest number
 Longest Bitonic Subsequence  -> DP
 Longest Bitonic SubArray	-> O(n) time, O(1) space
@@ -106,7 +106,7 @@ Longest subarray with sum divisible by k
 
 ===> Heap problems
 
-K’th Smallest/Largest Element in Unsorted Array
+Kï¿½th Smallest/Largest Element in Unsorted Array
 	--min heap
 Kth smallest element in a row-wise and column-wise sorted 2D array
 	--min heap
@@ -115,31 +115,34 @@ Median of Stream of Running Integers
 
 ----------------------------------------------------------------------
 
-int findPivot(int arr[]) {
-	return findPivot(arr, 0, arr.length-1);
+private static int pivotIncreasing(int start, int end, int arr[]) {
+    if(start > end || start == arr.length-1) {
+        return -1;
+    } else {
+        int mid = start + (end-start)/2;
+        if(arr[mid] > arr[mid+1]) {
+            return mid;
+        } else if(arr[start] > arr[mid]) {
+            return pivotIncreasing(start, mid-1, arr);
+        } else {
+            return pivotIncreasing(mid+1, end, arr);
+        }
+    }
 }
 
-private findPivot(int arr[], int start, int end) {
-	if(start > end) {
-		return -1;
-	}
-	if(arr[start] < arr[end]) {
-		return -1;
-	}
-	if(start == end) {
-		return start;
-	}
-	int mid = (end-start)/2 + start;
-	if(arr[mid-1] < arr[mid] && arr[mid] > arr[mid+1]) {
-		return mid;
-	}
-	if(arr[mid-1] > arr[mid] && arr[mid] < arr[mid+1]) {
-		return mid-1;
-	}
-	if(arr[mid-1] < arr[mid] && arr[mid] < arr[mid+1]) {
-		return findPivot(arr, mid+1, end);
-	}
-	return findPivot(arr, start, mid-1);
+private static int pivotDecreasing(int start, int end, int arr[]) {
+    if(start > end || start == arr.length-1) {
+        return -1;
+    } else {
+        int mid = start + (end-start)/2;
+        if(arr[mid] < arr[mid+1]) {
+            return mid;
+        } else if(arr[start] < arr[mid]) {
+            return pivotDecreasing(start, mid-1, arr);
+        } else {
+            return pivotDecreasing(mid+1, end, arr);
+        }
+    }
 }
 
 
@@ -180,7 +183,7 @@ void moveNegativeToStart(int arr[]) {
 
 -------------------
 
-//Rearrange an array such that ‘arr[j]’ becomes ‘i’ if ‘arr[i]’ is ‘j’
+//Rearrange an array such that ï¿½arr[j]ï¿½ becomes ï¿½iï¿½ if ï¿½arr[i]ï¿½ is ï¿½jï¿½
 void replace(int arr[]) {
 	int i=0;
 	while(i < arr.length) {
