@@ -1337,3 +1337,30 @@ class CompositeNode {
 
 ------------------------
 
+// print euler path of binary tree
+
+printEuler(Node root) {
+    List<Node> list = new LinkedList<>();
+    populateEulerPathOfTree(root, list);
+    for(Node node : list) {
+        print(node);
+    }
+}
+
+populateEulerPathOfTree(Node node, List<Node> list) {
+    list.add(node);
+    if(node.left != null) {
+        populateEulerPathOfTree(node.left, list);
+        list.add(node);
+    }
+    if(node.right != null) {
+        populateEulerPathOfTree(node.right, list);
+        list.add(node);
+    }
+}
+
+// LCA problem
+// print euler path of binary tree with level of each node
+// if node level is L, then node.left level is L+1 and node.right level is L+1
+
+------------------------
