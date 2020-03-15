@@ -297,7 +297,7 @@ Solution :
 					 
 		Solution 2 : (DFS) To check if (u-v) is a bridge edge using DFS
 	
-(Q) Given a Directed Graph G, has G Eulerian cycle? (Hierholzer’s Algorithm)
+(Q) Given a Directed Graph G, has G Eulerian cycle? (Hierholzerï¿½s Algorithm)
 	->check if G is Strongly Connected Component.(there is a path bw every pair of ordered vertices)
 	->For every edge, in-degree(u) = out-degree(u)
 	
@@ -715,9 +715,9 @@ Euler path and Euler Cycle
 (5) Bipartite problem :
 	http://www.geeksforgeeks.org/maximum-bipartite-matching/
 (6) All pair shortest path problem (floyd-warshall-algorithm)
-(7) single source shortest distances in O(VE) ,Bellman–Ford Algorithm
+(7) single source shortest distances in O(VE) ,Bellmanï¿½Ford Algorithm
 (8) graph with no negative weights,single source shortest distances in O(E + VLogV) time, 
-	Dijkstra’s algorithm
+	Dijkstraï¿½s algorithm
 (9) Shortest Path in DAG
 (10) All pair shortest path
 (11) Transitive closure
@@ -857,7 +857,7 @@ This can only be implemented in Union by Rank and not in union by height, as we 
 
 (Q)Find the number of islands
 (Q)Detect Cycle in an Undirected Graph
-(Q)Tarjan’s off-line lowest common ancestors algorithm
+(Q)Tarjanï¿½s off-line lowest common ancestors algorithm
 (Q)Job Sequencing Problem
 
 ====================================
@@ -1060,7 +1060,7 @@ on unweighted graphs, that is, graphs in which each edge has unit weight.
 Shortest-paths algorithms typically rely on the property that a shortest path 
 between two vertices contains other shortest paths within it.
 
-Dijkstra’s algorithm is a greedy algorithm.
+Dijkstraï¿½s algorithm is a greedy algorithm.
 Floyd-Warshall algorithm: (all pairs shortest paths) is a dynamic-programming algorithm.
 
 If the graph contains a negative-weight cycle reachable from s,then shortest-path weights are not well defined.
@@ -1139,7 +1139,7 @@ It is quite similar to prims algorithm, where we also take 2 sets.
 S' in prims algo contains vertices having a value d , 
 as minimum edge of all the edges from S to that vertex.
 
-Dijkstra’s algorithm maintains a set S of vertices whose final shortest-path
+Dijkstraï¿½s algorithm maintains a set S of vertices whose final shortest-path
 weights from the source s have already been determined. The algorithm repeatedly
 selects the vertex u from {V - S} with the minimum shortest-path estimate, adds u
 to S, and relaxes all edges leaving u. In the following implementation, we use a
@@ -1178,6 +1178,12 @@ floydWarshal(G) {
 		}
 	}
 }
+
+
+(Q) 2D matrix of 1 and 0 of NxM,
+convert 0 to 1 , if that 0 is neighbour of 1.
+How many times it would take to make all nodes as 1.
+definition of neighbor is left, right, top, bottom.
 
 
 ----------------------------------------------
