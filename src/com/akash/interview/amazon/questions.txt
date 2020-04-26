@@ -1,0 +1,53 @@
+Design S3
+amazon locker functionality
+	sms code for taking a delivery from locker
+
+
+imp links :
+http://techblog.netflix.com/2015/07/tuning-tomcat-for-high-throughput-fail.html
+https://www.eginnovations.com/blog/tomcat-performance-tuning/
+https://www.google.com/url?sa=t&source=web&rct=j&url=https://support.pentaho.com/hc/en-us/article_attachments/360004612592/Tomcat_Performance_Tuning_for_Pentaho.pdf%3Fmobile_site%3Dtrue&ved=2ahUKEwj29bLl9M_oAhWP4zgGHWB2D5QQFjADegQIDhAH&usg=AOvVaw147VDgWlpz0caG6wKGbp1G
+
+https://docs.bmc.com/docs/brid91/en/tomcat-container-workload-configuration-825210082.html
+https://www.datadoghq.com/blog/tomcat-architecture-and-performance/
+
+
+==============================
+
+(1) List<String> messages , List<String> words : Top N words having higher occurence in messages.
+(2) 2-D metric of 1 and 0, replace all 0 neighbours of 1 to 0, neighbour is left,right,top,bottom
+    How many times will it take to fill whole matrix as 1.
+    return -1 if not possible.
+
+(3) Number of ways to climb a stair, if user can climb step1 or step2
+(4) In park there are benches in a row and some people are sitting on some benches
+    If a new user comes, find a bench for him that he could sit farthest to all other people.
+(5) Given list of valid maven dependencies mapping and given list of dependencies in a project
+    check if dependencies of project are valid and if valid then print the order
+(6) Design Facebook NewsFeed (High level and low level)
+   High :
+	new post --> DB --> Debezium -> spark --> ES
+	Show Feed <-- ES
+
+	ES partitioning on the basis of user
+
+show feeds on the basis of ranking : likes,shares,comments,adds
+
+   Low :
+User
+UserToUserMapping
+UserToComment
+UserToFeed
+FeedRanking
+
+how to show image/video in a post
+
+fetch friends of user
+  -> mysql indexing
+  -> cassandra partitioning
+
+Ranking of Feed
+  -> Heap
+  -> internally ES has feature to keep it in sorted order of ranking
+
+==============================

@@ -1,0 +1,25 @@
+Reverse stack
+25 horse puzzle
+Design car parking
+Multi threading problem print 123 456
+Max sum without adjacent
+Distance bw two nodes in tree
+
+
+
+Round 1 :
+Find immediate bigger element
+Find element in a matrix (row and column wise sorted)
+Play song in random order. Song shouldn’t be played again.
+
+Round 2 :
+Dropwizard vs. Spring boot
+Why survivors in java memory model?
+Which GC you use?
+How you solve memory errors during startup?
+Design foodpanda app
+
+Round 3 :
+Design web server
+How do you implement S3 bucket?
+Lift management

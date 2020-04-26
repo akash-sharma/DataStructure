@@ -1,0 +1,25 @@
+Find second Max in an array
+Segregate odd even
+Singleton class
+Diff bw MySQL and mongodb
+How to design an application with fast home page
+Given two services , login and product , how make authentication fast
+
+Flatten linked list
+Copy linked list with random pointer
+Clustered index
+Diff bw redis and memcache
+Design bookmyshow
+Puzzle
+1-5
+2-25
+3-125
+4-625
+5-?
+
+most challenging situation you faced
+
+We have a company where people can come to office on any combination of days in a week.we have a User table where we store username and days column which will provide information about days on which this User will come to office. Try to design this system at big scale.
+
+Team : auth or recharge
+

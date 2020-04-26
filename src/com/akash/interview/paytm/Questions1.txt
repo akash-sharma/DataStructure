@@ -1,0 +1,20 @@
+-Train interval timing problem
+-Kth permutation of a number
+-Online player game having id and score of each player.provide ds for following operations
+Insert update delete player
+Rank of player by id
+Top k players, k is variable
+
+
+Db questions like how indexing works , cluster indexing , composite indexing
+When to use no SQL
+Sum of pair as given number in array
+Sum of pair is multiple of given no in array
+Power of a number
+Left view binary tree
+Copy of doubly linked list with one random pointer
+Max sum sub array with no consecutive
+
+How concurrent hashmap works
+How transactional annotation works in spring
+Design car parking problem, taking parking lot as an array. Optimize API for getting first free parking lot.

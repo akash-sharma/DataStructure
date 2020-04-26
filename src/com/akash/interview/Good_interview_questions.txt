@@ -1,0 +1,5 @@
+How https works, who encrypts the data
+When to use spring security and when to use oauth
+What measures would you apply to secure a rest service over json
+How reverse indexing in lucene is better than db indexing
+When not to use hibernate with relational DB
