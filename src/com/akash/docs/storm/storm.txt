@@ -1,0 +1,250 @@
+https://storm.apache.org/releases/2.1.0/Concepts.html
+
+
+collector : emit , act/fail
+https://storm.apache.org/releases/2.1.0/Guaranteeing-message-processing.html
+
+
+grouping : shuffle,field,global
+http://www.corejavaguru.com/bigdata/storm/word-count-topology
+
+
+parralelism_hint : worker,executor,task
+https://storm.apache.org/releases/1.2.3/Understanding-the-parallelism-of-a-Storm-topology.html
+
+one bolt emits data to multiple bolts
+https://gist.github.com/Xorlev/8058947
+
+installation
+http://storm.apache.org/releases/current/Setting-up-a-Storm-cluster.html
+
+when to ack from bolt
+https://stackoverflow.com/questions/47049058/is-it-necessary-to-ack-a-tuple-in-storm-bolt
+
+good blog
+https://www.freecodecamp.org/news/apache-storm-is-awesome-this-is-why-you-should-be-using-it-d7c37519a427/
+
+
+========================================================
+
+nodes : master node and worker nodes
+The master node runs a daemon called "Nimbus" 
+Nimbus : 
+	distributing code around the cluster
+	assigning tasks to machines 
+	monitoring for failures
+
+
+Each worker node runs a daemon called the "Supervisor"
+Each worker process executes a subset of a topology
+a running topology consists of many worker processes spread across many machines
+
+coordination between Nimbus and the Supervisors is done through a Zookeeper cluster
+Nimbus daemon and Supervisor daemons are fail-fast and stateless;
+you can kill -9 Nimbus or the Supervisors and they'll start back up like nothing happened
+
+
+MapReduce job eventually finishes, whereas a topology runs forever (or until you kill it).
+A topology is a graph of computation. 
+Each node in a topology contains processing logic
+A topology is a graph of spouts and bolts that are connected with stream groupings.
+
+
+A stream is an unbounded sequence of tuples
+transforming a stream into a new stream in a distributed and reliable way. 
+eg: a stream of tweets into a stream of trending topics
+
+
+A spout is a source of streams in a topology
+spouts will read tuples from an external source and emit them into the topology
+Spouts can emit more than one stream
+
+
+All processing in topologies is done in bolts. 
+Bolts can do anything from filtering, functions, aggregations, joins, talking to databases, and more
+Doing complex stream transformations often requires multiple steps and thus multiple bolts
+Bolts can emit more than one stream.
+Bolts must call the ack method on the OutputCollector for every tuple they process so that Storm knows when tuples are completed
+
+
+==============
+
+TopologyBuilder builder = new TopologyBuilder();        
+builder.setSpout("words", new TestWordSpout(), 2)
+	.setNumTasks(4);        
+builder.setBolt("exclaim1", new ExclamationBolt(), 3)
+	.setNumTasks(6)
+        .shuffleGrouping("words");
+builder.setBolt("exclaim2", new ExclamationBolt(), 2)
+        .shuffleGrouping("exclaim1");
+
+
+words spout has 2 executors and 4 tasks, 2 task per executor
+exclaim1 bolt has 3 executors and 6 tasks, 2 task per executor
+
+worker : storm process on a machine
+executor : thread in a process to execute spout or bolt
+task : A task performs the actual data processing
+
+#threads ≤ #tasks
+
+==============
+
+IRichSpout
+IRichBolt
+
+"shuffle grouping" means that tuples should be randomly distributed from the input tasks to the bolt's tasks
+
+setBolt takes an InputDeclarer
+input declarations can be chained to specify multiple sources for the Bolt
+
+
+
+--------
+TestWordSpout
+
+//Spout#nextTuple() 
+	either emits a new tuple into the topology or simply returns if there are no new tuples to emit. 
+//ack and fail are only called for reliable spouts
+
+public void nextTuple() {
+    Utils.sleep(100);
+    final String[] words = new String[] {"nathan", "mike", "jackson", "golda", "bertels"};
+    final Random rand = new Random();
+    final String word = words[rand.nextInt(words.length)];
+    _collector.emit(new Values(word));
+}
+
+--------
+
+public static class ExclamationBolt implements IRichBolt {
+    OutputCollector _collector;
+
+    @Override
+    public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
+        _collector = collector;
+    }
+
+    @Override
+    public void execute(Tuple tuple) {
+        _collector.emit(tuple, new Values(tuple.getString(0) + "!!!"));
+        _collector.ack(tuple);
+    }
+
+    @Override
+    public void cleanup() {
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+        declarer.declare(new Fields("word"));
+    }
+
+    @Override
+    public Map<String, Object> getComponentConfiguration() {
+        return null;
+    }
+}
+
+---------
+
+tuples can be emitted at anytime from the bolt -- in the prepare, execute, or cleanup methods
+The execute method receives a tuple from one of the bolt's inputs.
+
+Tuple#getSourceComponent -- name of input source for bolt
+
+#cleanup
+There's no guarantee that this method will be called on the cluster: 
+for example, if the machine the task is running on blows up, there's no way to invoke the method
+
+
+Shuffle grouping : 
+	sends the tuple to a random task
+	evenly distributing the work of processing the tuples across all
+
+Field grouping :
+	A fields grouping lets you group a stream by a subset of its fields.
+	helps in streaming joins and streaming aggregations
+	implemented using mod hashing
+
+
+A reliable spout is capable of replaying a tuple if it failed to be processed by Storm, 
+whereas an unreliable spout forgets about the tuple as soon as it is emitted.
+
+=>Stream groupings
+stream grouping defines how that stream should be partitioned among the bolt's tasks.
+
+Shuffle grouping
+Fields grouping
+Partial Key grouping
+All grouping
+
+
+
+=> Guaranteeing Message Processing
+
+Storm considers a tuple coming off a spout "fully processed" 
+when the tuple tree has been exhausted and every message in the tree has been processed.
+ A tuple is considered failed when its tree of messages fails to be fully processed within a specified timeout. 
+
+the Spout provides a "message id" that will be used to identify the tuple later
+
+There are two things you have to do as a user to benefit from Storm's reliability capabilities. 
+First, you need to tell Storm whenever you're creating a new link in the tree of tuples. 
+Second, you need to tell Storm when you have finished processing an individual tuple.
+
+Anchoring : when you pass input Tuple object in emit() method to another bolt.
+This helps storm to replay a tuple at root spout when a failure occurs at any downstream processing level.
+
+
+//Specifying a link in the tuple tree is called anchoring.
+public void execute(Tuple tuple) {
+	String word = "";
+	_collector.emit(tuple, new Values(word));
+	_collector.ack(tuple);
+}
+
+
+
+//Emitting the word tuple this way causes it to be unanchored.
+public void execute(Tuple tuple) {
+	String word = "";
+	_collector.emit(new Values(word));
+	_collector.ack(tuple);
+}
+
+
+Note : that there are some bolts which do not require tuple ack().
+      for example : all implementations of IBasicBolt.
+
+Note : Tuples emitted to BasicOutputCollector are automatically anchored to the input tuple, and 
+the input tuple is acked for you automatically when the execute method completes.
+@See IBasicBolt
+
+https://stackoverflow.com/questions/47049058/is-it-necessary-to-ack-a-tuple-in-storm-bolt
+
+
+Every tuple knows the ids of all the spout tuples for which it exists in their tuple trees
+
+
+============
+
+
+Topology example (graph of spout and bolt) :
+
+
+Spout 1  -->  bolt 1	-->	bolt 4
+	 -->  bolt 2	-->	bolt 4
+ 
+Spout 2  -->  bolt 3  	-->	bolt 4
+
+
+example topology graph :
+https://www.freecodecamp.org/news/apache-storm-is-awesome-this-is-why-you-should-be-using-it-d7c37519a427/
+
+
+============
+
+
+
+
