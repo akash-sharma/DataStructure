@@ -92,7 +92,7 @@ find median in BST
 	->check no of nodes in BST,do inorder traversal and stop at n/2
 BST from preorder
 	-> O(n^2) first element will be root, find first number in array greater than root,right subtree starts from there.Recursive
-	-> O(n) 
+	-> O(n)  - find next greater element for each element in preorder array (stack)
 BST from postorder
 
 Construct Tree from given Inorder and Preorder traversals
