@@ -487,3 +487,106 @@ so callbacks will also only be invoked during that time.
 Setting enable.auto.commit true means that offsets are committed automatically
  with a frequency controlled by the config auto.commit.interval.ms.
 
+======================================
+
+=>configuration of the producer
+
+
+bootstrap.servers
+key.serializer
+value.serializer
+
+acks -- [all, -1, 0, 1]
+	The number of acknowledgments the producer requires the leader to have received before considering a request complete.
+
+buffer.memory -- The total bytes of memory the producer can use to buffer records waiting to be sent to the server.
+
+compression.type -- default is none
+
+
+=> configuration for the consumer:
+
+
+bootstrap.servers
+key.deserializer
+value.deserializer
+
+fetch.min.bytes : The minimum amount of data the server should return for a fetch request.
+	If insufficient data is available the request will wait for that much data to accumulate before answering the request
+
+group.id : consumer group name
+
+session.timeout.ms: The timeout used to detect client failures when using Kafka's group management facility.
+	The client sends periodic heartbeats to indicate its liveness to the broker.
+	If no heartbeats are received by the broker before the expiration of this session timeout,
+	then the broker will remove this client from the group and initiate a rebalance.
+
+enable.auto.commit:
+	Default: true
+
+partition.assignment.strategy
+	class implementing ConsumerPartitionAssignor
+	default : RangeAssignorValid
+
+
+==========================================
+https://kafka.apache.org/documentation/
+
+
+Replicated Logs: Quorums, ISRs, and State Machines
+Availability and Durability Guarantees
+Log Compaction
+Log Compaction Basics
+4.9 Quotas
+
+5.4 Log
+5.5 Distribution
+
+==========================================
+
+Useful kafka commands
+
+
+// push data to kafka topic
+bin/kafka-console-producer.sh --broker-list <kafka_broker_ip>:9092 --topic <topic_name> --property "parse.key=true" --property "key.separator=::"
+>your_kafka_packet_key::your_kafka_packet_value
+
+
+// read data from kafka topic
+bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_ip>:9092 --topic <topic_name>
+
+
+// read data from kafka topic from beginning
+bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_ip>:9092 --topic <topic_name> --from-beginning
+
+
+// read kafka topic data at particular offset
+bin/kafka-console-consumer.sh --bootstrap-server <kafka_broker_ip>:9092 --topic <topic_name> --max-messages 1  --partition <parition> --offset <offset>
+
+
+// check offset value of all partitions in a consumer group (position of all consumers in a consumer group)
+bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_ip>:9092 --group <Consumer_group_name> --describe
+
+
+// get all consumer groups across all topics
+bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_ip>:9092 --list
+
+
+// dry run command for setting commited offset value in a partition
+bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_ip>:9092 --group <Consumer_group_name> --topic <topic_name>:<partition_number> --reset-offsets --to-offset <offset_number> --dry-run
+
+
+// execute command for setting commited offset value in a partition
+bin/kafka-consumer-groups.sh --bootstrap-server <kafka_broker_ip>:9092 --group <Consumer_group_name> --topic <topic_name>:<partition_number> --reset-offsets --to-offset <offset_number> --execute
+
+
+
+// create kafka topic with partition=3, replica=2 and packet retention time=14 days
+bin/kafka-topics.sh --create --zookeeper <zookeeper_ip>:2181 --replication-factor 2 --partitions 3 --topic <topic_name> --config retention.ms=1209600000
+
+
+// list topic name
+bin/kafka-topics.sh --list --zookeeper <zookeeper_ip>:2181
+
+
+==========================================
