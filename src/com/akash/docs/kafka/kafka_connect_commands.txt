@@ -1,0 +1,72 @@
+kafka connect commands and configuration
+
+
+(1) enable row based logs on atleast one mysql slave server
+(2) enable gtid on all mysql servers
+(3) open connectivity from kafka connect server to mysql servers
+(4) create new mysql user with permissions required for debizium
+
+
+// get all connectors name
+curl -X GET http://localhost:8083/connectors
+
+
+// get kafka connector configuration
+curl -X GET http://localhost:8083/connectors/my_connector_name
+
+
+// create or edit kafka connect configuration
+curl -X POST   http://10.254.16.133:8083/connectors -d'
+{
+   "name":"my_debizium_mysql_connector",
+   "config":{
+      "connector.class":"io.debezium.connector.mysql.MySqlConnector",
+      "database.user":"debezium",
+      "database.server.name":"<database_name>",
+      "database.port":"3306",
+      "database.server.id":"<any_random_number>",
+      "database.hostname":"<database_host>",
+      "database.password":"<database_password>",
+
+      "database.history.kafka.topic":"<topic_name>",
+      "database.history.kafka.bootstrap.servers":"<kafka_broker_ip>:9092",
+      "event.deserialization.failure.handling.mode":"warn",
+      "time.precision.mode":"connect",
+      
+      "include.schema.changes":"true",
+      "table.whitelist":"<database_name>.<table_name>",
+      "inconsistent.schema.handling.mode":"ignore",
+      
+      "name":"my_debizium_mysql_connector",
+      "database.history.skip.unparseable.ddl":"true",
+      "database.history.store.only.monitored.tables.ddl":"true",
+      "database.whitelist":"<database_name>",
+      "snapshot.mode":"schema_only"
+   }
+}
+'
+
+snapshot.mode : schema_only , schema_only_recovery
+
+database.history.kafka.topic : 
+
+kafka topic name where debizium packets will be pushed : {database.whitelist} + "." + {table.whitelist}
+
+
+
+// connector status
+curl -X GET http://localhost:8083/connectors/my_connector_name/status
+
+
+// delete connector
+curl -X DELETE http://localhost:8083/connectors/my_connector_name
+
+
+// pause connector
+curl -X PUT http://localhost:8083/connectors/my_connector_name/pause
+
+
+// resume connector
+curl -X PUT http://localhost:8083/connectors/my_connector_name/resume
+
+
