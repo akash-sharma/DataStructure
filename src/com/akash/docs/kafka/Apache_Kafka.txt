@@ -528,6 +528,8 @@ partition.assignment.strategy
 	class implementing ConsumerPartitionAssignor
 	default : RangeAssignorValid
 
+auto.offset.reset
+	https://stackoverflow.com/questions/32390265/what-determines-kafka-consumer-offset
 
 ==========================================
 https://kafka.apache.org/documentation/
