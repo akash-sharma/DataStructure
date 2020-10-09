@@ -566,7 +566,20 @@ Given an acyclic graph G, ordering of vertices in their departure time is called
  
 Topological sort : sorting vertices on the basis of departure timestamp (larger to smaller)
 	(this can be done while performing DFS just to avoid complexity of sorting)
-	
+
+(Q) Given all maven dependencies in a transitive manner,
+check if there is a cyclic dependency or not?
+If no cyclic dependency then print the order of downloading jars?
+ex :
+A requires B
+B requires C
+D requires E
+E requires C
+
+Output : No cycle , order of download : [C, E, D, B, A]
+HINT : check DAG and use topological sort
+
+
 DAG : Directed Acyclic Graph
 (Q) Given a Directed graph G, check if G is Acyclic?
 	-> No back edge means no cycle
