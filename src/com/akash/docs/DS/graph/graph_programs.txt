@@ -1,0 +1,340 @@
+class Graph {
+	private Map<Node, Set<Node>> allEdges = new HashMap<>();
+
+	private Set<Node> allVertices = new HashSet<>();
+
+	public Set<Node> getAllVertices() {
+		return allVertices;
+	}
+	
+	public Set<Node> getEdges(Node node) {
+		return allEdges.get(node);
+	}
+
+	public void addEdge(Node src, Node dest) {
+		Set<Node> edges = getEdges(src);
+		if(edges == null) {
+			edges = new HashSet<>();
+		}
+		edges.add(dest);
+		Set<Node> edges2 = getEdges(dest);
+		if(edges2 == null) {
+			edges2 = new HashSet<>();
+		}
+		edges2.add(src);
+	}
+}
+
+class Node {
+	int value;
+
+	String color;
+	Node parent;
+	int distance;
+}
+
+// set for all nodes : color = WHITE , distance = 0, parent = null
+
+void bfs(Node node) {
+
+	node.parent = null;
+	node.color = "GRAY";
+	node.distance = 0;
+	Queue<Node> queue = new LinkedList<>();
+	queue.add(node);
+	while(queue.size() > 0) {
+		Node temp = queue.poll();
+		process(temp);
+		Set<Node> adjacentEdges = getEdges(temp);
+		while(Node adjacentNode : adjacentEdges) {
+			if(adjacentNode.color.equals("WHITE")) {
+				adjacentNode.color = "GRAY";
+				adjacentNode.parent = temp;
+				adjacentNode.distance = temp.distance + 1;
+				queue.add(adjacentNode);
+			}
+		}
+		temp.color = "BLACK";
+	}
+}
+
+
+==========================
+
+
+// set for all nodes : color = WHITE , distance = 0, parent = null
+
+int getConnectedComponents() {
+	int connectedComponents = 0;
+	List<Node> allNodes = new ArrayList(getAllVertices());
+	for(Node temp : allNodes) {
+		if(temp.color.equals("WHITE")) {
+			bfs(temp);
+			connectedComponents++;
+		}
+	}
+	return connectedComponents;
+}
+
+
+==========================
+
+
+// set for all nodes : color = WHITE , distance = 0, parent = null
+
+boolean isBipartite(Node node) {
+	node.parent = null;
+	node.color = "GRAY";
+	node.distance = 0;
+	Queue<Node> queue = new LinkedList<>();
+	queue.add(node);
+	while(queue.size() > 0) {
+		Node temp = queue.poll();
+		Set<Node> adjacentEdges = getEdges(temp);
+		while(Node adjacentNode : adjacentEdges) {
+			if(adjacentNode.color.equals("WHITE")) {
+				adjacentNode.color = "GRAY";
+				adjacentNode.parent = temp;
+				adjacentNode.distance = temp.distance + 1;
+				queue.add(adjacentNode);
+			} else if(adjacentNode.distance == temp.distance) {
+				return false;
+			}
+		}
+		temp.color = "BLACK";
+	}
+	return true;
+}
+
+
+==========================
+
+
+// 2-D array contains 0 and 1, find number of islands of 1
+
+//color array = 0 -> white , 1 -> gray , 2 -> black
+
+int numberOfIslands(int arr[][]) {
+	int numberOfIslands = 0;
+	int colorArr[][] = new int[arr.length][arr[0].length];
+	for(int i=0; i<arr.length; i++) {
+		for(int j=0; j<arr[0].length; j++) {
+			if(colorArr[i][j] == 0) {
+				bfsArray(i, j, arr, colorArr);
+				numberOfIslands++;
+			}
+		}
+	}
+	return numberOfIslands;
+}
+
+class ArrNode {
+	int i,j;
+	public ArrNode(int i, int j) {
+		// check i, j limits
+	}
+}
+
+void bfsArray(int i, int j, int arr[][], int colorArr[][]) {
+	colorArr[i][j] = 1;
+	Queue<ArrNode> queue = new LinkedList<>();
+	queue.add(new ArrNode(i,j));
+	while(queue.size() > 0) {
+		ArrNode temp = queue.poll();
+		while(ArrNode adjacentArrNode : getAdjacentArrNode(temp)) {
+			if(colorArr[adjacentArrNode.i][adjacentArrNode.j] == 0) {
+				colorArr[adjacentArrNode.i][adjacentArrNode.j] = 1;
+				queue.add(new ArrNode(i,j));
+			}
+		}
+	}
+	colorArr[i][j] = 2;
+}
+
+Set<ArrNode> getAdjacentArrNode(ArrNode arrNode) {
+	Set<ArrNode> adjacent = new HashSet<>();
+	int i = arrNode.i;
+	int j = arrNode.j;
+	adjacent.add(new ArrNode(i-1, j-1));
+	adjacent.add(new ArrNode(i-1, j));
+	adjacent.add(new ArrNode(i-1, j+1));
+	adjacent.add(new ArrNode(i, j+1));
+	adjacent.add(new ArrNode(i+1, j+1));
+	adjacent.add(new ArrNode(i+1, j));
+	adjacent.add(new ArrNode(i+1, j-1));
+	adjacent.add(new ArrNode(i, j-1));
+}
+
+==========================
+
+
+class Node {
+	int arrival;
+	int departure;
+	boolean visited;
+}
+
+int time = 0;
+
+void dfs(Node node) {
+	node.visited = true;
+	node.arrival = time++;
+	process(node);
+	for(Node temp : getEdges(node)) {
+		if(!temp.visited) {
+			dfs(temp);
+		}
+	}
+	node.departure = time++;
+}
+
+
+
+==========================
+
+bfs
+connected components
+bipartite
+
+check euler path -> connected graph, odd degree vertex is 0 or 2
+check euler cycle -> connected graph, odd degree vertex is 0
+print euler path ->
+(1) check euler path
+(2) pick a node having odd degree or any node
+(3) if node has single edge then
+		traverse that edge and remove that edge
+	else 
+		traverse edge which is not an bridge edge and remove that edge
+
+
+dfs
+bridge edge
+2 edge connected
+articulation vertex
+
+DAG -> back edge, coloring method
+topological sort -> ordering all vertices by decreasing departure time
+strongly connected graph
+strongly connected component
+
+disjoint sets
+MST : kruskal , prims
+SSSP
+APSP
+
+MinCashFlow problem
+JobSequencing Problem
+
+
+==========================
+
+// bridge Edge or 2 Edge connected in undirected graph
+
+class Node {
+	int value;
+	
+	int visited;
+	int arrival;
+	int dbe;
+	int parent;
+}
+
+class Edge {
+	Node v1;
+	Node v2;
+}
+
+Set<Edge> bridgeEdges = new HashSet<>();
+
+boolean twoEdgeConnected(Graph graph) {
+	Node node = graph.getVertices().iterator().next();
+	doTwoEdgeConnected(node);
+	if(bridgeEdges.size() > 0) {
+		return true;
+	}
+	return false;
+}
+
+int time = 0;
+void doTwoEdgeConnected(Node node) {
+	node.visited = true;
+	node.arrival = time++;
+	node.dbe = node.arrival;
+	for(Node temp : getEdges(node)) {
+		if(!temp.visited) {
+			temp.parent = node;
+			doTwoEdgeConnected(temp);
+			node.dbe = Math.min(temp.dbe , node.dbe);
+			if(temp.dbe > node.dbe) {
+				// edge from node to temp is bridge edge
+				bridgeEdges.add(new Edge(node, temp));
+			}
+		} else if(temp.parent != node) {
+			node.dbe = Math.min(temp.arr, node.dbe);
+		}
+	}
+}
+
+
+==========================
+
+DAG = a graph having no back edge
+back edge vs bridge edge -> when a graph has no back edge then it has all edges as bridge adges
+
+class Node {
+	int value;
+	int arrival;
+	int departure;
+	boolean visited;
+}
+
+int time = 0;
+boolean isDag(Graph graph) {
+	Node node = graph.getVertices().iterator().next();
+	return !isBackEdge(node);
+}
+
+boolean isBackEdge(Node node) {
+	node.arrival = time++;
+	node.visited = true;
+	for(Node temp : getEdges(node)) {
+		if(!temp.visited) {
+			if(isBackEdge(temp)) {
+				return true;
+			}
+		} else if(temp.visited && temp.departure == 0) {	// check if node -> temp is back edge
+			return true;
+		}
+	}
+	node.departure = time++;
+	return false;
+}
+
+
+==========================
+
+// find unioun sets
+
+class DisjointNode {
+	int value;
+	DisjointNode parent;
+	int rank;	//no of nodes in current set
+}
+
+
+Map<Integer, DisjointNode> map;
+
+DisjointNode find(int n) {
+	DisjointNode node = map.get(n);
+	while(node.parent != null) {
+		node = node.parent;
+	}
+	return node;
+}
+
+
+void unioin(int a, int b) {
+	
+}
+
+
