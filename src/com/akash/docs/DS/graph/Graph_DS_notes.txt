@@ -685,6 +685,8 @@ Solution3=>
 the finish time of a vertex that connects to other SCCs (other that its own SCC),
  will always be greater than finish time of vertices in the other SCC
 
+(Q) Number of groups formed in a graph of friends
+
 http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/GraphAlgor/strongComponent.htm
 
 ------------------------------------------
