@@ -898,12 +898,12 @@ void mst() {
 
 N find(Map<N,FindUnionSet> fuSets, N node) {
 	FindUnionSet fuSet = fuSets.get(node);
-	if(fuSet.getParent() != null) {
-		N parentNode = find(fuSets, fuSet.getParent());
-		fuSet.setParent(fuSets.get(parentNode));
-		return parentNode;
+	FindUnionSet temp = fuSet
+	while(temp.getParent() != null) {
+		temp = temp.getParent();
 	}
-	return fuSet.getNode();
+	fuset.parent = temp;
+	return temp.getNode();
 }
 
 void union(Map<N,FindUnionSet> fuSets, N src, N dest) {
