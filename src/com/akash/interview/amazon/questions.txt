@@ -51,3 +51,8 @@ Ranking of Feed
   -> internally ES has feature to keep it in sorted order of ranking
 
 ==============================
+
+https://www.usenix.org/conference/atc13/technical-sessions/presentation/bronson
+
+https://stackoverflow.com/questions/3533948/facebook-architecture
+
