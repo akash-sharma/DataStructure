@@ -1,0 +1,66 @@
+index creation 
+-> static settings
+	-> number of shards
+	-> codec
+	-> routing_partition_size
+	-> soft_deletes.enabled
+-> dynamic settings
+	-> number_of_replicas
+	-> search.idle.after
+	-> refresh_interval
+	-> max_result_window
+	-> index.write.wait_for_active_shards
+
+
+https://www.elastic.co/blog/found-elasticsearch-top-down
+https://www.elastic.co/blog/found-elasticsearch-from-the-bottom-up/
+https://www.elastic.co/blog/found-sizing-elasticsearch
+https://www.elastic.co/blog/found-optimizing-elasticsearch-searches/
+https://www.elastic.co/blog/found-elasticsearch-in-production
+
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
+
+
+=================================
+
+https://www.elastic.co/blog/found-elasticsearch-top-down
+
+
+Optimistic concurrency control => _version , _seq_no
+
+shard is decided by _routing_key , by _id is routing_key
+
+ES is async and concurrent
+
+index.write.wait_for_active_shards  => wait in sync for no of active shards to write (improve resiliency)
+					(similar to quarom in cassandra)
+
+assign _id and have idempotent request
+
+primary shard  (master)
+replica shard  (slave)
+1 master many slaves
+
+
+Request handling
+client node -->  primary shard  --->  replica shards
+
+client node sends parralel request to all primary shards
+primary shard sends paraller request to all replica shards
+
+
+ES has translog or write-ahead log, which stores data in log and flush it during lucene commit.
+
+Lucene do not have mapping , ES has mapping
+
+search type
+-> query then fetch 
+	means that there will be two rounds of searching
+-> 
+
+Lucene do not have match query , ES have match query
+
+
