@@ -56,3 +56,10 @@ https://www.usenix.org/conference/atc13/technical-sessions/presentation/bronson
 
 https://stackoverflow.com/questions/3533948/facebook-architecture
 
+================================
+
+(Q) count number of pairs in an array having sum in multiple of 60
+
+input : 17, 20, 40, 100, 80
+output : 4  [(20,40), (20,100), (40,80), (100,80)]
+
