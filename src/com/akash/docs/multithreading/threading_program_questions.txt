@@ -22,6 +22,12 @@ https://www.geeksforgeeks.org/producer-consumer-solution-using-semaphores-java/
 	at max 10 connections can be created.
 	If a connection is sitting idle for 5 min, 
 	then we have to remove that connection from pool
+
+hints : Object pool pattern
+https://www.oodesign.com/object-pool-pattern.html
+https://stackoverflow.com/questions/6595310/implementing-connection-pooling-java
+https://stackoverflow.com/questions/41874688/implement-custom-connection-pool
+
 	
 (Q) A service sends messages to 4 listeners.
 	A Message can have a priority as 1,2,3,4...
