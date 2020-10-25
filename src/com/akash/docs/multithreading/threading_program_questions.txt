@@ -510,3 +510,109 @@ class MyBlockingQueue {
 
 // create BlockingQueue using Semaphore
 
+
+
+=======================
+
+(Q) Create a database connection pool
+    5 connections are created initially
+    and other connections can be created on request
+    at max 10 connections can be created.
+    If a connection is sitting idle for 5 min,
+    then we have to remove that connection from pool
+
+interface Connection {
+    int read(); // reads an int from the connection
+    void close(); // closes the connection
+}
+
+
+abstract class StreamConnection implements Connection {
+    	private final InputStream input;
+    	int read() {
+		return input.read();
+	}
+    	void close() {
+		input.close();
+	}
+}
+
+
+
+// now sure that connections are returned
+// now sure that connections are closed and then returned
+
+class StreamConnectionWrapper extends StreamConnection implements Connection {
+
+	private ConnectionPool connectionPool;
+	private Connection realConnection;
+	private boolean closed = false;
+
+	public StreamConnectionWrapper(ConnectionPool connectionPool) {
+		this.connectionPool = connectionPool;
+		this.realConnection = connectionPool.borrowConnection();
+	}
+
+	int read () {
+		if (closed)
+			throw new IllegalStateException("Connection closed");
+		return realConnection.read();
+	}
+
+	void close() {
+		if (!closed) {
+    			closed = true;
+    			connectionPool.returnConnection(realConnection);
+		}
+	}
+
+	protected void finalize() throws Throwable {
+		try {
+    			close();
+		} finally {
+    			super.finalize();
+		}
+	}
+}
+
+interface ConnectionPool {
+	Connection borrowConnection();
+	void returnConnection(Connection conn);
+}
+
+class StreamConnectionPool implements ConnectionPool {
+
+	private BlockingQueue connectionQueue;
+	private int corePoolSize, maxPoolSize;
+	private int currentPoolSize;
+
+	public StreamConnectionPool(int corePoolSize, int maxPoolSize) {
+		this.connectionQueue = new ArrayBlockingQueue<>(maxPoolSize);
+		this.corePoolSize = corePoolSize;
+		this.maxPoolSize = maxPoolSize;
+		addConnectionToPool(corePoolSize);
+		currentPoolSize = corePoolSize;
+	}
+
+	private void addConnectionToPool(corePoolSize) {
+		// initialize corePoolSize connections
+	}
+
+	@Overrride
+	public Connection borrowConnection() {
+		if(currentPoolSize < maxPoolSize) {
+			addConnectionToPool(1);
+		}
+		return connectionQueue.take();
+	}
+
+	@Override
+	pulic void returnConnection(Connection conn) {
+		connectionQueue.offer(conn);
+	}
+}
+
+
+
+
+=============================
