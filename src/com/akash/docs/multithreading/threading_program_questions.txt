@@ -530,11 +530,11 @@ interface Connection {
 abstract class StreamConnection implements Connection {
     	private final InputStream input;
     	int read() {
-		return input.read();
-	}
+		    return input.read();
+	    }
     	void close() {
-		input.close();
-	}
+		    input.close();
+	    }
 }
 
 
@@ -553,6 +553,7 @@ class StreamConnectionWrapper extends StreamConnection implements Connection {
 		this.realConnection = connectionPool.borrowConnection();
 	}
 
+    // can create a thread with interrupt,so that we can return resource after timeout
 	int read () {
 		if (closed)
 			throw new IllegalStateException("Connection closed");
@@ -584,23 +585,23 @@ class StreamConnectionPool implements ConnectionPool {
 
 	private BlockingQueue connectionQueue;
 	private int corePoolSize, maxPoolSize;
-	private int currentPoolSize;
+	private int currentPoolSize = 0;
 
 	public StreamConnectionPool(int corePoolSize, int maxPoolSize) {
 		this.connectionQueue = new ArrayBlockingQueue<>(maxPoolSize);
 		this.corePoolSize = corePoolSize;
 		this.maxPoolSize = maxPoolSize;
 		addConnectionToPool(corePoolSize);
-		currentPoolSize = corePoolSize;
 	}
 
-	private void addConnectionToPool(corePoolSize) {
+	private void addConnectionToPool(int newConnectionAdded) {
 		// initialize corePoolSize connections
+		currentPoolSize = currentPoolSize + newConnectionAdded
 	}
 
 	@Overrride
 	public Connection borrowConnection() {
-		if(currentPoolSize < maxPoolSize) {
+		if(connectionQueue.peek() == null && currentPoolSize < maxPoolSize) {
 			addConnectionToPool(1);
 		}
 		return connectionQueue.take();
