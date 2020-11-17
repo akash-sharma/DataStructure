@@ -39,14 +39,17 @@ https://stackoverflow.com/questions/44448899/spring-data-for-apache-cassandra-co
 Cassandra Architechture :
 
 problems in relational DB :
-(1) Master slave architechure : replication is done in asynchronous way, so it is low consistency (ACID but not consistent)
-(2) Developers need to take care of this master slave architecture logic in code
-(3) Data is normalized (3NF), Joins make query slower
-(4) Sharding in relational DB is very difficult, 
-	-> schema and code design have to take care of that(sharding by user_id then find all users from india)
+(1) Data is normalized (3NF), Joins make query slower
+(2) Master slave architecture : data replication to slave node is done in asynchronous way,
+        so it is low consistency (ACID but not consistent)
+(3) Developers need to take care of this master slave architecture logic in code
+(4) Sharding in relational DB is very difficult,
+    -> you cannot do joins
+	-> schema design and code queries have to take care of shard key
+	        (eg: if shard key is user_id then all queries should contain user_id)
 	-> data movement between shards is done manually
-	-> you cannot do joins
-(5) Master slave architecture is not Highly available
+
+(5) Master slave architecture is not Highly Available (HA)
 	-> many times you need to upgrade system configuration
 	-> change DB settings
 
