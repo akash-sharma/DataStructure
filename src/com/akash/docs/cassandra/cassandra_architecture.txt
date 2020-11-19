@@ -59,6 +59,7 @@ Lessons Learned :
 	cassandra gave it up
 (2) Manual Sharding and Rebalancing is Hard
 	cassandra will take of that, developer dont have to think about adding/removing nodes
+	adding/removing a node in cassandra cluster ring has no downtime.
 (3) Master slave is complex to manage
 (4) Scaling up is expensive
 	So use commodity hardware
@@ -81,12 +82,13 @@ Fast distributed database
 High Availability
 Linear Scalability
 Predictible performance
-No SPOF
+No SPOF (single point of failure)
 Multi-Data center
 
 No Master-slave , no rebalance, no re-election of master
 
 => data in Hash rings
+(nodes in a ring act as token node, hash of data is used to get token node)
 
 Consider Cassandra as a gaint Hash Ring where all nodes in cluster are same machine.
 Data is partitioned around the ring
@@ -95,6 +97,14 @@ All nodes hold data and can answer queries(both reads and write)
 Location of data is determined by partition key
 No master slave/ replica sets
 No config servers/zookeper
+
+=> adding/removing a node in cassandra cluster ring has no downtime
+https://stackoverflow.com/questions/49175112/cassandra-cluster-it-taking-lot-of-time-when-i-add-new-node/49176015
+https://stackoverflow.com/questions/51765453/adding-a-new-node-to-cassandra-db-clusterthat-currently-has-only-one-node-and/51766601
+
+Adding or removing a node from cluster ring will trigger rehashing and moving data from all nodes.
+Old nodes require cleanup process for data.
+
 
 => CAP theorem
 Cassandra chooses Availability and Partition Tolerance over consistency
@@ -124,7 +134,7 @@ High value of CL is high consistent and less available
 => Multi data center
 Typical Usage : client write to local DC, replicas async to other DC
 Replication factor per keyspace per datacenter
-Data cennters can be physical or logical
+Data centers can be physical or logical
 
 The consistency level defaults to ONE for all write and read operations.
 quorum = (sum_of_replication_factors / 2) + 1
@@ -137,8 +147,9 @@ LOCAL_QUORAM -- when in multi DC, async replication to other DCs
 ====================================
 
 => Write Path of cassandra queries :
-Writes are written to any node in the cluster(coordinator), 
-	that node can decide where to store that data in cluster
+Writes are written to any node in the cluster,
+    this is called as coordinator node.
+	coordinator node decide where to store that data in cluster
 
 When a write occurs, Cassandra stores the data in a structure in memory, the memtable, 
 and also appends writes to the commit log on disk.
@@ -180,6 +191,34 @@ It has to check multiple sstables and merged in memory and get latest by timesta
 
 When consitency < ALL, then cassandra performs read repair in background (read_repair_chance)
 
+
+====================================
+
+what are problems with master-slave design :
+(1) if master is down then during re-election of master, that data is not available (non HA)
+(2) if master and slave are unable to connect each other, then it is non HA
+
+Advantages of master-less architecture :
+(1) if one master is down, cordinator can return data from other master, system is HA
+(2) system can return data in case if network is split into different data centers
+
+====================================
+
+=> Vnodes
+The ring of tokens and nodes make Apache Cassandra™ scalable and fault-tolerant, but
+managing partitions on solely physical nodes causes problems. For example, when a physical
+node goes down, it is necessary to redistribute partitions. This is where virtual nodes (or VNodes)
+come in. VNodes help even the load when redistributing partitions across physical nodes.
+
+When using vnodes, Cassandra automatically assigns the token ranges for you.
+
+====================================
+
+=> Gossip protocol
+it avoid the need of a central system to monitor every node
+Every node sends health status data to every other node
+its like a person in society wants to know latest status of every other person in society
+As this data is very small, it is a constant tickle to nw traffic and very less to actual data streaming.
 
 ====================================
 
