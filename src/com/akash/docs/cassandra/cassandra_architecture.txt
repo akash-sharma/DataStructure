@@ -114,12 +114,15 @@ cassandra can have multiple data centers on different locations, it is difficult
 Data is replicated automatically on a count of RF
 Replication is done asynchronously
 
-
 => Consistency Level
 per query consistency
 ALL, QUORAM, ONE
 How many replicas for query to respond OK
 
+A replication factor greater than one
+(1) widens the range of token values a single node is responsible for.
+(2) causes overlap in the token ranges amongst nodes.
+(3) requires more storage in your cluster.
 
 When CL=2 and RF=3, and a write query came
 write on 2 nodes will be in sync
