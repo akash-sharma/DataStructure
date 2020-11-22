@@ -1,138 +1,87 @@
-=> Spring Repo
-https://www.codingame.com/playgrounds/13642/getting-started-with-spring-data-cassandra
-https://github.com/lankydan/spring-data-cassandra/tree/master/src/main
 
-
-=> Java api 
-https://github.com/eugenp/tutorials/tree/master/persistence-modules/java-cassandra
-
-
-https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
-https://teddyma.gitbooks.io/learncassandra/content/model/cql_and_data_structure.html
-https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlDatabaseInternalsTOC.html
-https://www.guru99.com/cassandra-architecture.html
-https://www.quora.com/What-is-the-internal-architecture-of-the-Cassandra-database
-
-*** course 
-https://academy.datastax.com/user 
-user : akash777.sharma@gmail.com
-password : India@123
-
-
-
-** imagine Cassandra as a giant HashMap
-the Partition keys play the role of that key in map,So each query needs to have them specified. 
-clustering keys (columns, which are optional) help in further narrowing your query search 
-
-** One table can have only one combination of same partition key and clustering key
-
-https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlWriteUpdate.html
-
-https://stackoverflow.com/questions/36328063/how-to-return-a-custom-object-from-a-spring-data-jpa-group-by-query
-
-https://stackoverflow.com/questions/44448899/spring-data-for-apache-cassandra-converts-java-time-localdatetime-to-utc
-
-
-==================================================
-
-
-Cassandra Architechture :
-
-problems in relational DB :
 (1) Data is normalized (3NF), Joins make query slower
-(2) Master slave architecture : data replication to slave node is done in asynchronous way,
-        so it is low consistency (ACID but not consistent)
-(3) Developers need to take care of this master slave architecture logic in code
-(4) Sharding in relational DB is very difficult,
-    -> you cannot do joins
+(2) Master slave architecture is not Highly Available (HA)
+(3) Sharding in relational DB is very difficult,
+	-> you cannot do joins
 	-> schema design and code queries have to take care of shard key
 	        (eg: if shard key is user_id then all queries should contain user_id)
 	-> data movement between shards is done manually
 
-(5) Master slave architecture is not Highly Available (HA)
-	-> many times you need to upgrade system configuration
-	-> change DB settings
-
 
 Lessons Learned :
-(1) Consistency is not practical
-	cassandra gave it up
+(1) Consistency is not practical , cassandra gave it up (CAP)
 (2) Manual Sharding and Rebalancing is Hard
 	cassandra will take of that, developer dont have to think about adding/removing nodes
 	adding/removing a node in cassandra cluster ring has no downtime.
-(3) Master slave is complex to manage
-(4) Scaling up is expensive
-	So use commodity hardware
+(3) Master slave is complex to manage, cassandra is ring of master nodes
+(4) Scaling up is expensive , So use commodity hardware
 (5) Scatter/Gather is not good
 	Denormalize for real time query performance
 	Goal is to hit 1 machine
 
 
+
+
+what are problems with master-slave design :
+(1) if master is down then during re-election of master, that data is not available (non HA)
+(2) if master and slave are unable to connect each other, then it is non HA
+(3) Developers need to take care of this master slave architecture logic in code
+
+Advantages of master-less architecture :
+(1) if one master is down, cordinator can return data from other master, system is HA
+(2) system can return data in case if network is split into different data centers
+(3) cordinator node helps to find correct token node and developer do not need to take care
+
+
+
 In cassandra
 (1) Data is in denormalized form, no joins
 (2) Tables are created in a way that supports queries
-(3) masterless architecture
+(3) masterless architecture (No Master-slave , no rebalance, no re-election of master)
 (4) sharding is implemented automatically on the basis of partition key
+(5) supports multi DC (data center)
+(6) No SPOF (single point of failure)
 
-====================================
 
-Apache Cassandra
-
-Fast distributed database
-High Availability
-Linear Scalability
-Predictible performance
-No SPOF (single point of failure)
-Multi-Data center
-
-No Master-slave , no rebalance, no re-election of master
-
-=> data in Hash rings
-(nodes in a ring act as token node, hash of data is used to get token node)
-
-Consider Cassandra as a gaint Hash Ring where all nodes in cluster are same machine.
+Consider Cassandra as a gaint Hash Ring where all nodes in cluster are similar machines.
 Data is partitioned around the ring
-Data is replicated to RF=N servers
-All nodes hold data and can answer queries(both reads and write)
+Data is replicated to RF=N servers, if RF=2 then 2 copies of each data is maintained in ring.
+All nodes hold data and each node acts as a cordinator that can answer queries(both reads and write)
 Location of data is determined by partition key
-No master slave/ replica sets
 No config servers/zookeper
+
+
 
 => adding/removing a node in cassandra cluster ring has no downtime
 https://stackoverflow.com/questions/49175112/cassandra-cluster-it-taking-lot-of-time-when-i-add-new-node/49176015
 https://stackoverflow.com/questions/51765453/adding-a-new-node-to-cassandra-db-clusterthat-currently-has-only-one-node-and/51766601
 
-Adding or removing a node from cluster ring will trigger rehashing and moving data from all nodes.
-Old nodes require cleanup process for data.
+Adding or removing a node from cluster ring will trigger rehashing.
+A small hash slot from every node is moved from all nodes to the new node.
+Similar rehashing is done on node removal.
+After data rehashes, old nodes require cleanup process for old stale data.
 
-
-=> CAP theorem
-Cassandra chooses Availability and Partition Tolerance over consistency
-cassandra can have multiple data centers on different locations, it is difficult to maintain consistency
 
 => Replication
-Data is replicated automatically on a count of RF
-Replication is done asynchronously
+Data is replicated automatically on a count of Replication Factor
+synchronous data replication depends upon write CL.
+for example : if RF = 3 and write CL = 2 , then 2 writes are done synchronously and 3rd one is asynchronously.
+
 
 => Consistency Level
-per query consistency
-ALL, QUORAM, ONE
-How many replicas for query to respond OK
+Reads and Writes to cassandra ring nodes depends on read CL and write CL values.
+possible values : ALL, QUORAM, ONE
+CL values shows that how many replicas for query to respond OK
 
 A replication factor greater than one
 (1) widens the range of token values a single node is responsible for.
 (2) causes overlap in the token ranges amongst nodes.
 (3) requires more storage in your cluster.
 
-When CL=2 and RF=3, and a write query came
-write on 2 nodes will be in sync
-write on 3rd node will be async
-
 
 Availability and consistency depends upon CL value
 Low value of CL is less consistent and high available
 High value of CL is high consistent and less available
-
 
 => Multi data center
 Typical Usage : client write to local DC, replicas async to other DC
@@ -147,14 +96,26 @@ sum_of_replication_factors = datacenter1_RF + datacenter2_RF + . . . + datacente
 LOCAL_ONE    -- when in multi DC, async replication to other DCs
 LOCAL_QUORAM -- when in multi DC, async replication to other DCs
 
-====================================
+-> When write CL=ALL and read CL=ALL
+very Strong consistency
+
+-> When write CL=quoram and read CL=quoram
+strong consistency (good for production env)
+
+
+when to use READ CL=1 and WRITE CL=1
+-> when you want faster reads and writes
+-> your data is not so important with real time (eventual existence)
+for example : logs, events
+
+=============================
 
 => Write Path of cassandra queries :
 Writes are written to any node in the cluster,
     this is called as coordinator node.
 	coordinator node decide where to store that data in cluster
 
-When a write occurs, Cassandra stores the data in a structure in memory, the memtable, 
+When a write occurs, Cassandra stores the data in a structure in memory, the memtable,
 and also appends writes to the commit log on disk.
 
 commit log is append only data structure, it is fast
@@ -182,9 +143,9 @@ Easy to take backups as every write has a timestamp
 
 Similar to write path
 
-When a client connects to a node and issues a read or write request, 
+When a client connects to a node and issues a read or write request,
 that node serves as the coordinator for that particular client operation.
-The job of the coordinator is to act as a proxy between the client application and the nodes (or replicas) 
+The job of the coordinator is to act as a proxy between the client application and the nodes (or replicas)
 
 Read query can be fired on any node acting as a coordinator
 Contacts node with requested key
@@ -195,15 +156,7 @@ It has to check multiple sstables and merged in memory and get latest by timesta
 When consitency < ALL, then cassandra performs read repair in background (read_repair_chance)
 
 
-====================================
-
-what are problems with master-slave design :
-(1) if master is down then during re-election of master, that data is not available (non HA)
-(2) if master and slave are unable to connect each other, then it is non HA
-
-Advantages of master-less architecture :
-(1) if one master is down, cordinator can return data from other master, system is HA
-(2) system can return data in case if network is split into different data centers
+*** https://www.quora.com/What-is-the-internal-architecture-of-the-Cassandra-database
 
 ====================================
 
@@ -246,6 +199,7 @@ Counter column conditions :
 (col1), col2, col3_counter    // invalid
 ((col1), col2), col3_counter  // valid
 
+*** https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
 
 ====================================
 
@@ -259,7 +213,7 @@ column value	-- column value
 
 	Map<RowKey, SortedMap<ColumnKey, ColumnValue>>
 
-A map gives efficient key lookup, and the sorted nature gives efficient scans. 
+A map gives efficient key lookup, and the sorted nature gives efficient scans.
 The number of column keys is unbounded
 
 Partition key and clustering keys
@@ -267,4 +221,37 @@ Partition key and clustering keys
 ====================================
 
 
+=> Spring Repo
+https://www.codingame.com/playgrounds/13642/getting-started-with-spring-data-cassandra
+https://github.com/lankydan/spring-data-cassandra/tree/master/src/main
+
+
+=> Java api
+https://github.com/eugenp/tutorials/tree/master/persistence-modules/java-cassandra
+
+
+https://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra
+https://teddyma.gitbooks.io/learncassandra/content/model/cql_and_data_structure.html
+https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlDatabaseInternalsTOC.html
+https://www.guru99.com/cassandra-architecture.html
+https://www.quora.com/What-is-the-internal-architecture-of-the-Cassandra-database
+
+*** course
+https://www.datastax.com/dev/academy
+
+
+** imagine Cassandra as a giant HashMap
+the Partition keys play the role of that key in map,So each query needs to have them specified.
+clustering keys (columns, which are optional) help in further narrowing your query search
+
+** One table can have only one combination of same partition key and clustering key
+
+https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlWriteUpdate.html
+
+https://stackoverflow.com/questions/36328063/how-to-return-a-custom-object-from-a-spring-data-jpa-group-by-query
+
+https://stackoverflow.com/questions/44448899/spring-data-for-apache-cassandra-converts-java-time-localdatetime-to-utc
+
+
+==================================================
 
