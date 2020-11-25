@@ -11,6 +11,78 @@ index creation
 	-> max_result_window
 	-> index.write.wait_for_active_shards
 
+=================================
+
+https://www.elastic.co/blog/found-elasticsearch-top-down
+
+
+Cordinator Node :
+
+The ES node which excepts request is called cordinator node.
+Its job is route this request to proper node and proper shard.
+For routing this request to proper node, every cordinator node must have whole cluster setting.
+Every cordinator node must have information like
+-> which nodes host which indexes and shards
+-> metadata about every node
+-> index mappings and templates
+
+
+=>Replication and consistency :
+
+Data is written down to primary shards. For resilency and HA multiple copies of data is stored in replica shards.
+By default only primary shards are written (wait_for_active_shards=1)
+max value of wait_for_active_shards = number_of_replicas+1
+
+eg: If we have 3 nodes in cluster and index has number_of_replicas=3
+then data is copied to 3 active shards : one primary shard and 2 replica shard
+If number of active shards is less than 3, then index operation will not proceed successfuly.
+This check is done when writes on few shards are done,
+so if write is done primary shard and failed on replica shard, then _shard key will show these results.
+
+
+=> What is an ES index
+
+Conceptually, an Elasticsearch index with two shards is exactly the same as two Elasticsearch indexes with one shard each.
+The difference is it provides routing feature in formar case.
+Elasticsearch index is an abstraction on top of a collection of Lucene indexes, through the concept of shards.
+
+=> Factors to consider for an index request
+(1) routing key and routing config of shards
+(2) write consistency value
+(3) document associated unique id (try to assign IDs to make request idempotent)
+
+=> Routing
+For a good partitioning of data, routing key should be picked smartly.
+
+
+=> Primary concerns
+Every Shard has exactly one primary and zero or more replicas.
+For every index operation primary shard will act as a cordinator
+and will send the index operation to replicas depending upon consistency values.
+
+When sufficient number of replicas acknowledge,
+then primary shard will respond success or failure to cordinating node.
+
+For a bulk operation, index request are sent to all respective primary shards in parallel.
+ES has a transaction logs or translog (write ahead log)
+Every request is written to translog and committed to index after some fix time.
+When node crashes, data written to translog which is not commit are not reflected.
+
+
+Lucene does not understand type of field or mapping of field.
+Elastic Search does this job for us to make our task easier.
+Lucene only knows to reverse indexed tokens.
+(Analyser, filter, tokenizer)
+
+Lucene do not have match query , ES have match query
+
+
+=> Query then fetch (two rounds of searching)
+lets suppose a query is fired to get top 10 records from whole index
+-> query is fired on every shard to get top 10
+-> these top 10 document ids will be merged by cordinator and final fetch is fired by Ids
+
+====================================
 
 https://www.elastic.co/blog/found-elasticsearch-top-down
 https://www.elastic.co/blog/found-elasticsearch-from-the-bottom-up/
@@ -23,44 +95,4 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.ht
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 
-
-=================================
-
-https://www.elastic.co/blog/found-elasticsearch-top-down
-
-
-Optimistic concurrency control => _version , _seq_no
-
-shard is decided by _routing_key , by _id is routing_key
-
-ES is async and concurrent
-
-index.write.wait_for_active_shards  => wait in sync for no of active shards to write (improve resiliency)
-					(similar to quarom in cassandra)
-
-assign _id and have idempotent request
-
-primary shard  (master)
-replica shard  (slave)
-1 master many slaves
-
-
-Request handling
-client node -->  primary shard  --->  replica shards
-
-client node sends parralel request to all primary shards
-primary shard sends paraller request to all replica shards
-
-
-ES has translog or write-ahead log, which stores data in log and flush it during lucene commit.
-
-Lucene do not have mapping , ES has mapping
-
-search type
--> query then fetch 
-	means that there will be two rounds of searching
--> 
-
-Lucene do not have match query , ES have match query
-
-
+===================================
