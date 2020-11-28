@@ -1,0 +1,40 @@
+Redis cluster :
+
+redis cluster has 16383 equal hash slots which are divided in number of master nodes in cluster.
+
+-> Partitioning
+It allows partitioning by equaling dividing has slots to nodes
+For example 3 node cluster will have
+Node A -> 0 to 5500.
+Node B -> 5501 to 11000.
+Node C -> 11001 to 16383.
+
+When a master node goes down, its hash slots are automatically moved to other active master nodes.
+No downtime required here.
+But this does not mean that it will move data of that master also.So that data will be lost.
+Similarly hash slots will be moved when a new node is added to cluster.
+
+
+-> Replication
+Slave nodes can be added to cluster for HA
+reads and writes are always served by master node
+when a master goes down, one of the slave automatically becomes master.
+
+So in case of replication, when a master node goes down, there is no movement of hash slots.
+Respective slave node of down master will become master.
+
+Replication in redis cluster is asynchronous.
+When client writes data to master, master acknowledge client without syncing data to slaves.
+Data replication to slaves are written asynchronously.
+
+Hence redis Cluster is not able to guarantee strong consistency.
+In certain conditions redis will loose writes even after acknoledgement of data writing.
+
+-> cluster vs sentinal
+https://stackoverflow.com/questions/56498406/redis-advantages-of-sentinel-and-cluster
+https://blog.octo.com/en/what-redis-deployment-do-you-need/
+
+=================
+
+Design problem :  Distributed Lock Manager
+https://medium.com/@davidecerbo/everything-i-know-about-distributed-locks-2bf54de2df71
