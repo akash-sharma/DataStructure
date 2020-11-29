@@ -28,11 +28,24 @@ When client writes data to master, master acknowledge client without syncing dat
 Data replication to slaves are written asynchronously.
 
 Hence redis Cluster is not able to guarantee strong consistency.
-In certain conditions redis will loose writes even after acknoledgement of data writing.
+In certain conditions redis will loose writes even after acknowledgement of data writing.
 
 -> cluster vs sentinal
 https://stackoverflow.com/questions/56498406/redis-advantages-of-sentinel-and-cluster
 https://blog.octo.com/en/what-redis-deployment-do-you-need/
+
+=> Sentinal
+It is a way of deployment redis in a distributed environment.
+There is only one master with any number of slaves
+So this is not a scalable solution.
+It is Highly Available as, if master goes down, then one slave automatically becomes master
+
+=> Redis cluster
+data can be sharded in multiple master nodes (It is scalable solution)
+Every master can have one or more slave nodes
+It is Highly Available as, if master goes down, then one slave automatically becomes master
+Data replication is async
+
 
 =================
 
