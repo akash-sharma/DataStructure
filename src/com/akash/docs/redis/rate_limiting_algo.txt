@@ -1,4 +1,4 @@
-=>Rate limiter
+=>Rate limiter Algo and design
 
 /api1
 /api2
@@ -36,8 +36,8 @@ value = order list of timestamp
 
 
 client1 hits api1 (RateLimiterFilter)
-(A) get window and threshold info by client + api combination
-(B) prepare list of keys for all windows falling in client + api combination
+(A) get window and threshold information by (client + api) key from config map
+(B) prepare list of keys for all windows falling in (client + api) combination
 for eg: keys =  client1_api1_10 , client1_api1_60
 
 (C) check from data store if any of these keys are have exceeded their threshold
