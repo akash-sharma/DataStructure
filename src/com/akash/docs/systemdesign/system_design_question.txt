@@ -142,3 +142,84 @@ Data is stored in DB and in a distributed cache
    cron time for stats update should be lesser (preferably half time) than delete cron
 
 
+======================
+
+Design facebook feed/Twitter page
+
+facebook feed page - post
+user -> friends
+user -> post text/images
+user -> can see post of his friends
+post -> like, share, comment
+//post will be visible on priority basis, based on time, num_of_comments and num_of_likes
+
+
+
+User table
+id, name, password, status
+
+Friend table
+id, user_id_1, user_id_2, status
+
+Post table
+id, post, posted_by, posted_at
+
+Comment table
+id, comment, post_id, commented_by, commented_at
+
+
+apis
+/createPost
+/feedpage/{user_id}
+/getFriends/{user_id}
+/getComments/{post_id}
+
+
+=> Approach 1
+
+-> createPost
+db insert post
+
+
+-> feedpage , show paginated data (page_size=10, page_number=1)
+get all friends (store friends in distributed cache, ttl = ? )
+get top 10 latest post of each friend from DB
+merge whole list into final 10 posts and return
+
+
+=> Approach 2
+
+Creation of new facebook post will save data in mysql
+and push data in a pipeline (debizium --> kafka --> storm)
+and every user related feeds are stored in a distributed cache like redis
+
+Reads will be fulfilled from redis cache itself
+No need to fire query on DB in case of Reads
+
+kafka -->  Feed service --> Timeline service
+
+-> Redis cache structure :
+Every post or comment will be pushed to pipeline
+Feed service will find all friends of the author of post
+This post is pushed to all buckets (sorted set) of users in redis
+
+sorted set logic by { time, num_of_likes, num_of_comments }
+user1 --> [post_id_1, post_id_2]
+user2 --> [post_id_1, post_id_2, post_id_3]
+
+
+In this approach we have pre-populated all data of user feed in redis.
+If any part of system is down, it will seen Eventually.
+So it is Eventually consistent system.
+
+(Q) If pipeline is down for a short time, how will it ensure that every packet is processed.
+-> Using kafka with Storm will ensure at least once delivery
+https://medium.com/@madhur25/meaning-of-at-least-once-at-most-once-and-exactly-once-delivery-10e477fafe16
+
+
+(Q) If a user has 100k friends, then on his single post system will trigger 100k packets in redis.
+This will be a bottleneck for redis, high load on timeline service.
+-> For this special case, we can apply another logic of fetching data from DB (mixture of both DB and redis)
+-> Or we can create separate redis keys for these special users, for these cases redis will store single copy of post.
+
+=======================
