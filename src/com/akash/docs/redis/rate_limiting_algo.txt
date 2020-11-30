@@ -1,12 +1,78 @@
-redis key = user_id + api_url
+=>Rate limiter
+
+/api1
+/api2
+/api3
+/api4
+
+client1
+client2
+
+config map (key = client + api)
+{
+	client = client1
+	api = api1
+	window = 10 sec
+	threshold = 1000
+}
+{
+	client = client1
+	api = api1
+	window = 60 sec
+	threshold = 5000
+}
+{
+	client = client2
+	api = api2
+	window = 60 sec
+	threshold = 5000
+}
+
+http status = TOO_MANY_REQUESTS
+
+data store format
+key = client + api + window
+value = order list of timestamp
+
+
+client1 hits api1 (RateLimiterFilter)
+(A) get window and threshold info by client + api combination
+(B) prepare list of keys for all windows falling in client + api combination
+for eg: keys =  client1_api1_10 , client1_api1_60
+
+(C) check from data store if any of these keys are have exceeded their threshold
+(D) if yes then return TOO_MANY_REQUESTS , else proceed
+
+distributed solution : redis cluster
+data structure : sorted set in redis
+
+-> Step C
+redis key = client + api + window
 value (sorted set) = time_in_ms : time_in_ms
 
+rateLimiterThresholdExceed {
 
-(1) ZREMRANGEBYSCORE  key  '-inf' (currentTime - window)
+	allow = true
 
-(2) ZCOUNT  key  '-inf'  '+inf'
+	ZREMRANGEBYSCORE  key  '-inf' (currentTime - window)
 
-(3) ZADD  key  currentTime  currentTime
+	count = ZCOUNT  key  '-inf'  '+inf'
+	if(count > threshold) {
+		allow = false
+	}
 
+	ZADD  key  currentTime  currentTime
 
+	return allow
+}
 
+-> Algo analysis : 
+
+ZREMRANGEBYSCORE
+O(log(N)+M)
+
+ZCOUNT
+O(log(N))
+
+ZADD
+O(log(N))
