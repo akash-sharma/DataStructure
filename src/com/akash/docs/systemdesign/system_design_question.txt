@@ -1,0 +1,144 @@
+rate limitor
+tinyUrl
+
+book my show
+
+consistent hashing
+circuit breaker
+
+
+
+==========
+
+=>Rate limitor
+
+/api1
+/api2
+/api3
+/api4
+
+client1
+client2
+
+config map (key = client + api)
+{
+	client = client1
+	api = api1
+	window = 10 sec
+	threshold = 1000
+}
+{
+	client = client1
+	api = api1
+	window = 60 sec
+	threshold = 5000
+}
+{
+	client = client2
+	api = api2
+	window = 60 sec
+	threshold = 5000
+}
+
+http status = TOO_MANY_REQUESTS
+
+data store format
+key = client + api + window
+value = order list of timestamp
+
+
+client1 hits api1 (RateLimiterFilter)
+(A) get window and threshold info by client + api combination
+(B) prepare list of keys for all windows falling in client + api combination
+for eg: keys =  client1_api1_10 , client1_api1_60
+
+(C) check from data store if any of these keys are have exceeded their threshold
+(D) if yes then return TOO_MANY_REQUESTS , else proceed
+
+distributed solution : redis cluster
+data structure : sorted set in redis
+
+-> Step C
+redis key = client + api + window
+value (sorted set) = time_in_ms : time_in_ms
+
+rateLimiterThresholdExceed {
+
+	allow = true
+
+	ZREMRANGEBYSCORE  key  '-inf' (currentTime - window)
+
+	count = ZCOUNT  key  '-inf'  '+inf'
+	if(count > threshold) {
+		allow = false
+	}
+
+	ZADD  key  currentTime  currentTime
+
+	return allow
+}
+
+-> Algo analysis :
+
+ZREMRANGEBYSCORE
+O(log(N)+M)
+
+ZCOUNT
+O(log(N))
+
+ZADD
+O(log(N))
+
+(Q) what should be ttl for cache key
+-> ?
+
+
+==================
+
+tinyUrl
+
+short url -> long url
+long url -> short url
+Track click stats
+Delete expired URLs
+
+
+DB table
+id, long_url, short_url, created_at, created_by
+
+apis :
+/getTinyUrl
+/getLongUrl
+
+Data is stored in DB and in a distributed cache
+
+=> getTinyUrl
+(1) check in distributed cache, if found then return
+(2) check in DB , if found then return
+(3) create tiny url for long url
+(4) save in DB
+(5) save in distributed cache
+
+
+=> getLongUrl
+(1) check in distributed cache, if found then return
+(2) check in DB , if found then return
+
+
+(Q) How to convert long string to short unique string
+-> first we need to generate unique hash via MD5 or SHA256
+-> then perform Base26 or Base64 encoding on that hash
+
+
+(Q) what should be ttl for cache key
+-> 1 day
+
+(Q) how to delete expired urls
+-> cron job should run after 24 hours and delete urls older than 5 days
+
+(Q) how to track click stats
+-> click stats should be maintained in distributed cache and
+   should be updated in DB in separate table via cron
+   cron time for stats update should be lesser (preferably half time) than delete cron
+
+
