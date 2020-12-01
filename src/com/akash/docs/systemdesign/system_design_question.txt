@@ -267,4 +267,8 @@ then kafka can hold buffer data for a while.
 
 mysql can be used to store chunk file metadata.
 
+https://towardsdatascience.com/system-design-analysis-of-google-drive-ca3408f22ed3
+https://www.youtube.com/watch?v=U0xTu6E2CT8&list=RDCMUCn1XnDWhsLS5URXTi5wtFTA&start_radio=1
+
 ============================
+
