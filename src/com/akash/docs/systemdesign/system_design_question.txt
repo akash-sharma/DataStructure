@@ -1,12 +1,13 @@
 rate limitor
 tinyUrl
-facebook feed page
+facebook feed page / twitter feed page
+dropbox or google drive
 
-Google drive/dropbox
+
 book my show
-circuit breaker
 Uber
 make my trip
+circuit breaker
 
 ==========
 
@@ -223,3 +224,47 @@ This will be a bottleneck for redis, high load on timeline service.
 -> Or we can create separate redis keys for these special users, for these cases redis will store single copy of post.
 
 =======================
+
+Design dropbox or google drive
+
+1) files can be uploaded or downloaded by users
+2) files can be shared accross multiple devices and between multiple users
+3) maintain history of changes in files
+
+
+=> Approach 1
+
+upload files to amazon S3, for scale, availabity and CDN properties
+upload whole file to S3 when created
+On any changes in file, upload full file to different path on S3 with different version
+All these file meta informations can be stored in DB.
+
+problems with this approach :
+It consumes more internet bandwidth as on every update we upload full file again
+It consumes more S3 space on higher updates (S3 space costs to us)
+
+=> Approach 2
+
+Divide the file into chunks of fixed size and upload these chunks in S3.
+This will reduce latency and reduce S3 space on higher number of updates.
+Chunk file uploaded to S3 will be having a unique random name based on some hash value.
+These hash names, chunk number, file name, file type, file size
+and all other similar information is stored in file_metadata.
+This metadata is stored in DB.
+
+
+Now how to upload file chunks to server.
+To solve this problem we will use client side code (mobile client or web browser app)
+
+Every client will be having a watcher service that watches on File changes.
+Once a file is changed, the chunk file that is changed is uploaded to S3
+and its metadata is created and updated to server via some api.
+This metadata is saved to DB and cache.
+Also this metadata is pushed to a queue like kafka , where it sends updated metadata packet to all other clients.
+This way all clients sharing that file will be notified.
+Advantage of queue is that, if client is offline for some time and it came again
+then kafka can hold buffer data for a while.
+
+mysql can be used to store chunk file metadata.
+
+============================
