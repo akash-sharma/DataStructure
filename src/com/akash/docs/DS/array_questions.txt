@@ -1,3 +1,20 @@
+array  --> helping DS in array questions
+        (Stack, Queue, Map, Set, Heap, BST, segment tree, bits, sorting algo, 2D-array)
+linked list
+tree --> segment tree, interval tree
+graph
+DP
+
+===========
+Set, SortedSet, TreeSet
+Map, SortedMap, TreeMap
+Heap -> PriorityQueue
+
+Queue<Integer> minHeap = new PriorityQueue<Integer>();
+Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
+
+===========
+
 ====>Array Rotations :
 
 rotate array by d elements 
