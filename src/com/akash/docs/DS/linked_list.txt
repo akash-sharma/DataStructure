@@ -154,8 +154,35 @@ Node reverse(Node head) {
 	return t1;
 }
 
+---------------------------
+
+Node reverse(Node node) {
+	if(node == null || node.next == null) {
+		return node;
+	}
+	Node temp = node.next;
+	Node root = reverse(temp);
+	temp.next = node;
+	node.next = null;
+	return root;
+}
 
 ----------------------------
+
+Node middle(Node node) {
+	Node slow = node;
+	Node fast = null;
+	if(node != null) {
+		fast = node.next;
+	}
+	while(fast != null && fast.next != null) {
+		slow = slow.next;
+		fast = fast.next.next;
+	}
+	return slow;
+}
+
+-----------------------------
 
 // Function to check if a singly linked list is palindrome
 
