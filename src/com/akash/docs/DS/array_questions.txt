@@ -1,19 +1,27 @@
-array  --> helping DS in array questions
-        (Stack, Queue, Map, Set, Heap, BST, segment tree, bits, sorting algo, 2D-array)
 linked list
 tree --> segment tree, interval tree
 graph
 DP
+array  --> helping DS in array questions
+        (Stack, Queue, Map, Set, Heap, BST, segment tree, interval tree, bits, sorting algo, 2D-array)
 
-===========
-Set, SortedSet, TreeSet
-Map, SortedMap, TreeMap
-Heap -> PriorityQueue
+DS implementation in java
 
-Queue<Integer> minHeap = new PriorityQueue<Integer>();
+queue -> LinkedList
+stack -> Stack
+heap -> PriorityQueue
+map -> HashMap
+set -> HashSet
+TreeMap -> BST (RB tree)
+TreeSet -> BST (RB tree)
+
+
+Queue<Integer> queue = new LinkedList<>(); // poll(), add()
+Queue<Integer> minHeap = new PriorityQueue<Integer>(); // poll(), add()
 Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
 
-===========
+
+=================
 
 ====>Array Rotations :
 
@@ -456,3 +464,74 @@ void sortStack(Stack stack, int temp) {
 
 -------------------
 
+=> Segment Tree
+
+input array : [1, 3, 5, 7, 9, 11]
+segment tree array : [36, 9, 27, 4, 5, 16, 11, 1, 3, 0, 0, 7, 9, 0, 0]
+
+class Node {
+	int value;
+	int leftLimit;
+	int rightLimit;
+	Node left;
+	Node right;
+}
+
+// linked list based binary tree
+int getSum(Node treeNode, int low, int high) {
+	if(treeNode == null) {
+		return 0;
+	}
+	if(treeNode.leftLimit >= low && treeNode.rightLimit <= high) {
+		return treeNode.value;
+	}
+	if(treeNode.leftLimit > high || treeNode.rightLimit < low) {
+		return 0;
+	}
+	return getSum(treeNode.left, low, high) + getSum(treeNode.right, low, high);
+}
+
+// array based binary tree
+int getSum(int tree[], int low, int high) {
+	//TODO :
+}
+
+
+Node createSegmentTree(int arr[], int start, int end) {
+	if(end > start) {
+		return null;
+	}
+	if(start == end) {
+		//leaf node
+		Node node = new Node(arr[start]);
+		node.leftLimit = start;
+		node.rightLimit = end;
+		return node;
+	}
+	if(end = start + 1) {
+		Node parentNode = new Node(arr[start] + arr[end]);
+		parentNode.left = new Node(arr[start]);
+		parentNode.right = new Node(arr[end]);
+		parentNode.leftLimit = start;
+		parentNode.rightLimit = end;
+		return parentNode;
+	}
+	int mid = start + (end-start)/2;
+	Node leftNode = createSegmentTree(arr, start, mid);
+	Node rightNode = createSegmentTree(arr, mid+1, end);
+	if(leftNode == null) {
+		return rightNode;
+	}
+	if(rightNode == null) {
+		return leftNode;
+	}
+	int sum = leftNode.value + rightNode.value;
+	Node parentNode = new Node(sum);
+	parentNode.left = leftNode;
+	parentNode.right = rightNode;
+	parentNode.leftLimit = start;
+	parentNode.rightLimit = end;
+	return parentNode;
+}
+
+-----------------------
