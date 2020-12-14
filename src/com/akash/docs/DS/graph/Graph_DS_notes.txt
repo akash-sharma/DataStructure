@@ -790,6 +790,8 @@ Algo :
 4  	if( {ei} U T  is a tree ) then
 5. 		T <- T U {ei}
 
+(Q) Minimum cost required to connect all houses in a city
+(Q) Minimum cost to connect all cities
 
 (Q) Is the MST unique?
 Ans: Yes if edge lengths are unique

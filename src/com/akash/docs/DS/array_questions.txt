@@ -57,6 +57,10 @@ Check if strings are rotations of each other or not
 	->kmp
 Count rotations divisible by 4
 
+maximum sum in an array without adjacent elements
+Minimum broadcast range required by M towers to reach N houses
+Count minimum number of fountains to be activated to cover the entire garden
+
 
 ====>Array rearrangement
 Rearrange an array such that arr[i] = i
@@ -96,6 +100,7 @@ print all subsequences of a string
 
 ====> stack questions
 
+check is Parenthesis are correct or not
 reverse stack using recursion
 sort stack using recursion
 queue using stack
@@ -137,6 +142,7 @@ Kth smallest element in a row-wise and column-wise sorted 2D array
 	--min heap
 Median of Stream of Running Integers
 	--sliding window
+Connect n ropes with minimum cost
 
 ----------------------------------------------------------------------
 
