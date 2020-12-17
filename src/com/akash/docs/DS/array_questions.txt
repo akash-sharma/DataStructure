@@ -21,7 +21,88 @@ Queue<Integer> minHeap = new PriorityQueue<Integer>(); // poll(), add()
 Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
 
 
-=================
+=================================
+
+=>sorting algo
+->bubble
+->selection
+->insertion
+
+find minimum and maximum element in an array (bubble, selection)
+
+->merge sort
+merging two sorted arrays
+merging two sorted linked list
+merging two sorted linked list without using extra space
+count number of inversions
+
+->quick sort
+sort array of 0 and 1
+sort array of 0 1 and 2
+segregate numbers smaller and larger than x
+
+
+->Heap sort
+merge k sorted arrays
+place 1 farthest from 0 in an array of 0 and 1
+Median of Stream of Running Integers
+Connect n ropes with minimum cost
+Kth Smallest/Largest Element in Unsorted Array
+Kth smallest element in a row-wise and column-wise sorted 2D array
+
+
+->couting sort
+lexicographicaly maximum string
+
+=>
+a X b = LCM(a,b) X HCF(a,b)
+
+HCF
+-> rotation of an array using reversal
+-> find common matching time for diff time intervals (fountain problem)
+
+
+substring sum problem
+substring sum problem without taking adjacent
+max diff bw numbers without taking adjacent from left to right
+Stock buy and sell problem
+maximum profit by buying and selling a stock at most twice
+given an array arr find the maximum j-i such that arrj arri
+
+
+minimum broadcast range required by m towers to reach n houses
+
+
+
+Segment tree
+Interval tree
+
+
+=>binary search
+find pivot element in sorted and rotated array
+sorted array with all elements having 2 occurence except 1 element, find that element
+majority element in a sorted array
+
+
+=> stack questions
+
+check if Parenthesis are correct or not, [{{}}]({})
+reverse stack using recursion
+sort stack using recursion
+queue using stack
+Design a stack with operations on middle element
+stack with get min on constant time
+Next Greater Element
+The Stock Span Problem
+Largest Rectangular Area in a Histogram
+	-> use segment tree , time = O(N.logN)
+	-> nearest min in left and nearest min in right
+		Find the nearest smaller numbers on left side in an array
+histogram with water
+	-> max index of left and right
+
+
+=================================
 
 ====>Array Rotations :
 
@@ -60,7 +141,10 @@ Count rotations divisible by 4
 maximum sum in an array without adjacent elements
 Minimum broadcast range required by M towers to reach N houses
 Count minimum number of fountains to be activated to cover the entire garden
-
+-> Input : arr1 = {2, 3, 10, 6, 4, 8, 1}
+   Output : 8
+   max diff bw two elements
+   larger element appears after smaller element
 
 ====>Array rearrangement
 Rearrange an array such that arr[i] = i
