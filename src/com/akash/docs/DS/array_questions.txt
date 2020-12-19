@@ -23,6 +23,8 @@ Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
 
 =================================
 
+Array
+
 =>sorting algo
 ->bubble
 ->selection
@@ -54,14 +56,27 @@ Kth smallest element in a row-wise and column-wise sorted 2D array
 ->couting sort
 lexicographicaly maximum string
 
-=>
 a X b = LCM(a,b) X HCF(a,b)
 
 HCF
 -> rotation of an array using reversal
 -> find common matching time for diff time intervals (fountain problem)
 
+=> array sum problem
 
+Find all triplets with zero sum
+Given an array A[] and a number x, check for pair in A[] with sum as x
+Find a triplet that sum to a given value
+Find a triplet in an array whose sum is closest to a given number
+Maximum value of expression (arr[i] + arr[j] * arr[k]) formed from a valid Triplet
+	such that arr[i] < arr[j] < arr[k] and i < j < k
+	-> maintain 2 arrays of min number in left and max number in right
+Find a triplet such that sum of two equals to third element
+Find triplet with minimum sum
+
+=> sum , diff problem, stock buy sell problem
+
+max diff in an array arr, max of (arr[j] - arr[i]), j>i
 substring sum problem
 substring sum problem without taking adjacent
 max diff bw numbers without taking adjacent from left to right
@@ -72,6 +87,10 @@ given an array arr find the maximum j-i such that arrj arri
 
 minimum broadcast range required by m towers to reach n houses
 
+
+Largest Sum Contiguous Subarray
+Maximum Sum Increasing Subsequence
+Longest increasing Subsequence
 
 
 Segment tree
@@ -100,6 +119,71 @@ Largest Rectangular Area in a Histogram
 		Find the nearest smaller numbers on left side in an array
 histogram with water
 	-> max index of left and right
+
+=======================
+
+// Find all triplets with zero sum
+List<List<Integer>> threeSumToZero(int[] nums) {
+	if(nums.length < 3) {
+            return new ArrayList<>();
+        }
+	Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+        int n = nums.length;
+        for (int i=0; i<n-1; i++)
+        {
+            // initialize left and right
+            int l = i + 1;
+            int r = n - 1;
+            int x = nums[i];
+            while (l < r)
+            {
+                if (x + nums[l] + nums[r] == 0)
+                {
+                    List<Integer> temp = new ArrayList<>();
+                    temp.add(nums[i]);
+                    temp.add(nums[l]);
+                    temp.add(nums[r]);
+                    result.add(temp);
+
+                    l++;
+                    r--;
+                } else if (x + nums[l] + nums[r] < 0) {
+                    l++;
+                } else {
+                    r--;
+                }
+            }
+        }
+        return result;
+}
+
+
+
+// max diff in an array arr, max of (arr[j] - arr[i]), j>i
+
+5 2 7 1 3 9
+ans : 8
+
+int maxDiff(int arr[]) {
+	int minTillNow = arr[0];
+	int maxDiff = 0;
+	for(int i=1; i<arr.length; i++) {
+		if(arr[i] - minTillNow > maxDiff) {
+			maxDiff = arr[i] - minTillNow;
+		}
+		if(minTillNow > arr[i]) {
+			minTillNow = arr[i];
+		}
+	}
+	return maxDiff;
+}
+
+
+
+// maximum profit by buying and selling a stock at most twice
+
+
 
 
 =================================
