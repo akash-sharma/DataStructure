@@ -591,4 +591,18 @@ bin/kafka-topics.sh --create --zookeeper <zookeeper_ip>:2181 --replication-facto
 bin/kafka-topics.sh --list --zookeeper <zookeeper_ip>:2181
 
 
+// describe topic
+bin/kafka-topics.sh --zookeeper <zookeeper_ip>:2181 --describe --topic <topic_name>
+
+// change topic retention time
+bin/kafka-topics.sh --zookeeper <zookeper_ip>:2181 --alter --topic <topic_name> --config retention.ms=<time_in_ms>
+
+// get end offset of a topic for each partition
+./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list <broker_ip>:9092 --topic <topic_name>  --time -1
+
+
+// get start offset of a topic for each partition
+./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list <broker_ip>:9092 --topic <topic_name>  --time -2
+
+
 ==========================================
