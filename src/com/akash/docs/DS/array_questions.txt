@@ -1,29 +1,6 @@
-linked list
-tree --> segment tree, interval tree
-graph
-DP
-array  --> helping DS in array questions
-        (Stack, Queue, Map, Set, Heap, BST, segment tree, interval tree, bits, sorting algo, 2D-array)
+https://leetcode.com/problemset/all/?difficulty=Hard&topicSlugs=array
+https://www.geeksforgeeks.org/array-data-structure/
 
-DS implementation in java
-
-queue -> LinkedList
-stack -> Stack
-heap -> PriorityQueue
-map -> HashMap
-set -> HashSet
-TreeMap -> BST (RB tree)
-TreeSet -> BST (RB tree)
-
-
-Queue<Integer> queue = new LinkedList<>(); // poll(), add()
-Queue<Integer> minHeap = new PriorityQueue<Integer>(); // poll(), add()
-Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
-
-
-=================================
-
-Array
 
 =>sorting algo
 ->bubble
@@ -32,19 +9,20 @@ Array
 
 find minimum and maximum element in an array (bubble, selection)
 
-->merge sort
+=>merge sort
 merging two sorted arrays
 merging two sorted linked list
 merging two sorted linked list without using extra space
 count number of inversions
 
-->quick sort
+=>quick sort
 sort array of 0 and 1
 sort array of 0 1 and 2
 segregate numbers smaller and larger than x
+Move all negative numbers to beginning and positive to end
 
 
-->Heap sort
+=>Heap sort
 merge k sorted arrays
 place 1 farthest from 0 in an array of 0 and 1
 Median of Stream of Running Integers
@@ -53,7 +31,7 @@ Kth Smallest/Largest Element in Unsorted Array
 Kth smallest element in a row-wise and column-wise sorted 2D array
 
 
-->couting sort
+=>couting sort
 lexicographicaly maximum string
 
 a X b = LCM(a,b) X HCF(a,b)
@@ -61,37 +39,6 @@ a X b = LCM(a,b) X HCF(a,b)
 HCF
 -> rotation of an array using reversal
 -> find common matching time for diff time intervals (fountain problem)
-
-=> array sum problem
-
-Find all triplets with zero sum
-Given an array A[] and a number x, check for pair in A[] with sum as x
-Find a triplet that sum to a given value
-Find a triplet in an array whose sum is closest to a given number
-Maximum value of expression (arr[i] + arr[j] * arr[k]) formed from a valid Triplet
-	such that arr[i] < arr[j] < arr[k] and i < j < k
-	-> maintain 2 arrays of min number in left and max number in right
-Find a triplet such that sum of two equals to third element
-Find triplet with minimum sum
-
-=> sum , diff problem, stock buy sell problem
-
-max diff in an array arr, max of (arr[j] - arr[i]), j>i
-substring sum problem
-substring sum problem without taking adjacent
-max diff bw numbers without taking adjacent from left to right
-Stock buy and sell problem
-maximum profit by buying and selling a stock at most twice
-given an array arr find the maximum j-i such that arrj arri
-
-
-minimum broadcast range required by m towers to reach n houses
-
-
-Largest Sum Contiguous Subarray
-Maximum Sum Increasing Subsequence
-Longest increasing Subsequence
-
 
 Segment tree
 Interval tree
@@ -101,6 +48,7 @@ Interval tree
 find pivot element in sorted and rotated array
 sorted array with all elements having 2 occurence except 1 element, find that element
 majority element in a sorted array
+
 
 
 => stack questions
@@ -119,6 +67,44 @@ Largest Rectangular Area in a Histogram
 		Find the nearest smaller numbers on left side in an array
 histogram with water
 	-> max index of left and right
+
+
+=> moore algorithm
+Majority Element in an array
+Online Majority Element In Subarray
+
+
+=> array sum problem
+
+Find all triplets with zero sum
+Given an array A[] and a number x, check for pair in A[] with sum as x
+Find a triplet that sum to a given value
+Find a triplet in an array whose sum is closest to a given number
+Maximum value of expression (arr[i] + arr[j] * arr[k]) formed from a valid Triplet
+	such that arr[i] < arr[j] < arr[k] and i < j < k
+	-> maintain 2 arrays of min number in left and max number in right
+Find a triplet such that sum of two equals to third element
+Find triplet with minimum sum
+
+=> sum , diff problem, stock buy sell problem
+
+max diff in an array arr, max of (arr[j] - arr[i]), j>i
+Stock buy and sell problem
+maximum profit by buying and selling a stock at most twice
+maximum profit by buying and selling a stock at most k times
+substring sum problem
+substring sum problem without taking adjacent
+max diff bw numbers without taking adjacent from left to right
+given an array arr find the maximum j-i such that arrj arri
+
+
+minimum broadcast range required by m towers to reach n houses
+Given the positions of houses and heaters on a horizontal line, return the minimum radius standard of heaters
+
+Largest Sum Contiguous Subarray
+Maximum Sum Increasing Subsequence
+Longest increasing Subsequence
+
 
 =======================
 
@@ -183,54 +169,300 @@ int maxDiff(int arr[]) {
 
 // maximum profit by buying and selling a stock at most twice
 
+public int maxProfit(int[] prices) {
+	final int n = prices.length;
+	if(n < 2) {
+	    return 0;
+	}
+	int maxDiff = 0;
+	for(int i=0; i<n; i++) {
+	    int maxDiff1 = maxDiff(prices, 0, i);
+	    int maxDiff2 = maxDiff(prices, i+1, n-1);
+	    maxDiff = Math.max(maxDiff, maxDiff1 + maxDiff2);
+	}
+	return maxDiff;
+}
+
+private int maxDiff(int arr[], int start, int end) {
+	int length = end - start;
+	if(length < 1) {
+	    return 0;
+	}
+	int maxDiff = 0;
+	int minTillNow = arr[start];
+	for(int i=start+1; i<=end; i++) {
+	    if(arr[i] - minTillNow > maxDiff) {
+		maxDiff = arr[i] - minTillNow;
+	    }
+	    if(arr[i] < minTillNow) {
+		minTillNow = arr[i];
+	    }
+	}
+	return maxDiff;
+}
+
+==========================
+
+// lexicographicaly maximum string
+
+https://leetcode.com/problems/remove-duplicate-letters/
+https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
+https://leetcode.com/problems/last-substring-in-lexicographical-order/submissions/
 
 
 
-=================================
+last substring of a string in lexicographical order
+-> abab
+-> bab
 
-====>Array Rotations :
+-> cacacb
+-> cb
 
-rotate array by d elements 
-	->gcd way
-	->left reversal algo
-	->right reversal algo
-find pivot element in sorted and rotated array
-find sum of pair of numbers in sorted and rotated array
-	->sorting  --	O(n^2)
-	->hashing  --	O(n)
-Find a triplet that sum to a given value
-Find all triplets with zero sum
-	->sorting then pick one and do sorting approach of 2  --	O(n^2)
-	->store sum-A[i] in hashset, check if sum of every pair exist in hashset  --	O(n^2)
-Find four elements that sum to a given value
-	->create an array of sum of each pair,sort it,approach of 2 -- O(n^2.log n)
+https://www.geeksforgeeks.org/lexicographically-smallest-string-formed-by-removing-duplicates/?ref=rp
 
-find pair of number having sum less than K
-find triplets having sum less than k
-Closest product pair in an array	
+===============================
 
-majority element	-> hashmap, moore voting algo
---majority element in a sorted array
-Lexicographically minimum string rotation	-> array of size 26,count occurence of character from A-Z
---Rotate Matrix Elements (shift all elements by 1)
---Print a given matrix in spiral form
---Inplace rotate square matrix by 90 degrees -> rotate -> transpose
---TODO--Rotate each ring of matrix anticlockwise by K elements
-Check if all rows of a matrix are circular rotations of each other -> append array to array itself
-Minimum rotations required to get the same string -> same as above
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/submissions/
+// Find Minimum in Rotated Sorted Array
+
+class Solution {
+    public int findMin(int[] nums) {
+        int n = nums.length;
+        if(n == 1) {
+            return nums[0];
+        }
+        if(nums[0] < nums[n-1]) {
+            return nums[0];
+        }
+        return recur(nums, 0, n-1);
+    }
+
+    private int recur(int arr[], int start, int end) {
+        System.out.println("start = "+start + ", end = "+end);
+        if(start <= end) {
+            int mid = start + (end-start) / 2;
+            int prev = mid-1;
+            int next = mid+1;
+            if(prev < 0) {
+                prev = arr.length-1;
+            }
+            if(next > arr.length-1) {
+                next = 0;
+            }
+            if(arr[mid] < arr[next] &&  arr[mid] < arr[prev]) {
+                return arr[mid];
+            } else if(arr[mid] >= arr[0] ) {
+                return recur(arr, mid+1, end);
+            } else {
+                return recur(arr, start, mid-1);
+            }
+        } else {
+            return -1;
+        }
+    }
+}
+
+
+// Search in Rotated Sorted Array
+
+// Find Minimum in Rotated Sorted Array with duplicates
+public int findMin(int[] nums) {
+	int n = nums.length;
+	if(n == 1) {
+	    return nums[0];
+	}
+	if(nums[0] < nums[n-1]) {
+	    return nums[0];
+	}
+	int start = 0;
+	int end = n-1;
+	while(end > start) {
+	    int mid = start + (end-start)/2;
+	    if(nums[mid] == nums[end]) {
+		end--;
+	    } else if(nums[mid] > nums[end]) {
+		start = mid+1;
+	    } else {
+		end = mid;
+	    }
+	}
+	return nums[end];
+}
+
+============
+
+
+Segment tree using array implementation
+
+int n = arr.length;
+int x = (int) Math.ceil( Math.log(n) / Math.log(2) );
+int y = (int) Math.pow(2, x);
+int treeSize = 2*y - 1;
+int tree[] = new int[treeSize];
+
+// divide arr into 2 subarrays [0..(x/2)-1] and [x/2 .. n-1]
+// each subarray will return a subresult
+// 2 subresults are applied to a function and returned as result
+
+
+
+// online majority check using Segment tree, moore algo can also be applied
+class MajorityChecker {
+
+    private int arr[];
+    private STNode root;
+
+    public MajorityChecker(int[] arr) {
+        this.arr = arr;
+        root = createST(0, arr.length-1);
+    }
+
+    public int query(int left, int right, int threshold) {
+
+        Map<Integer,Integer> map = query(root, left, right);
+        for(Integer key : map.keySet()) {
+            if(map.get(key).intValue() >= threshold) {
+               return key;
+            }
+        }
+        return -1;
+    }
+
+    private Map<Integer,Integer> query(STNode node, int low, int high) {
+        if(node == null) {
+            return new HashMap<>();
+        }
+        if(node.leftIndex >= low && node.rightIndex <= high) {
+            return node.map;
+        } else if(node.rightIndex < low || node.leftIndex > high) {
+            return new HashMap<>();
+        } else {
+            Map<Integer,Integer> map1 = query(node.left, low, high);
+            Map<Integer,Integer> map2 = query(node.right, low, high);
+            return mergeMap(map1, map2);
+        }
+    }
+
+    class STNode {
+        int leftIndex;
+        int rightIndex;
+        STNode left;
+        STNode right;
+        Map<Integer,Integer> map = new HashMap<>();
+
+        STNode() {
+
+        }
+
+        STNode(int leftIndex, int rightIndex) {
+            this.leftIndex = leftIndex;
+            this.rightIndex = rightIndex;
+        }
+    }
+
+    private STNode createST(int start, int end) {
+        if(end < start) {
+            return null;
+        }
+        if(start == end) {
+            STNode stNode = new STNode(start, end);
+            populateMap(stNode.map, arr[start]);
+            return stNode;
+        }
+        if(end == start + 1) {
+            STNode stNode = new STNode(start, end);
+            populateMap(stNode.map, arr[start]);
+            populateMap(stNode.map, arr[end]);
+
+            STNode leftStNode = new STNode(start, start);
+            populateMap(leftStNode.map, arr[start]);
+            stNode.left = leftStNode;
+
+            STNode rightStNode = new STNode(end, end);
+            populateMap(rightStNode.map, arr[end]);
+            stNode.right = rightStNode;
+
+            return stNode;
+        }
+        int mid = start + (end-start)/2;
+        STNode node1 = createST(start, mid);
+        STNode node2 = createST(mid+1, end);
+        if(node1 == null) {
+            return node2;
+        }
+        if(node2 == null) {
+            return node1;
+        }
+        STNode rootStNode = new STNode(start, end);
+        rootStNode.map = mergeMap(node1.map, node2.map);
+        rootStNode.left = node1;
+        rootStNode.right = node2;
+        return rootStNode;
+    }
+
+    private void populateMap(Map<Integer,Integer> map, int key) {
+        Integer value = map.get(key);
+        if(value == null) {
+            map.put(key, 1);
+        } else {
+            map.put(key, value+1);
+        }
+    }
+
+    private Map<Integer,Integer> mergeMap(Map<Integer,Integer> map1, Map<Integer,Integer> map2) {
+
+        Map<Integer,Integer> mainMap = new HashMap<>();
+        Set<Integer> set = new HashSet(map1.keySet());
+        set.addAll(map2.keySet());
+        for(Integer key : set) {
+            Integer value1 = map1.get(key);
+            if(value1 == null) {
+                value1 = 0;
+            }
+            Integer value2 = map2.get(key);
+            if(value2 == null) {
+                value2 = 0;
+            }
+            mainMap.put(key, value1 + value2);
+        }
+        return mainMap;
+    }
+}
+
+
+
+
+==================================================
+
+=> Array Rotation
+rotate array by d elements
+Lexicographically minimum string rotation
+Rotate Matrix Elements
+Print a given matrix in spiral form
+Inplace rotate square matrix by 90 degrees
+Check if all rows of a matrix are circular rotations of each other
+Minimum rotations required to get the same string
 Check if strings are rotations of each other or not
-	->kmp
-Count rotations divisible by 4
-
 maximum sum in an array without adjacent elements
-Minimum broadcast range required by M towers to reach N houses
 Count minimum number of fountains to be activated to cover the entire garden
 -> Input : arr1 = {2, 3, 10, 6, 4, 8, 1}
    Output : 8
    max diff bw two elements
    larger element appears after smaller element
 
-====>Array rearrangement
+
+--Print all subarrays with 0 sum
+max sum subarray
+max sum subarray without adjacent
+max diff in an array of integers, such that A[j] > A[i] and j>i
+
+Find subarray with given sum (Nonnegative Numbers)
+Find subarray with given sum (array having negative numbers)
+print all permutations of a given string
+print all subsequences of a string
+
+
+=> Array rearrangement
 Rearrange an array such that arr[i] = i
 Move all negative numbers to beginning and positive to end
 Rearrange array such that arr[i] >= arr[j] if i is even and arr[i]<=arr[j] if i is odd and j < i
@@ -250,69 +482,7 @@ Maximum Sum Increasing Subsequence (positive numbers)
 
 
 
-====>Optimization Problems :
---Find the smallest positive integer value that cannot be represented as sum of any subset of a given array
-Smallest subarray with sum greater than a given value
-
---Print all subarrays with 0 sum
-max sum subarray
-max sum subarray without adjacent
-max diff in an array of integers, such that A[j] > A[i] and j>i
-
-Find subarray with given sum (Nonnegative Numbers)
---Find subarray with given sum (array having negative numbers)
-print all permutations of a given string
-print all subsequences of a string 
-
---create and store segment tree
-
-====> stack questions
-
-check is Parenthesis are correct or not
-reverse stack using recursion
-sort stack using recursion
-queue using stack
-Design a stack with operations on middle element
-stack with get min on constant time
-Next Greater Element
-The Stock Span Problem
-Largest Rectangular Area in a Histogram
-	-> use segment tree , time = O(N.logN)
-	-> nearest min in left and nearest min in right
-		Find the nearest smaller numbers on left side in an array
-histogram with water
-	-> max index of left and right
-
-===>binary search problems
-
-Contains (True or False)
-Index of first occurrence of a key
-Index of last occurrence of a key
-Index of least element greater than key
-Index of greatest element less than key
-
-pivot element in a sorted and rotated array
-maximum occurence in a sorted array
-
-
-===>divisibility problems 
-
-all subsets in a set divisible by k
-Count all sub-arrays having sum divisible by k
-Longest subarray with sum divisible by k
-
-
-===> Heap problems
-
-K�th Smallest/Largest Element in Unsorted Array
-	--min heap
-Kth smallest element in a row-wise and column-wise sorted 2D array
-	--min heap
-Median of Stream of Running Integers
-	--sliding window
-Connect n ropes with minimum cost
-
-----------------------------------------------------------------------
+===========================
 
 private static int pivotIncreasing(int start, int end, int arr[]) {
     if(start > end || start == arr.length-1) {
@@ -404,7 +574,7 @@ void replaceInternal(int arr[], int i) {
 
 -------------------
 
-//print longest increasing substring 
+//print longest increasing substring
 int longestIncreasingSubstring(int arr[]) {
 	int max = 1;
 	int maxEndingHere = 1;
@@ -566,7 +736,7 @@ int longestBitonicSubarray(int arr[]) {
 
 -------------------
 
-// print all subsequences of a string 
+// print all subsequences of a string
 
 input : ABC
 output : A B C AB AC BC ABC
@@ -598,7 +768,7 @@ private List<List<Character>> getAllSubsequences(char arr[], int start, int end)
 	if(end > start) {
 		List<List<Character>> recursiveList = getAllSubsequences(arr, start+1, end);
 		returnList.addAll(recursiveList);
-		
+
 		List<List<Character>> copiedRecursiveList = new new LinkedList<>(recursiveList);
 		for(List temp : copiedRecursiveList) {
 			temp.addFirst(arr[start]);
@@ -613,7 +783,7 @@ private List<List<Character>> getAllSubsequences(char arr[], int start, int end)
 // sort stack using, pop() push() size() top() methods
 
 void emptyStack(Stack stack) {
-	
+
 	if(stack.size() != 0) {
 		int temp = stack.pop();
 		emptyStack(stack);
@@ -708,4 +878,5 @@ Node createSegmentTree(int arr[], int start, int end) {
 	return parentNode;
 }
 
------------------------
+
+============================
