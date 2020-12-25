@@ -11,27 +11,34 @@ find minimum and maximum element in an array (bubble, selection)
 
 =>merge sort
 merging two sorted arrays
+merging two sorted arrays without using extra space
 merging two sorted linked list
-merging two sorted linked list without using extra space
+merging two sorted linked list without using extra space (create a new linked list in sorted order)
 count number of inversions
+iterative way of merge sort
+
 
 =>quick sort
 sort array of 0 and 1
 sort array of 0 1 and 2
 segregate numbers smaller and larger than x
 Move all negative numbers to beginning and positive to end
+iterative way of quick sort
 
 
 =>Heap sort
+build heap from array
 merge k sorted arrays
+sort nearly sorted array
+Kth Smallest/Largest Element in Unsorted Array
+Kth smallest element in a row-wise and column-wise sorted 2D array
+convert min heap to max heap
 place 1 farthest from 0 in an array of 0 and 1
 Median of Stream of Running Integers
 Connect n ropes with minimum cost
-Kth Smallest/Largest Element in Unsorted Array
-Kth smallest element in a row-wise and column-wise sorted 2D array
 
 
-=>couting sort
+=>counting sort
 lexicographicaly maximum string
 
 a X b = LCM(a,b) X HCF(a,b)
@@ -54,6 +61,9 @@ majority element in a sorted array
 => stack questions
 
 check if Parenthesis are correct or not, [{{}}]({})
+check if Parenthesis are correct or not, * can be used as any character
+    valid -> ()()* , (())(* , * , *)(), (()) , (((*))(**
+    invalid -> ())*()
 reverse stack using recursion
 sort stack using recursion
 queue using stack
@@ -107,6 +117,18 @@ Longest increasing Subsequence
 
 
 =======================
+
+// merging two sorted arrays without using extra space
+arr1 : {i1, i2... in} , arr2 : {j1, j2.. jn}
+if(arr1[i] <= arr2[j]) {
+    i++;
+} else {
+    swap(i, j);
+    fix j in arr2 using insertion sort
+    i++;
+}
+
+-----------------
 
 // Find all triplets with zero sum
 List<List<Integer>> threeSumToZero(int[] nums) {
