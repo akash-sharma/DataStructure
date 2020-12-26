@@ -1,3 +1,23 @@
+helping DS in array questions
+        (Stack, Queue, Map, Set, Heap, BST, segment tree, interval tree, bits, sorting algo, 2D-array)
+
+DS implementation in java
+
+queue -> LinkedList
+stack -> Stack
+heap -> PriorityQueue
+map -> HashMap
+set -> HashSet
+TreeMap -> BST (RB tree)
+TreeSet -> BST (RB tree)
+
+
+Queue<Integer> queue = new LinkedList<>(); // poll(), add()
+Queue<Integer> minHeap = new PriorityQueue<Integer>(); // poll(), add()
+Queue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
+
+===================================================
+
 https://leetcode.com/problemset/all/?difficulty=Hard&topicSlugs=array
 https://www.geeksforgeeks.org/array-data-structure/
 
@@ -31,11 +51,13 @@ build heap from array
 merge k sorted arrays
 sort nearly sorted array
 Kth Smallest/Largest Element in Unsorted Array
+printing k largest elements in an array
 Kth smallest element in a row-wise and column-wise sorted 2D array
 convert min heap to max heap
 place 1 farthest from 0 in an array of 0 and 1
 Median of Stream of Running Integers
 Connect n ropes with minimum cost
+find minimum element in max heap
 
 
 =>counting sort
@@ -55,7 +77,7 @@ Interval tree
 find pivot element in sorted and rotated array
 sorted array with all elements having 2 occurence except 1 element, find that element
 majority element in a sorted array
-
+search an element in a row-wise and column-wise sorted 2D array
 
 
 => stack questions
@@ -127,6 +149,56 @@ if(arr1[i] <= arr2[j]) {
     fix j in arr2 using insertion sort
     i++;
 }
+
+----------------
+
+// merge k sorted arrays
+
+create min heap of 1st element of each array
+repeat until min heap is empty
+    pull min and heapify
+    add element from that array whose element was pulled from heap previously and heapify
+    if that array is empty then do nothing
+
+// java code for min heap
+class MinHeapNode implements Comparable<MinHeapNode> {
+    int value;
+    int index;
+    int rowIndex;
+
+    @Override
+    public int compareTo(MinHeapNode ob) {
+        Integer current = new Integer(this.value);
+        Integer compare = new Integer(ob.value);
+        return current.compareTo(compare);
+    }
+}
+
+Queue<MinHeapNode> minHeap = new PriorityQueue<>();
+
+-----------------
+
+// sort nearly sorted array
+// almost sorted array with each element is at most k away from its target position
+
+create min heap of k+1 size
+pull min from heap and heapify
+add another element from array to heap and heapify
+
+-----------------
+
+// kth smallest element
+O(n + kLogn)
+-> create a min heap of size n
+-> poll elements k times from min heap
+
+O(k + (n-k)*Logk)
+-> create a max heap of size k [0..k-1]
+-> now iterate in array from [k.. n-1]
+	-> if array index is less than top of heap
+		then put array index to top of heap and heapify
+	-> else do nothing
+-> top of heap is kth smallest element
 
 -----------------
 
