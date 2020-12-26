@@ -53,9 +53,11 @@ sort nearly sorted array
 Kth Smallest/Largest Element in Unsorted Array
 printing k largest elements in an array
 Kth smallest element in a row-wise and column-wise sorted 2D array
+    -> merge k sorted arrays
+count negative numbers in a row-wise and column-wise sorted 2D array
 convert min heap to max heap
 place 1 farthest from 0 in an array of 0 and 1
-Median of Stream of Running Integers
+* Median of Stream of Running Integers
 Connect n ropes with minimum cost
 find minimum element in max heap
 
