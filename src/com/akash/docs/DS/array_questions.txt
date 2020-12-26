@@ -93,10 +93,7 @@ sort stack using recursion
 queue using stack
 Design a stack with operations on middle element
 stack with get min on constant time
-Next Greater Element
-The Stock Span Problem
 Largest Rectangular Area in a Histogram
-	-> use segment tree , time = O(N.logN)
 	-> nearest min in left and nearest min in right
 		Find the nearest smaller numbers on left side in an array
 histogram with water
