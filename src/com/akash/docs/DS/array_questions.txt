@@ -77,6 +77,7 @@ Interval tree
 
 =>binary search
 find pivot element in sorted and rotated array
+find pivot element in sorted and rotated array with duplicates
 sorted array with all elements having 2 occurence except 1 element, find that element
 majority element in a sorted array
 search an element in a row-wise and column-wise sorted 2D array
@@ -135,6 +136,26 @@ Given the positions of houses and heaters on a horizontal line, return the minim
 Largest Sum Contiguous Subarray
 Maximum Sum Increasing Subsequence
 Longest increasing Subsequence
+
+
+---------------
+
+// lexicographicaly maximum string
+
+https://leetcode.com/problems/remove-duplicate-letters/
+https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
+https://leetcode.com/problems/last-substring-in-lexicographical-order/submissions/
+
+
+
+last substring of a string in lexicographical order
+-> abab
+-> bab
+
+-> cacacb
+-> cb
+
+https://www.geeksforgeeks.org/lexicographically-smallest-string-formed-by-removing-duplicates/?ref=rp
 
 
 =======================
@@ -200,6 +221,26 @@ O(k + (n-k)*Logk)
 -> top of heap is kth smallest element
 
 -----------------
+
+// search an element in a row-wise and column-wise sorted 2D array
+
+start searching from top right corner
+if match found then return
+else if current element is smaller, then move down
+else move left
+
+-------------------
+
+// sorted array with all elements having 2 occurence except 1 element, find that element
+
+if mid is even
+    if arr[mid-1] == arr[mid] then move right
+    else move left
+else
+     if arr[mid-1] == arr[mid] then move left
+     else move right
+
+------------------
 
 // Find all triplets with zero sum
 List<List<Integer>> threeSumToZero(int[] nums) {
@@ -294,28 +335,10 @@ private int maxDiff(int arr[], int start, int end) {
 	return maxDiff;
 }
 
-==========================
-
-// lexicographicaly maximum string
-
-https://leetcode.com/problems/remove-duplicate-letters/
-https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
-https://leetcode.com/problems/last-substring-in-lexicographical-order/submissions/
-
-
-
-last substring of a string in lexicographical order
--> abab
--> bab
-
--> cacacb
--> cb
-
-https://www.geeksforgeeks.org/lexicographically-smallest-string-formed-by-removing-duplicates/?ref=rp
-
 ===============================
 
 https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/submissions/
+// find pivot element in sorted and rotated array
 // Find Minimum in Rotated Sorted Array
 
 class Solution {
@@ -357,7 +380,7 @@ class Solution {
 
 
 // Search in Rotated Sorted Array
-
+// find pivot element in sorted and rotated array with duplicates
 // Find Minimum in Rotated Sorted Array with duplicates
 public int findMin(int[] nums) {
 	int n = nums.length;
@@ -372,11 +395,11 @@ public int findMin(int[] nums) {
 	while(end > start) {
 	    int mid = start + (end-start)/2;
 	    if(nums[mid] == nums[end]) {
-		end--;
+		    end--;
 	    } else if(nums[mid] > nums[end]) {
-		start = mid+1;
+		    start = mid+1;
 	    } else {
-		end = mid;
+		    end = mid;
 	    }
 	}
 	return nums[end];
