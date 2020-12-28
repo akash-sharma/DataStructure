@@ -90,6 +90,14 @@ check if Parenthesis are correct or not, [{{}}]({})
 check if Parenthesis are correct or not, * can be used as any character
     valid -> ()()* , (())(* , * , *)(), (()) , (((*))(**
     invalid -> ())*()
+count minimum number of reversals to make an parenthesis expression as balanced
+Evaluation of Postfix Expression
+Reverse First K elements of Queue
+Queue reversal
+preorder to postorder of BST
+get min at pop
+sort a stack
+implement two stack in one array
 reverse stack using recursion
 sort stack using recursion
 queue using stack
@@ -99,7 +107,11 @@ Largest Rectangular Area in a Histogram
 	-> nearest min in left and nearest min in right
 		Find the nearest smaller numbers on left side in an array
 histogram with water
-	-> max index of left and right
+	-> max/min index of left and right
+
+
+https://www.geeksforgeeks.org/category/data-structures/stack/
+https://practice.geeksforgeeks.org/explore/?category%5B%5D=Stack&difficulty%5B%5D=1&difficulty%5B%5D=2&page=1
 
 
 => moore algorithm
