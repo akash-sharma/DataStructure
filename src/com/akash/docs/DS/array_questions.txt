@@ -73,6 +73,7 @@ HCF
 
 Segment tree
 Interval tree
+Trie
 
 
 =>binary search
@@ -87,19 +88,22 @@ Find first and last positions of an element in a sorted array
 => stack questions
 
 check if Parenthesis are correct or not, [{{}}]({})
+count minimum number of reversals to make an parenthesis expression as balanced
 check if Parenthesis are correct or not, * can be used as any character
     valid -> ()()* , (())(* , * , *)(), (()) , (((*))(**
     invalid -> ())*()
-count minimum number of reversals to make an parenthesis expression as balanced
+        -> reversal problem logic
 Evaluation of Postfix Expression
+    2 3 1 * + 9 -  , 100 200 + 2 / 5 * 7 +
+--infix to postfix Expression
+    a+b*(c^d-e)^(f+g*h)-i
+--preorder to postorder of BST
+--sort a stack
+sort stack using recursion
+--implement two stack in one array
 Reverse First K elements of Queue
 Queue reversal
-preorder to postorder of BST
-get min at pop
-sort a stack
-implement two stack in one array
 reverse stack using recursion
-sort stack using recursion
 queue using stack
 Design a stack with operations on middle element
 stack with get min on constant time
@@ -343,6 +347,34 @@ private int searchLast(int nums[], int start, int end, int target) {
 }
 
 -----------------------------
+
+// count minimum number of reversals to make an parenthesis expression as balanced
+
+logic : count number of unbalanced parenthesis, result = ceil(m/2) + ceil(n/2)
+m : count of '}'
+n : count of '{'
+
+time : O(n)
+memory : O(1)
+
+start from index 0 to n-1
+if opened parenthesis found
+    open++
+if closed parenthesis found
+    if(open > 0)
+        open--;
+    else
+        closed++;
+return Math.ceil(open/2) + Math.ceil(closed/2);
+
+-----------------------------
+
+// Evaluation of Postfix Expression
+
+if number found then push into stack
+if operator found then pop two elements from stack and push result in stack
+
+------------------------
 
 // Find all triplets with zero sum
 List<List<Integer>> threeSumToZero(int[] nums) {
