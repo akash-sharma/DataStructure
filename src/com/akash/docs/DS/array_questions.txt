@@ -55,7 +55,7 @@ printing k largest elements in an array
 Kth smallest element in a row-wise and column-wise sorted 2D array
     -> merge k sorted arrays
 count negative numbers in a row-wise and column-wise sorted 2D array
-convert min heap to max heap
+    -> binary search solution
 place 1 farthest from 0 in an array of 0 and 1
 * Median of Stream of Running Integers
 Connect n ropes with minimum cost
@@ -79,8 +79,9 @@ Interval tree
 find pivot element in sorted and rotated array
 find pivot element in sorted and rotated array with duplicates
 sorted array with all elements having 2 occurence except 1 element, find that element
-majority element in a sorted array
 search an element in a row-wise and column-wise sorted 2D array
+majority element in a sorted array
+Find first and last positions of an element in a sorted array
 
 
 => stack questions
@@ -172,6 +173,33 @@ if(arr1[i] <= arr2[j]) {
 
 ----------------
 
+// build heap from array
+void createHeap(arr) {
+    for(int i=n/2; i>=0 ; i++) {
+        heapify(arr, i);
+    }
+}
+
+// min heap
+void heapify(arr, i) {
+    int n = arr.length;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+    int smaller = i;
+    if(arr[smaller] > arr[left] && left < n) {
+        smaller = left;
+    }
+    if(arr[smaller] > arr[right] && right < n) {
+        smaller = right;
+    }
+    if(smaller != i) {
+        swap(arr, i, smaller);
+        heapify(arr, smaller);
+    }
+}
+
+----------------
+
 // merge k sorted arrays
 
 create min heap of 1st element of each array
@@ -179,6 +207,10 @@ repeat until min heap is empty
     pull min and heapify
     add element from that array whose element was pulled from heap previously and heapify
     if that array is empty then do nothing
+
+complexity
+time : O(NK(logK))
+memory : O(k)
 
 // java code for min heap
 class MinHeapNode implements Comparable<MinHeapNode> {
@@ -229,6 +261,8 @@ if match found then return
 else if current element is smaller, then move down
 else move left
 
+time complexity : O(n)
+
 -------------------
 
 // sorted array with all elements having 2 occurence except 1 element, find that element
@@ -241,6 +275,62 @@ else
      else move right
 
 ------------------
+
+// majority element in a sorted array
+// Find first and last positions of an element in a sorted array
+
+public int[] searchRange(int[] nums, int target) {
+    int n = nums.length;
+    int firstIndex = searchFirst(nums, 0, n-1, target);
+    if(firstIndex == -1) {
+        return new int[]{-1, -1};
+    }
+    int lastIndex = searchLast(nums, firstIndex, n-1, target);
+    return new int[]{firstIndex, lastIndex};
+}
+
+private int searchFirst(int nums[], int start, int end, int target) {
+    if(end < start) {
+        return -1;
+    }
+    int mid = start + (end-start)/2;
+    if(nums[mid] == target) {
+        if(mid == 0 || nums[mid] > nums[mid-1]) {
+            return mid;
+        } else {
+            return searchFirst(nums, start, mid-1, target);
+        }
+    } else {
+        if(nums[mid] > target) {
+            return searchFirst(nums, start, mid-1, target);
+        } else {
+            return searchFirst(nums, mid+1, end, target);
+        }
+    }
+}
+
+private int searchLast(int nums[], int start, int end, int target) {
+    int n = nums.length;
+    if(end < start) {
+        return -1;
+    }
+    int mid = start + (end-start)/2;
+    if(nums[mid] == target) {
+        if(mid == n-1 || nums[mid] < nums[mid+1]) {
+            return mid;
+        } else {
+            return searchLast(nums, mid+1, end, target);
+        }
+    } else {
+        if(nums[mid] > target) {
+            return searchLast(nums, start, mid-1, target);
+        } else {
+            return searchLast(nums, mid+1, end, target);
+        }
+    }
+}
+
+-----------------------------
 
 // Find all triplets with zero sum
 List<List<Integer>> threeSumToZero(int[] nums) {
