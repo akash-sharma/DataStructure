@@ -93,14 +93,13 @@ check if Parenthesis are correct or not, * can be used as any character
     valid -> ()()* , (())(* , * , *)(), (()) , (((*))(**
     invalid -> ())*()
         -> reversal problem logic
-Evaluation of Postfix Expression
-    2 3 1 * + 9 -  , 100 200 + 2 / 5 * 7 +
---infix to postfix Expression
-    a+b*(c^d-e)^(f+g*h)-i
---preorder to postorder of BST
---sort a stack
+Evaluation of Postfix Expression : 2 3 1 * + 9 -  , 100 200 + 2 / 5 * 7 +
+postfix to infix expression
+infix to postfix Expression : a+b*(c^d-e)^(f+g*h)-i
+sort a stack using stack
 sort stack using recursion
---implement two stack in one array
+implement two stack in one array
+    -> maintain stacks in opposite corners
 Reverse First K elements of Queue
 Queue reversal
 reverse stack using recursion
@@ -109,6 +108,8 @@ Design a stack with operations on middle element
 stack with get min on constant time
 Largest Rectangular Area in a Histogram
 	-> nearest min in left and nearest min in right
+	    (nearest min in left -- from left to right)
+	    (nearest min in right -- from right to left)
 		Find the nearest smaller numbers on left side in an array
 histogram with water
 	-> max/min index of left and right
@@ -346,6 +347,17 @@ private int searchLast(int nums[], int start, int end, int target) {
     }
 }
 
+------------------
+
+// check if Parenthesis are correct or not
+approach 1 => using a stack , time = O(N), memory = O(N)
+
+approach 2 => using 2 variables as open
+when open found then open++
+when close found then open--
+if open==0 then Parenthesis are correct
+time = O(N), memory = O(1)
+
 -----------------------------
 
 // count minimum number of reversals to make an parenthesis expression as balanced
@@ -370,9 +382,30 @@ return Math.ceil(open/2) + Math.ceil(closed/2);
 -----------------------------
 
 // Evaluation of Postfix Expression
+// postfix to infix expression
 
 if number found then push into stack
 if operator found then pop two elements from stack and push result in stack
+
+------------------------
+
+// infix to postfix Expression
+-> initialize postfix result and stack
+-> if operand found push to result
+-> if '(' found push to stack
+-> if ')' found then pop all operators from stack and push to result until '(' found
+-> if operator is found then
+    -> if a higher(or equal) priority operator than current operator, is found on stack top
+        then pop stack top and move it to result
+    -> do above step until a lower priority operator is found
+    -> push operator to stack
+-> if expression is over and stack is non-empty
+    then pop every element from stack and push to result
+
+priority of operators :
+^
+*, /
++, -
 
 ------------------------
 
