@@ -107,17 +107,8 @@ queue using stack
 Design a stack with operations on middle element
 stack with get min on constant time
 Largest Rectangular Area in a Histogram
-	-> nearest min in left and nearest min in right
-	    (nearest min in left -- from left to right)
-	    (nearest min in right -- from right to left)
-		Find the nearest smaller numbers on left side in an array
 histogram with water
 	-> max/min index of left and right
-
-
-https://www.geeksforgeeks.org/category/data-structures/stack/
-https://practice.geeksforgeeks.org/explore/?category%5B%5D=Stack&difficulty%5B%5D=1&difficulty%5B%5D=2&page=1
-
 
 => moore algorithm
 Majority Element in an array
@@ -149,12 +140,23 @@ given an array arr find the maximum j-i such that arrj arri
 
 
 minimum broadcast range required by m towers to reach n houses
-Given the positions of houses and heaters on a horizontal line, return the minimum radius standard of heaters
+Minimum number of towers required such that every house is in the range of at least one tower
+Check if given point lies in range of any of the given towers
+Minimum number of moves required to reach the destination by the king in a chess board
+
 
 Largest Sum Contiguous Subarray
+maximum sum subsequence when no two elements are adjacent (Find maximum possible stolen value from houses)
 Maximum Sum Increasing Subsequence
 Longest increasing Subsequence
 
+Prefix Sum Array
+check if there is a subarray with 0 sum
+Equilibrium index of an array
+Maximum subarray size, such that all subarrays of that size have sum less than k
+Count of seats booked on each of the given N flights
+
+https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/
 
 ---------------
 
@@ -406,6 +408,13 @@ priority of operators :
 ^
 *, /
 +, -
+
+------------------------
+
+Largest Rectangular Area in a Histogram
+	-> nearest min in left and nearest min in right
+	    (nearest min in left -- from left to right)
+	    (nearest min in right -- from right to left)
 
 ------------------------
 
@@ -712,8 +721,45 @@ class MajorityChecker {
     }
 }
 
+-------------------
 
+// minimum broadcast range required by m towers to reach n houses
+house[] = {12, 13, 11, 80}
+tower[] = {4, 6, 15, 60}
 
+int minBroadcast(int house[], int tower[]) {
+    Arrays.sort(house);
+    Arrays.sort(tower);
+    int n = house.length;
+    int m = tower.length;
+    int houseIndex = 0;
+    int towerIndex = 0;
+
+    int leftTower = Integer.MIN;
+    int rightTower = tower[towerIndex];
+    int globalMax = 0;
+
+    while(houseIndex < n) {
+        if(house[houseIndex] > rightTower) {
+            leftTower = rightTower;
+            if(towerIndex < m) {
+                towerIndex++;
+                rightTower = tower[towerIndex];
+            } else {
+                rightTower = Integer.MAX;
+            }
+        } else {
+            int leftDiff = house[houseIndex] - leftTower;
+            int rightDiff = rightTower - house[houseIndex];
+            int localMax = Math.min(leftDiff, rightDiff);
+            if(localMax > globalMax) {
+                globalMax = localMax;
+            }
+            houseIndex++;
+        }
+    }
+    return globalMax;
+}
 
 ==================================================
 
@@ -747,7 +793,6 @@ print all subsequences of a string
 
 => Array rearrangement
 Rearrange an array such that arr[i] = i
-Move all negative numbers to beginning and positive to end
 Rearrange array such that arr[i] >= arr[j] if i is even and arr[i]<=arr[j] if i is odd and j < i
 Convert array into Zig-Zag fashion
 Rearrange array in alternating positive & negative items with O(1) extra space  -> quick sort logic
