@@ -64,6 +64,11 @@ find minimum element in max heap
 
 =>counting sort
 lexicographicaly maximum string
+lexicographicaly minimum string without duplicate : cbacdcbc -> abcd
+Lexicographically smallest string formed by removing duplicates : cbacdcbc -> acdb
+    ->lexicographicaly minimum string without duplicate with maintaining order
+last substring of a string in lexicographical order : abab -> bab , cacacb -> cb
+
 
 a X b = LCM(a,b) X HCF(a,b)
 
@@ -158,25 +163,14 @@ Count of seats booked on each of the given N flights
 
 https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/
 
----------------
+=======================
 
-// lexicographicaly maximum string
-
-https://leetcode.com/problems/remove-duplicate-letters/
-https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
-https://leetcode.com/problems/last-substring-in-lexicographical-order/submissions/
-
-
-
-last substring of a string in lexicographical order
--> abab
--> bab
-
--> cacacb
--> cb
-
-https://www.geeksforgeeks.org/lexicographically-smallest-string-formed-by-removing-duplicates/?ref=rp
-
+Design a stack that supports getMin() in O(1) time and O(1) extra space
+Largest Rectangular Area in a Histogram
+Count of seats booked on each of the given N flights
+Largest Sum Contiguous Subarray
+Maximum Sum Increasing Subsequence
+maximum sum subsequence when no two elements are adjacent
 
 =======================
 
@@ -760,6 +754,40 @@ int minBroadcast(int house[], int tower[]) {
     }
     return globalMax;
 }
+
+---------------------
+
+// Lexicographically smallest string formed by removing duplicates
+time = O(N)
+space = O(N)
+
+String lexicographicallySmallest() {
+	int count[] = new int[26];
+	boolean visited[] = new boolean[26];
+
+	for(int i=0; i<arr.length; i++) {
+		count[arr.charAt(i) - 'a']++;
+	}
+
+	String result = "";
+	for(int i=0; i<arr.length; i++) {
+		char ch = arr.charAt(i);
+		count[ch - 'a']--;
+		if( !visited[ch - 'a'] ) {
+			char temp = result.charAt(result.length()-1);
+			while(result.length() > 0 && temp > ch && count[temp - 'a'] > 0) {
+				visited[temp - 'a'] = false;
+				result = result.substring(0, result.length()-1);
+			}
+			result = result + ch;
+			visited[ch - 'a'] = true;
+		}
+	}
+
+	return result;
+}
+
+---------------------
 
 ==================================================
 
