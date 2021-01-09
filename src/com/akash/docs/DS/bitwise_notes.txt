@@ -83,3 +83,20 @@ n & (n-1) = will reset rightmost set bit
 
 (Q) Check overflow during sum
 
+-----------------
+
+int countSetBits(int num) {
+    int count = 0;
+    while(num > 0) {
+        if((num & 1) == 1) {
+            count++;
+        }
+        num = num >> 1;
+    }
+    return count;
+}
+
+
+Count number of bits to be flipped to convert A to B
+-> do countSetBits of (A xor B)
+
