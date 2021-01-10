@@ -155,19 +155,20 @@ maximum sum subsequence when no two elements are adjacent (Find maximum possible
 Maximum Sum Increasing Subsequence
 Longest increasing Subsequence
 
-Prefix Sum Array
+=> Prefix Sum Array
 check if there is a subarray with 0 sum
 Equilibrium index of an array
-Maximum subarray size, such that all subarrays of that size have sum less than k
 Count of seats booked on each of the given N flights
+
+=> Window Sliding Technique
+Given an array and an integer k, calculate max sum of subarray of k size
+Given an array and an integer k, calculate max subarray size whose sum is less than or equal to k
+
 
 https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/
 
 =======================
 
-Design a stack that supports getMin() in O(1) time and O(1) extra space
-Largest Rectangular Area in a Histogram
-Count of seats booked on each of the given N flights
 Largest Sum Contiguous Subarray
 Maximum Sum Increasing Subsequence
 maximum sum subsequence when no two elements are adjacent
@@ -902,6 +903,40 @@ String lexicographicallySmallest() {
 }
 
 ---------------------
+
+// check if there is a subarray with 0 sum
+create an array of Prefix Sum Array
+if any element repeats in Prefix Sum Array, then it has a subarray with 0 sum
+
+---------------------
+
+// Equilibrium index of an array
+// an index whose sum of elements at lower indexes is equal to the sum of elements at higher indexes
+
+leftSum = 0
+sum = sum of all elements in arr
+for every element i in arr {
+    leftSum = leftSum + arr[i]
+    sum = sum - arr[i]
+    if(sum == leftSum) {
+        return i;
+    }
+    return -1;
+}
+
+---------------------
+
+// Window Sliding Technique
+// Given an array and an integer k, calculate max sum of subarray of k size
+
+-> calculate sum of subarray window 0 to k-1
+-> maxSum = subarray_sum(0, k-1)
+-> iterate from k to length-1
+     subarray_sum = subarray_sum + arr[i] - arr[i-k];
+     maxSum = max(subarray_sum, maxSum);
+
+--------------------
+
 
 ==================================================
 
