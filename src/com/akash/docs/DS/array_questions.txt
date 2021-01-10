@@ -110,7 +110,7 @@ Queue reversal
 reverse stack using recursion
 queue using stack
 Design a stack with operations on middle element
-stack with get min on constant time
+stack with get min in constant time and memory
 Largest Rectangular Area in a Histogram
 histogram with water
 	-> max/min index of left and right
@@ -472,6 +472,57 @@ Largest Rectangular Area in a Histogram
 
 // Design a stack with operations on middle element
 use doubly linked list
+
+------------------------
+
+// stack with get min in constant time and memory
+
+push() {
+	if stack is empty {
+		stack.push(element);
+		min = element
+	}
+	else
+		if (element > min) {
+			stack.push(element);
+		}
+		else {
+			temp = 2 * element - min;
+			stack.push(temp);
+			min = element;
+		}
+}
+
+popMin() {
+	if stack is empty {
+		return null
+	}
+	else {
+		top = stack.pop();
+		if(top < min) {
+			minTemp = min;
+			min = 2 * min - top;
+			return minTemp;
+		}
+		else {
+			return top;
+		}
+	}
+}
+
+getMin() {
+	return min;
+}
+
+peek() {
+	top = stack.peek();
+	if(top < min) {
+		return min;
+	}
+	else {
+		return top;
+	}
+}
 
 ------------------------
 
