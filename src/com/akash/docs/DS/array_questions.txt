@@ -151,9 +151,8 @@ Check if given point lies in range of any of the given towers
 
 
 Largest Sum Contiguous Subarray
-maximum sum subsequence when no two elements are adjacent (Find maximum possible stolen value from houses)
-Maximum Sum Increasing Subsequence
-Longest increasing Subsequence
+maximum sum subsequence when no two elements are adjacent
+Find maximum possible stolen value from houses
 
 => Prefix Sum Array
 check if there is a subarray with 0 sum
@@ -164,8 +163,15 @@ Count of seats booked on each of the given N flights
 Given an array and an integer k, calculate max sum of subarray of k size
 Given an array and an integer k, calculate max subarray size whose sum is less than or equal to k
 
-
 https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/
+
+
+longest increasing substring
+longest increasing subsequence
+Maximum Sum Increasing Subsequence
+
+Longest Bitonic Subsequence
+Longest Bitonic Subarray
 
 =======================
 
@@ -937,6 +943,32 @@ for every element i in arr {
 
 --------------------
 
+// Largest Sum Contiguous Subarray
+
+int maxResult = 0;
+int maxEndingHere = 0;
+
+for(int i=0; i<n; i++) {
+	maxEndingHere = Math.max(maxEndingHere + arr[i], arr[i]);
+	maxResult = Math.max(maxEndingHere, maxResult);
+}
+return maxResult;
+
+--------------------
+
+// maximum sum subsequence when no two elements are adjacent
+// Find maximum possible stolen value from houses
+
+int excl = 0;
+int incl = arr[0];
+int exclForNext = 0;
+
+for(int i=0; i<n; i++) {
+	exclForNext = Math.max(incl, excl);
+	incl = excl + arr[i];
+	excl = exclForNext;
+}
+return Math.max(incl, excl);
 
 ==================================================
 
