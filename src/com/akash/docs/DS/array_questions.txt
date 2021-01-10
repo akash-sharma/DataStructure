@@ -57,7 +57,7 @@ Kth smallest element in a row-wise and column-wise sorted 2D array
 count negative numbers in a row-wise and column-wise sorted 2D array
     -> binary search solution
 place 1 farthest from 0 in an array of 0 and 1
-* Median of Stream of Running Integers
+Median of Stream of Running Integers
 Connect n ropes with minimum cost
 find minimum element in max heap
 
@@ -267,6 +267,43 @@ O(k + (n-k)*Logk)
 
 -----------------
 
+// Median of Stream of Running Integers
+
+hint : minHeap will store larger numbers than median
+       maxHeap will store smaller numbers than median
+
+if(maxHeap.size() > minHeap.size()) {
+	if(element < median) {
+		temp = maxHeap.poll();
+		minHeap.add(temp);
+		maxHeap.add(element);
+	} else {
+		minHeap.add(element);
+	}
+	median = (minHeap.peek() + maxheap.peek()) / 2;
+}
+else if(maxHeap.size() < minHeap.size()) {
+	if(element > median) {
+		temp = minHeap.poll();
+		maxHeap.add(temp);
+		minHeap.add(element);
+	} else {
+		maxHeap.add(element);
+	}
+	median = (minHeap.peek() + maxheap.peek()) / 2;
+}
+else {		// both size equal
+	if(element < median) {
+		maxHeap.add(element);
+		median = maxHeap.peek();
+	} else {
+		minHeap.add(element);
+		median = minHeap.peek();
+	}
+}
+
+-----------------
+
 // search an element in a row-wise and column-wise sorted 2D array
 
 start searching from top right corner
@@ -409,6 +446,11 @@ Largest Rectangular Area in a Histogram
 	-> nearest min in left and nearest min in right
 	    (nearest min in left -- from left to right)
 	    (nearest min in right -- from right to left)
+
+------------------------
+
+// Design a stack with operations on middle element
+use doubly linked list
 
 ------------------------
 
