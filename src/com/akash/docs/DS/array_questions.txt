@@ -175,12 +175,6 @@ Longest Bitonic Subarray
 
 =======================
 
-Largest Sum Contiguous Subarray
-Maximum Sum Increasing Subsequence
-maximum sum subsequence when no two elements are adjacent
-
-=======================
-
 // merging two sorted arrays without using extra space
 arr1 : {i1, i2... in} , arr2 : {j1, j2.. jn}
 if(arr1[i] <= arr2[j]) {
