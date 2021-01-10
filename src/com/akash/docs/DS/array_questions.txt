@@ -147,7 +147,7 @@ given an array arr find the maximum j-i such that arrj arri
 minimum broadcast range required by m towers to reach n houses
 Minimum number of towers required such that every house is in the range of at least one tower
 Check if given point lies in range of any of the given towers
-Minimum number of moves required to reach the destination by the king in a chess board
+* Minimum number of moves required to reach the destination by the king in a chess board
 
 
 Largest Sum Contiguous Subarray
@@ -182,6 +182,27 @@ if(arr1[i] <= arr2[j]) {
     swap(i, j);
     fix j in arr2 using insertion sort
     i++;
+}
+
+----------------
+
+// sort array of 0 1 and 2
+
+int low = 0;
+int high = arr.length - 1;
+
+int i = 0;
+for(i <= high) {
+	if(arr[i] == 0) {
+		swap(arr, low, i);
+		low++;
+		i++;
+	} else if(arr[i] == 1) {
+		i++;
+	} else {
+		swap(arr, i, high);
+		high--;
+	}
 }
 
 ----------------
