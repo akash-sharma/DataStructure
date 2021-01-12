@@ -115,6 +115,10 @@ Lowest Common Ancestor(LCA)
 	-> Build Euler path of tree with level of nodes
 		find minimum level bw the two nodes
 
+LCA in a BST , time = O(height), memory = O(1)
+Maximum element between two nodes of BST
+
+
 check if binary tree is heap   
 	-> level order traversal, check parent child relation (0 to n/2)
 given level order traversal of binary tree, check if min heap
