@@ -138,8 +138,6 @@ max diff in an array arr, max of (arr[j] - arr[i]), j>i
 Stock buy and sell problem
 maximum profit by buying and selling a stock at most twice
 maximum profit by buying and selling a stock at most k times
-substring sum problem
-substring sum problem without taking adjacent
 max diff bw numbers without taking adjacent from left to right
 given an array arr find the maximum j-i such that arrj arri
 
@@ -147,7 +145,7 @@ given an array arr find the maximum j-i such that arrj arri
 minimum broadcast range required by m towers to reach n houses
 Minimum number of towers required such that every house is in the range of at least one tower
 Check if given point lies in range of any of the given towers
-* Minimum number of moves required to reach the destination by the king in a chess board
+Minimum number of moves required to reach the destination by the king in a chess board
 
 
 Largest Sum Contiguous Subarray
