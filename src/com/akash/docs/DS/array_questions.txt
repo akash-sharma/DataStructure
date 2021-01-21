@@ -171,6 +171,33 @@ Maximum Sum Increasing Subsequence
 Longest Bitonic Subsequence
 Longest Bitonic Subarray
 
+=> interval problems :
+check if there is any conflict in intervals
+Given train arrival and departure time, find minimum number of platforms required
+Given n appointments, find all conflicting appointments
+Find the point where maximum intervals overlap
+
+approach 1 :
+-> two loops
+
+approach 2 :
+-> interval tree (will only return single conflict)
+
+approach 3 :
+-> taking array of the count of interval timing
+-> set initial value to 0
+-> add 1 to array slot if interval found
+
+
+approach 4 :
+-> sort both arrival and departure arrays
+-> take pointers in arrival and departure array
+-> count conflicts
+
+approach 5 :
+-> map approach
+https://www.geeksforgeeks.org/minimum-number-platforms-required-railwaybus-station-set-2-map-based-approach/
+
 =======================
 
 // merging two sorted arrays without using extra space
