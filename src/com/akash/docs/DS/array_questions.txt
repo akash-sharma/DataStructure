@@ -76,8 +76,7 @@ HCF
 -> rotation of an array using reversal
 -> find common matching time for diff time intervals (fountain problem)
 
-Segment tree
-Interval tree
+
 Trie
 
 
@@ -177,26 +176,6 @@ Given train arrival and departure time, find minimum number of platforms require
 Given n appointments, find all conflicting appointments
 Find the point where maximum intervals overlap
 
-approach 1 :
--> two loops
-
-approach 2 :
--> interval tree (will only return single conflict)
-
-approach 3 :
--> taking array of the count of interval timing
--> set initial value to 0
--> add 1 to array slot if interval found
-
-
-approach 4 :
--> sort both arrival and departure arrays
--> take pointers in arrival and departure array
--> count conflicts
-
-approach 5 :
--> map approach
-https://www.geeksforgeeks.org/minimum-number-platforms-required-railwaybus-station-set-2-map-based-approach/
 
 =======================
 
@@ -988,6 +967,54 @@ for(int i=0; i<n; i++) {
 	excl = exclForNext;
 }
 return Math.max(incl, excl);
+
+----------------------------------
+
+interval problems :
+
+=> Approach 1 :
+-> two loops
+time = O(n^2)
+
+
+=> Approach 2 : [Interval tree (will only return single conflict)]
+-> every node has 3 values (left, right, max_in_right)
+-> if root and element intervals conflicts then return root
+    -> condition of conflict = (root.left < element.right && element.left < root.right)
+-> else if root has left child and root's left child max > element left
+    -> then recursively traverse left subtree
+-> else recursively traverse left subtree
+
+interval tree creation -- O(nlogn)
+search of a conflict   -- O(logn)
+
+
+=> Approach 3 :
+-> taking array of the count of interval timing
+-> set initial value to 0
+-> add 1 to array slot if interval found
+time = O(n)
+memory = O(time slots)
+
+
+=> Approach 4 :
+-> sort both arrival and departure arrays
+-> take pointers in arrival and departure array
+-> count conflicts
+time = O(nlogn)
+memory = O(n)
+
+
+=> Approach 5 : (map based approach)
+-> keep arr and dep times in a single array
+-> arrival times with A, departure times with D
+-> sort this array on the basis of time, if times are equal then A first
+-> iterate array
+    -> if A comes then paltform++
+    -> if D comes then paltform--
+time = O(nlogn)
+memory = O(n)
+
 
 ==================================================
 
