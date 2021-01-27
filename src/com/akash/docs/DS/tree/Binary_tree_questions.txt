@@ -150,6 +150,7 @@ Minimum no. of iterations to pass information to all nodes in the tree
 
 Check for Children Sum Property in a Binary Tree 
 
+* Given a BST, convert it to a complete BST
 
 --------------------------------------------------
 
