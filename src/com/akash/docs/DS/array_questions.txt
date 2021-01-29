@@ -91,8 +91,11 @@ Find first and last positions of an element in a sorted array
 Capacity To Ship Packages Within D Days
 Minimum Number of Days to Make m Bouquets
 Find the Smallest Divisor Given a Threshold
+    https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/
 Koko Eating Bananas
+    https://leetcode.com/problems/koko-eating-bananas/
 Split Array Largest Sum
+    https://leetcode.com/problems/split-array-largest-sum/
 
 
 => stack questions
@@ -186,9 +189,17 @@ Find the point where maximum intervals overlap
 
 
 => permutation of String
-* Kth permutation of String - ABCD
+Kth permutation of String - ABCD
+    https://leetcode.com/problems/permutation-sequence/
 print all permutation of String - ABCD
-* print all permutation of String with repeated characters - ABCDAC
+    https://leetcode.com/problems/permutations/
+print all permutation of String with repeated characters - ABCDAC
+    https://leetcode.com/problems/permutations-ii/
+Check if one String contains permutation of another String
+    https://leetcode.com/problems/permutation-in-string/
+print all permutation of a String in uppercase and lowercase
+    https://leetcode.com/problems/letter-case-permutation/
+
 
 * find all peak elements in an array
 
