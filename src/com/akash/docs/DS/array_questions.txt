@@ -474,7 +474,74 @@ boolean canBeTransferred(int capacity, int D, int[] weights) {
 
 time complexity = O(n * sum(weights))
 
-can be improved by applying binary search
+// binary search approach
+int capacityToShip(int weights[], int D) {
+    int minCapacity = max(weights)
+    int maxCapacity = sigma(weights)
+
+    while(minCapacity < maxCapacity) {
+        int mid = minCapacity + (maxCapacity-minCapacity)/2;
+        if(canBeTransferred(mid, D, weights)) {
+            maxCapacity = mid;
+        } else {
+            minCapacity = mid + 1;
+        }
+    }
+    return minCapacity;
+}
+
+time complexity = O(n * log(sum(weights)))
+
+------------------
+
+// Minimum Number of Days to Make m Bouquets
+Given an integer array bloomDay, an integer m and an integer k
+We need to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
+Return the minimum number of days to make m Bouquets
+
+public int minDays(int[] bloomDay, int m, int k) {
+    int n = bloomDay.length;
+    if(m * k > n) {
+        return -1;
+    }
+    int min = bloomDay[0];
+    int max = bloomDay[0];
+    for(int i=1; i<n; i++) {
+        min = Math.min(min, bloomDay[i]);
+        max = Math.max(max, bloomDay[i]);
+    }
+    while(min < max) {
+        int mid = min + (max-min)/2;
+        if(isPossible(bloomDay, m, k, mid)) {
+            max = mid;
+        } else {
+            min = mid + 1;
+        }
+    }
+    return min;
+}
+
+private boolean isPossible(int[] bloomDay, int m, int k, int dayCount) {
+
+    int bouquetCount = 0;
+    int lastNonBouquetIndex = -1;
+    for(int index = 0; index < bloomDay.length; index++) {
+        if(dayCount - bloomDay[index] >= 0) {
+            if(index - lastNonBouquetIndex == k) {
+                bouquetCount++;
+                if(bouquetCount == m) {
+                    return true;
+                }
+                lastNonBouquetIndex = index;
+            }
+        } else {
+            lastNonBouquetIndex = index;
+        }
+    }
+    return false;
+}
+
+time = O(n * log(n))
 
 ------------------
 
