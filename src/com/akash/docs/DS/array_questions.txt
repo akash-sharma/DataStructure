@@ -187,8 +187,10 @@ Given train arrival and departure time, find minimum number of platforms require
 Given n appointments, find all conflicting appointments
 Find the point where maximum intervals overlap
 
-
+=> backtracking
 => permutation of String
+
+    https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning)
 Kth permutation of String - ABCD
     https://leetcode.com/problems/permutation-sequence/
 print all permutation of String - ABCD
