@@ -189,14 +189,14 @@ Find the point where maximum intervals overlap
 
 => backtracking
 => permutation of String
-
-    https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning)
 Kth permutation of String - ABCD
     https://leetcode.com/problems/permutation-sequence/
+    https://leetcode.com/problems/permutation-sequence/discuss/22507/%22Explain-like-I'm-five%22-Java-Solution-in-O(n)
 print all permutation of String - ABCD
     https://leetcode.com/problems/permutations/
 print all permutation of String with repeated characters - ABCDAC
     https://leetcode.com/problems/permutations-ii/
+
 Check if one String contains permutation of another String
     https://leetcode.com/problems/permutation-in-string/
 print all permutation of a String in uppercase and lowercase

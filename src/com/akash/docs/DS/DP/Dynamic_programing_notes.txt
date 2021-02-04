@@ -282,6 +282,7 @@ if n=0, sum>0 , false
 if sum=0 , true
 
 printing all subsets can be done, as in case of LCS
+*** https://www.geeksforgeeks.org/perfect-sum-problem-print-subsets-given-sum/
 
 boolean setContainsSubsetWithSum(int set[], int sum) {
 	boolean memo[][] = new boolean[set.length+1][sum+1];
