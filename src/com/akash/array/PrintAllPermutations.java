@@ -116,7 +116,7 @@ public class PrintAllPermutations {
 		StringBuilder result = new StringBuilder();
 		for(int i = 1; i <= n; i++){
 			int index = k / factorial[n-i];
-			result.append(String.valueOf(numbers.get(index)));
+			result.append(numbers.get(index));
 			numbers.remove(index);
 			k = k - (index * factorial[n-i]);
 		}
