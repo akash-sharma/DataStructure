@@ -12,106 +12,67 @@ import java.util.List;
 public class PrintAllPermutations {
 
 	public static void main(String args[]) {
-		/*int arr[] = {1,2,3,4};
-		List<List<Integer>> result = printAllPermutation(arr);
-		for(List<Integer> temp : result) {
-			System.out.println(Arrays.asList(temp));
-		}
 
-		System.out.println("<==========>");
-
-		int duplicateArr[] = {1,2,1};
-		List<List<Integer>> uniqueResult = printAllUniquePermutation(duplicateArr);
-		for(List<Integer> temp : uniqueResult) {
-			System.out.println(Arrays.asList(temp));
-		}*/
-		int arr[] = {1,2,3,4};
-		List<List<Integer>> result = printAllPermutation(arr);
-		for(List<Integer> temp : result) {
-			System.out.println(Arrays.asList(temp));
-		}
 	}
 
-	public static List<List<Integer>> printAllPermutation(int[] nums) {
+	public static List<List<Integer>> getAllPermutation(int[] nums) {
 		List<List<Integer>> list = new ArrayList<>();
-		// Arrays.sort(nums); // not necessary
-		allPermutation(list, new ArrayList<>(), nums);
+		getAllPermutation(list, new ArrayList<>(), nums);
 		return list;
 	}
 
-	private static void allPermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+	private static void getAllPermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums){
 		if(tempList.size() == nums.length){
 			list.add(new ArrayList<>(tempList));
 		} else{
-			for(int i = 0; i < nums.length; i++){
-				if(tempList.contains(nums[i])) continue; // element already exists, skip
+			for(int i = 0; i < nums.length; i++) {
+				if(tempList.contains(nums[i])) {
+					continue;	// element already exists, skip
+				}
 				tempList.add(nums[i]);
-				allPermutation(list, tempList, nums);
+				getAllPermutation(list, tempList, nums);
 				tempList.remove(tempList.size() - 1);
 			}
 		}
 	}
 
-	public static void printAllPermutation(String str) {
-		permuteAll(str, 0, str.length()-1);
-	}
-
-	private static void permuteAll(String str, int l, int r) {
-		if (l == r) {
-			System.out.println(str);
-		}
-		else {
-			for (int i = l; i <= r; i++) {
-				str = swap(str,l,i);
-				permuteAll(str, l+1, r);
-				str = swap(str,l,i);
-			}
-		}
-	}
-
-	private static String swap(String a, int i, int j) {
-		char temp;
-		char[] charArray = a.toCharArray();
-		temp = charArray[i] ;
-		charArray[i] = charArray[j];
-		charArray[j] = temp;
-		return new String(charArray);
-	}
-
-	public static List<List<Integer>> printAllUniquePermutation(int[] nums) {
+	// https://leetcode.com/problems/permutation-sequence/
+	public static List<List<Integer>> getAllUniquePermutation(int[] nums) {
 		List<List<Integer>> list = new ArrayList<>();
 		Arrays.sort(nums);
-		uniquePermutation(list, new ArrayList<>(), nums, new boolean[nums.length]);
+		getAllUniquePermutation(list, new ArrayList<>(), nums, new boolean[nums.length]);
 		return list;
 	}
 
-	private static void uniquePermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
+	private static void getAllUniquePermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
 		if(tempList.size() == nums.length){
 			list.add(new ArrayList<>(tempList));
 		} else{
 			for(int i = 0; i < nums.length; i++){
-				if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) continue;
+				if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) {
+					continue;
+				}
 				used[i] = true;
 				tempList.add(nums[i]);
-				uniquePermutation(list, tempList, nums, used);
+				getAllUniquePermutation(list, tempList, nums, used);
 				used[i] = false;
 				tempList.remove(tempList.size() - 1);
 			}
 		}
 	}
 
-	public static List<List<Integer>> printAllSubsets(int[] nums) {
+	public static List<List<Integer>> getAllSubsets(int[] nums) {
 		List<List<Integer>> list = new ArrayList<>();
 		Arrays.sort(nums);
-		printAllSubsets(list, new ArrayList<>(), nums, 0);
+		getAllSubsets(list, new ArrayList<>(), nums, 0);
 		return list;
 	}
 
-	private static void printAllSubsets(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
+	private static void getAllSubsets(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
 		list.add(new ArrayList<>(tempList));
 		for(int i = start; i < nums.length; i++){
 			tempList.add(nums[i]);
-			printAllSubsets(list, tempList, nums, i + 1);
+			getAllSubsets(list, tempList, nums, i + 1);
 			tempList.remove(tempList.size() - 1);
 		}
 	}
@@ -134,21 +95,17 @@ public class PrintAllPermutations {
 	}
 
 	public static String getKthPermutation(int n, int k) {
-		int pos = 0;
-		List<Integer> numbers = new ArrayList<>();
-		int[] factorial = new int[n+1];
-		StringBuilder sb = new StringBuilder();
 
 		// create an array of factorial lookup
-		int sum = 1;
+		int[] factorial = new int[n+1];
 		factorial[0] = 1;
 		for(int i=1; i<=n; i++){
-			sum *= i;
-			factorial[i] = sum;
+			factorial[i] = i * factorial[i-1];
 		}
 		// factorial[] = {1, 1, 2, 6, 24, ... n!}
 
 		// create a list of numbers to get indices
+		List<Integer> numbers = new ArrayList<>();
 		for(int i=1; i<=n; i++){
 			numbers.add(i);
 		}
@@ -156,13 +113,14 @@ public class PrintAllPermutations {
 
 		k--;
 
+		StringBuilder result = new StringBuilder();
 		for(int i = 1; i <= n; i++){
-			int index = k/factorial[n-i];
-			sb.append(String.valueOf(numbers.get(index)));
+			int index = k / factorial[n-i];
+			result.append(String.valueOf(numbers.get(index)));
 			numbers.remove(index);
-			k-=index*factorial[n-i];
+			k = k - (index * factorial[n-i]);
 		}
 
-		return String.valueOf(sb);
+		return String.valueOf(result);
 	}
 }
