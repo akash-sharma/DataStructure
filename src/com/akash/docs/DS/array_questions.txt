@@ -192,6 +192,7 @@ Find the point where maximum intervals overlap
 Kth permutation of String - ABCD
 print all permutation of String - ABCD
 print all permutation of String with repeated characters - ABCDAC
+find all subsets with given sum in an array with duplicates
 
 Check if one String contains permutation of another String
     https://leetcode.com/problems/permutation-in-string/
@@ -211,6 +212,12 @@ print all permutation of a String in uppercase and lowercase
 
 minimum cost jump, forward = 2, backward 1
 
+
+Max subarray sum
+Max subarray sum with start and end
+Maximum product subarray
+Given non-negative numbers and a target integer k, check if any subarray of size at least 2 has sum multiple of k
+Max sum subarray with one deletion
 
 =======================
 
@@ -1237,6 +1244,49 @@ long getJumpCost(int arr[]) {
 	return result;
 }
 
+
+-------------------------------------
+
+// max subarray sum
+int maxSubarray(int arr[]) {
+	int maxTillNow = 0;
+	int maxSum = 0;
+	for(int i=0; i<arr.length; i++) {
+		maxTillNow = Math.max(maxTillNow + arr[i], arr[i]);
+		maxSum = Math.max(maxTillNow, maxSum);
+	}
+	return maxSum;
+}
+
+
+int arr[] = { -2, -3, 4, -1, -2, 1, 4, -3 };
+
+// max subarray sum with start and end
+int maxSubarray(int arr[]) {
+	int maxTillNow = 0;
+	int maxSum = 0;
+
+	int end = -1;
+	int tempStart = -1;
+	int start = -1;
+	for(int i=0; i<arr.length; i++) {
+		if(maxTillNow + arr[i] > arr[i]) {
+			maxTillNow = maxTillNow + arr[i];
+		} else {
+			maxTillNow = arr[i];
+			tempStart = i;
+		}
+		if(maxTillNow > maxSum) {
+			maxSum = maxTillNow;
+			end = i;
+			start = tempStart;
+		}
+	}
+	if(start > -1 && end > -1 && start <= end) {
+		// print from start to end
+	}
+	return maxSum;
+}
 
 ==================================================
 
