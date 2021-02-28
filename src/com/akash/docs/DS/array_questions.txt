@@ -223,16 +223,30 @@ Max sum subarray with one deletion
 
 // merging two sorted arrays without using extra space
 arr1 : {i1, i2... in} , arr2 : {j1, j2.. jn}
-if(arr1[i] <= arr2[j]) {
-    i++;
-} else {
-    swap(i, j);
-    fix j in arr2 using insertion sort
-    i++;
-}
+
+let k = n+m
+-> gap = ceil(k/2) to 1
+-> if(arr[i] < arr[i + gap])
+    swap(arr[i], arr[i + gap])
+
+time = (m+n)*log(m+n)
 
 ----------------
 
+// sort array of 0 and 1
+sort01(int arr[]) {
+	int i = -1;
+	int j = 0;
+	while(j < arr.length) {
+		if(arr[j] == 0) {
+			i++;
+			swap(arr, i, j);
+			j++;
+		}
+	}
+}
+
+----------------
 // sort array of 0 1 and 2
 
 int low = 0;
