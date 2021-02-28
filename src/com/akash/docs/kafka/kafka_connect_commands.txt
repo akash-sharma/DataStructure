@@ -1,4 +1,7 @@
 
+// Debezium Connector for MySQL doc
+https://debezium.io/documentation/reference/0.10/connectors/mysql.html
+
 *** https://wecode.wepay.com/posts/streaming-databases-in-realtime-with-mysql-debezium-kafka#:~:text=Kafka%20connect%20and%20Debezium%20work,will%20pick%20up%20from%20there.
 
 // kafka connect doc
@@ -9,6 +12,11 @@ https://docs.confluent.io/2.0.0/connect/userguide.html
 
 // steps to configure
 *** https://blog.clairvoyantsoft.com/mysql-cdc-with-apache-kafka-and-debezium-3d45c00762e4
+
+// automatic restart kafka connector
+https://rmoff.net/2019/06/06/automatically-restarting-failed-kafka-connect-tasks/
+
+
 
 ==================
 
