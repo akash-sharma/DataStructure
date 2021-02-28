@@ -1,3 +1,14 @@
+
+*** https://wecode.wepay.com/posts/streaming-databases-in-realtime-with-mysql-debezium-kafka#:~:text=Kafka%20connect%20and%20Debezium%20work,will%20pick%20up%20from%20there.
+
+// kafka connect doc
+https://docs.confluent.io/2.0.0/connect/userguide.html
+
+// what is row based logs and replication
+*** https://www.databasejournal.com/features/mysql/article.php/3922266/Comparing-MySQL-Statement-Based-and-Row-Based-Replication.htm
+
+==================
+
 kafka connect commands and configuration
 
 
