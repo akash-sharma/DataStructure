@@ -1,13 +1,33 @@
-rate limitor
-tinyUrl
-facebook feed page / twitter feed page
-dropbox or google drive
+
+*** https://hackernoon.com/top-10-system-design-interview-questions-for-software-engineers-8561290f0444
+https://www.educative.io/courses/grokking-the-system-design-interview
+https://www.educative.io/courses/grokking-the-object-oriented-design-interview
+https://www.educative.io/courses/coderust-hacking-the-coding-interview
 
 
-book my show
-Uber
-make my trip
-circuit breaker
+- Rate limiter
+- tiny url system
+- Facebook / twitter feed page ( async streaming pipeline)
+- dropbox or google drive
+- Leader board (redis)
+- Big file processing system
+- coupon code checkout system
+- ticket booking system ( movie, railway)
+- video streaming system (hotstar, netflix)
+- shopping website system (amazon, myntra)
+- online cab system (Uber, Ola)
+- online travelling system (MMT)
+- audit user actions and apply recommendation
+
+- circuit breaker - hystrix
+- api gateway -- zuul
+- varnish
+- Web sockets
+    https://youtu.be/i5OVcTdt_OU
+    Always opened tcp connection with bidirectional communication
+
+
+SAGA : https://www.infoq.com/articles/saga-orchestration-outbox/
 
 ==========
 
@@ -272,3 +292,34 @@ https://www.youtube.com/watch?v=U0xTu6E2CT8&list=RDCMUCn1XnDWhsLS5URXTi5wtFTA&st
 
 ============================
 
+=> Uber system design :
+
+- Web sockets that sends information of drivers
+- Information is pushed to kafka and then saved in db and served by region servers
+- Region servers have consistent  hashing for drivers location cells and gossip protocol for information of other servers
+- Heavy write on db, db is geo based
+- It uses google S2 library for cabs location and google map for eta between two locations
+- Fault detection system, cross check driver location data
+- Nodes can be used for websockets part
+
+============================
+
+=> Book my show :
+
+- Central server that saves live movie ticket data
+- While payment of seat booking , lock is acquired on the seat of movie by central server
+- Central server must provide apis for checkout which internally applies lock, only unlocked and unsold seats are shown to user via apis
+- As soon as, user goes to payment page,  seat and user data is saved in cache of BMS and central server is updated via push api. Cache can be distributed like redis on bus.
+
+============================
+
+=> cricinfo system :
+
+- product apis and core apis
+- 2 tier caching and 3 tier caching
+- 2 tier : local cache and distributed cache, problem : stampede effect
+- varnish : merges many requests to one request
+- 2 and 3 tier caching must have some metadata information in response that shows which part resolved data. This would be helpful in debugging
+- web sockets are used to push live scores to users
+
+============================

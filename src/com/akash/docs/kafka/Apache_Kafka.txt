@@ -20,6 +20,13 @@ http://cloudurable.com/blog/kafka-architecture/index.html
 zookeper features
 https://data-flair.training/blogs/zookeeper-in-kafka/
 
+Book :
+https://www.cloudera.com/documentation/enterprise/6/latest/PDF/cloudera-kafka.pdf
+
+https://medium.com/pinterest-engineering/how-pinterest-runs-kafka-at-scale-ff9c6f735be
+https://medium.com/pinterest-engineering/scalable-and-reliable-data-ingestion-at-pinterest-b921c2ee8754
+https://www.confluent.io/kafka-summit-sf18/pinterests-story-of-streaming-hundreds-of-terabytes/
+
 =================
 
 (Q) Diff bw kafka and rabbitmq
@@ -223,9 +230,6 @@ Now if you create new consumer and want to read data from same topic it will get
 Kafka with java
 
 https://dzone.com/articles/kafka-producer-and-consumer-example
-
-Book : 
-https://www.cloudera.com/documentation/enterprise/6/latest/PDF/cloudera-kafka.pdf
 
 ---------------------------------------------------
 
