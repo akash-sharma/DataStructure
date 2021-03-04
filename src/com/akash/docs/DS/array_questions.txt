@@ -122,6 +122,7 @@ stack with get min in constant time and memory
 Largest Rectangular Area in a Histogram
 histogram with water
 	-> max/min index of left and right
+2 D matrix of 0 and 1, find the largest rectangle containing only 1's and return its area
 * Celebrity problem
 
 
@@ -639,8 +640,79 @@ Largest Rectangular Area in a Histogram
 	    (nearest min in left -- from left to right)
 	    (nearest min in right -- from right to left)
 
-------------------------
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        if(n == 0) {
+            return 0;
+        }
+        if(n == 1) {
+            return heights[0];
+        }
+        Stack<Integer> stack = new Stack<>();
+        int left[] = new int[n];
+        int right[] = new int[n];
+        for(int i=0; i<n; i++) {
+            left[i] = -1;
+            right[i] = n;
+        }
 
+        for(int i=0; i<n; i++) {
+            if(stack.size() == 0) {
+                stack.push(i);
+            } else {
+                iterativeScan(stack, heights, i, right);
+                stack.push(i);
+            }
+        }
+        stack.clear();
+
+        for(int i=n-1; i>=0; i--) {
+            if(stack.size() == 0) {
+                stack.push(i);
+            } else {
+                iterativeScan(stack, heights, i, left);
+                stack.push(i);
+            }
+        }
+
+        int max = 0;
+        for(int i=0; i<n; i++) {
+            int result = (right[i] - left[i] - 1) * heights[i];
+            max = Math.max(result, max);
+        }
+        return max;
+    }
+
+    private void iterativeScan(Stack<Integer> stack, int heights[], int i, int right[]) {
+        while(stack.size() > 0) {
+            Integer top = stack.peek();
+            if(top != null && heights[top] > heights[i]) {
+                stack.pop();
+                right[top] = i;
+            } else {
+                return;
+            }
+        }
+    }
+
+}
+
+------------------------
+// 2 D matrix of 0 and 1, find the largest rectangle containing only 1's and return its area
+
+-> maxResult = 0
+-> create an array of matrix column size , int height[] = new int[matrix[0].length]
+-> height = row1
+-> maxResult = max(largestRectangleArea(height), maxResult);
+-> iterate over row2,
+    if row2[i] == 0 then height[i] = 0
+    if row2[i] == 1 then height[i] = height[i] + 1
+-> maxResult = max(largestRectangleArea(height), maxResult);
+-> repeat row2 step for all rows
+-> return maxResult
+
+------------------------
 // Design a stack with operations on middle element
 use doubly linked list
 
