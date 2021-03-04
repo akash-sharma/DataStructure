@@ -159,9 +159,13 @@ Check if given point lies in range of any of the given towers
 Minimum number of moves required to reach the destination by the king in a chess board
 
 
-Largest Sum Contiguous Subarray
+maximum Sum Contiguous Subarray and print it
 maximum sum subsequence when no two elements are adjacent
 Find maximum possible stolen value from houses
+Maximum product subarray
+Given non-negative numbers and a target integer k, check if any subarray of size at least 2 has sum multiple of k
+Max sum subarray with one deletion
+
 
 => Prefix Sum Array
 check if there is a subarray with 0 sum
@@ -212,13 +216,6 @@ print all permutation of a String in uppercase and lowercase
     Free position will be marked 0 and obstacle will be denoted by 1
 
 minimum cost jump, forward = 2, backward 1
-
-
-Max subarray sum
-Max subarray sum with start and end
-Maximum product subarray
-Given non-negative numbers and a target integer k, check if any subarray of size at least 2 has sum multiple of k
-Max sum subarray with one deletion
 
 =======================
 
@@ -830,6 +827,8 @@ int maxDiff(int arr[]) {
 
 // maximum profit by buying and selling a stock at most twice
 
+=> Approach 1 :
+
 public int maxProfit(int[] prices) {
 	final int n = prices.length;
 	if(n < 2) {
@@ -861,6 +860,34 @@ private int maxDiff(int arr[], int start, int end) {
 	}
 	return maxDiff;
 }
+
+
+=> Approach 2 :
+
+public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if(n < 2) {
+            return 0;
+        }
+        int result[] = new int[n];
+
+        int max = prices[n-1];
+        for(int i=n-2; i>=0; i--) {
+            if(prices[i] > max) {
+                max = prices[i];
+            }
+            result[i] = Math.max( max - prices[i], result[i+1]);
+        }
+
+        int min = prices[0];
+        for(int i=1; i<n; i++) {
+            if(prices[i] < min) {
+                min = prices[i];
+            }
+            result[i] = Math.max(result[i] + prices[i] - min, result[i-1]);
+        }
+        return result[n-1];
+    }
 
 ===============================
 
@@ -1179,7 +1206,7 @@ for every element i in arr {
 
 --------------------
 
-// Largest Sum Contiguous Subarray
+// maximum Sum Contiguous Subarray
 
 int maxResult = 0;
 int maxEndingHere = 0;
@@ -1188,6 +1215,35 @@ for(int i=0; i<n; i++) {
 	maxEndingHere = Math.max(maxEndingHere + arr[i], arr[i]);
 	maxResult = Math.max(maxEndingHere, maxResult);
 }
+return maxResult;
+
+--------------------
+
+// maximum Sum Contiguous Subarray and print it
+int arr[] = { -2, -3, 4, -1, -2, 1, 4, -3 };
+
+int maxResult = 0;
+int maxEndingHere = 0;
+
+int start = -1;
+int end = -1;
+int tempStart = 0;
+for(int i=0; i<n; i++) {
+    if(maxEndingHere + arr[i] > arr[i]) {
+        maxEndingHere = maxEndingHere + arr[i];
+    } else {
+        if(maxEndingHere > maxResult) {
+            start = tempStart;
+        }
+        tempStart = i;
+        maxEndingHere = arr[i];
+    }
+    if(maxEndingHere > maxResult) {
+        maxResult = maxEndingHere;
+        end = i;
+    }
+}
+// print start and end
 return maxResult;
 
 --------------------
@@ -1328,50 +1384,6 @@ long getJumpCost(int arr[]) {
 	}
 	long result = Math.min( dp[length-1], dp[length-2]);
 	return result;
-}
-
-
--------------------------------------
-
-// max subarray sum
-int maxSubarray(int arr[]) {
-	int maxTillNow = 0;
-	int maxSum = 0;
-	for(int i=0; i<arr.length; i++) {
-		maxTillNow = Math.max(maxTillNow + arr[i], arr[i]);
-		maxSum = Math.max(maxTillNow, maxSum);
-	}
-	return maxSum;
-}
-
-
-int arr[] = { -2, -3, 4, -1, -2, 1, 4, -3 };
-
-// max subarray sum with start and end
-int maxSubarray(int arr[]) {
-	int maxTillNow = 0;
-	int maxSum = 0;
-
-	int end = -1;
-	int tempStart = -1;
-	int start = -1;
-	for(int i=0; i<arr.length; i++) {
-		if(maxTillNow + arr[i] > arr[i]) {
-			maxTillNow = maxTillNow + arr[i];
-		} else {
-			maxTillNow = arr[i];
-			tempStart = i;
-		}
-		if(maxTillNow > maxSum) {
-			maxSum = maxTillNow;
-			end = i;
-			start = tempStart;
-		}
-	}
-	if(start > -1 && end > -1 && start <= end) {
-		// print from start to end
-	}
-	return maxSum;
 }
 
 ==================================================
