@@ -60,6 +60,8 @@ place 1 farthest from 0 in an array of 0 and 1
 Median of Stream of Running Integers
 Connect n ropes with minimum cost
 find minimum element in max heap
+Given a list of input tasks to run, and the cooldown interval, output task execution list
+Given a list of input tasks to run, and the cooldown interval, output the minimum number of time slots required to run them
 
 
 =>counting sort
@@ -78,6 +80,7 @@ HCF
 
 
 Trie
+Given 2D array of characters and list of words, print those words which are present in 2D array
 
 
 =>binary search
@@ -381,6 +384,70 @@ else {		// both size equal
 		median = minHeap.peek();
 	}
 }
+
+-----------------
+
+// Given a list of input tasks to run, and the cooldown interval, output task execution list
+Given a list tasks(t1,t2,t3) and an integer as cooling period
+return a list of ordered task execution, such that no task is repeated in a single cooling period
+
+https://leetcode.com/problems/task-scheduler/
+
+eg:
+input :
+t1, t2, t1, t1
+coolingperiod = 2
+
+output :
+t1, t2, t1, _, t1
+
+List<Task> optimizedProcessingOder(List<Task> inputTasks, int coolingCycles);
+
+Solution :
+
+class Task {
+    TaskType type;
+    // other fields
+}
+
+// count occurrence of every task and take a map
+t1 - 3
+t2 - 1
+t3 - 2
+Map<TaskType, List<Task>> map;
+Map<TaskType, Integer> count;
+
+// Now make an ordered list by decreasing count of occurrence , i.e
+t1 - 3
+t3 - 2
+t2 - 1
+
+int counter = 0;
+int taskSize = inputTasks.size();
+while(taskSize > counter) {
+    for(TaskType taskType : orderList) {
+        if(taskSize == counter) {
+            break;
+        }
+        List<Task> tasks = map.get(taskType);
+        if(tasks.size() > 0) {
+            Task task = tasks.remove(0);
+            print(task);
+            counter++;
+        } else {
+            print(empty);
+        }
+    }
+}
+
+-----------------
+
+// Given 2D array of characters and list of words, print those words which are present in 2D array
+Given a 2D array of chars and a raw list of valid words.
+Find all the valid words from the array. From each element in the array, you can traverse up, down, right or left.
+
+https://www.careercup.com/question?id=15321757
+
 
 -----------------
 

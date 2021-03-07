@@ -46,6 +46,9 @@ it does not have overlapping subproblems property.
 
 =>Dynamic Programming examples :
 
+Minimum cells required to reach destination with jumps equal to cell values
+** https://www.geeksforgeeks.org/minimum-cells-required-reach-destination-jumps-equal-cell-values/
+
 ugly mumbers
 fibonacci
 Catalan number

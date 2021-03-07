@@ -1,0 +1,80 @@
+minimum cost jump, forward = 2, backward 1
+
+https://www.hackerearth.com/practice/algorithms/greedy/basics-of-greedy-algorithms/practice-problems/algorithm/the-pile-game-14656545/
+https://www.hackerearth.com/practice/basic-programming/implementation/basics-of-implementation/practice-problems/algorithm/book-cricket-8cb02499/
+https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/easy-23-6031def9/
+https://www.hackerearth.com/problem/algorithm/string-game-27/
+
+=======================================
+
+Collecting Medicines
+
+https://www.hackerearth.com/practice/algorithms/greedy/basics-of-greedy-algorithms/practice-problems/algorithm/the-pile-game-14656545/
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+class TestClass {
+    public static void main(String args[] ) throws Exception {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String testNum = br.readLine();
+        int n = Integer.parseInt(testNum);
+        for(int i=1; i<= n; i++) {
+            String data = br.readLine();
+            Long num = Long.parseLong(data);
+            if(num != 3l) {
+                System.out.println("A");
+            } else {
+                System.out.println("B");
+            }
+        }
+    }
+}
+
+========================
+
+The Book Game
+
+https://www.hackerearth.com/practice/basic-programming/implementation/basics-of-implementation/practice-problems/algorithm/book-cricket-8cb02499/
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.math.*;
+
+
+class TestClass {
+    public static void main(String args[] ) throws Exception {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String firstLine = br.readLine();
+        String arr1[] = firstLine.split(" ");
+        int k = Integer.parseInt(arr1[1]);
+        String secondLine = br.readLine();
+        String arr2[] = secondLine.split(" ");
+
+        BigDecimal mod = new BigDecimal("1000000007");
+        BigDecimal product = new BigDecimal("0");
+        for(int i=0; i<k; i++) {
+            String str = arr2[i];
+            String temp = str.substring(str.length()-1);
+            BigDecimal tempNum =
+                BigDecimal.valueOf(Long.parseLong(temp));
+            if(tempNum.compareTo(BigDecimal.ZERO) == 0 || tempNum.compareTo(BigDecimal.ONE) == 0) {
+                product = product.add(tempNum);
+            } else {
+                if(product.compareTo(BigDecimal.ZERO) == 0) {
+                    product = product.add(tempNum);
+                } else {
+                    product = product.multiply(tempNum);
+                }
+            }
+        }
+        product = product.remainder(mod);
+        System.out.println(product);
+    }
+}
+
+
+========================
+
