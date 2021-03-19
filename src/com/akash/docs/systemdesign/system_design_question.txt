@@ -323,3 +323,24 @@ https://www.youtube.com/watch?v=U0xTu6E2CT8&list=RDCMUCn1XnDWhsLS5URXTi5wtFTA&st
 - web sockets are used to push live scores to users
 
 ============================
+
+Advantages and disadvantages of using micro services
+https://www.cio.com/article/3201193/7-reasons-to-switch-to-microservices-and-5-reasons-you-might-not-succeed.html
+
+advantages of using microservices :
+(1) if one service has some problem, it does not impact the other service
+(2) deployment part is segregated
+(3) ownership of resources(database) is divided, any update is done via http call
+(4) relatively less down time (high resilience)
+(5) horizontal scaling of servers which results in less expense
+
+
+disadvantage of using microservices :
+(1) sometimes debugging of an issue causes multiple service scanning
+(2) its difficult to make things transactional and complicated business scenarios
+(3) end to end testing is complicated
+(4) keep failures in mind
+(5) high monitoring systems
+
+
+==============================
