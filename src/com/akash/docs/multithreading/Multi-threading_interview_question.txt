@@ -64,6 +64,8 @@ Multi-threading interview question
 	-> using wait notify
 	-> using ReentrantLock
 40) create BlockingQueue using Semaphore
+41) Design a lock where there are two functions acquire() and release() and two threads have to use it.
+    How will you write code for it?
 
 ----------------------------------------------
 
@@ -110,3 +112,55 @@ DelayQueue --- elements are inserted in queue with a specified delay and release
 
 Exchanger  --- exchange data between two threads
 
+==================
+
+(Q) Design a lock where there are two functions acquire() and release() and two threads have to use it.
+    How will you write code for it?
+
+MyLock myLock = new MyLock();
+// thread1
+myLock.acquire();	// execute
+// thread2
+myLock.acquire();	// wait
+// thread1
+myLock.release();	// thread2 start execution
+
+
+class MyLock {
+	private Lock lock = new ReentrantLock();
+	private Condition acquireCondition = lock.newCondition();
+	private volatile int counter = 0;
+	private Thread acquiredThread = null;
+
+	public void acquire() {
+		lock.lock();
+		try {
+			if(counter != 0) {
+				if(acquiredThread != Thread.currentThread()) {
+					while(counter != 0) {
+						acquireCondition.await();
+					}
+				}
+			}
+			counter++;
+			acquiredThread = Thread.currentThread();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public void release() {
+		lock.lock();
+		try {
+			counter--;
+			if(counter == 0) {
+				acquiredThread = null;
+				acquireCondition.signal();
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+}
+
+==================
