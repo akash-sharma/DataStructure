@@ -82,6 +82,7 @@ HCF
 
 Trie
 Given 2D array of characters and list of words, print those words which are present in 2D array
+Sorting array of strings (or words) using Trie
 
 
 =>binary search
@@ -464,8 +465,56 @@ void print(TaskType taskType) {
 Given a 2D array of chars and a raw list of valid words.
 Find all the valid words from the array. From each element in the array, you can traverse up, down, right or left.
 
-https://www.careercup.com/question?id=15321757
+// when you want to search exact word
+public class Trie {
 
+	private static TrieNode rootNode = new TrieNode();
+
+	private static class TrieNode {
+		TrieNode[] children = new TrieNode[26];
+		boolean isEndOfWord;
+	}
+
+	public void insert(String str) {
+		if(str == null || str.length() == 0) {
+			return;
+		}
+		TreeNode temp = rootNode;
+		int n = str.length();
+		int index;
+		for(int i=0; i<n; i++) {
+			index = str.charAt(i) - 'a';
+			if(temp.children[index] == null) {
+				temp.children[index] = new TrieNode();
+			}
+			temp = temp.children[index];
+		}
+		temp.isEndOfWord = true;
+	}
+
+	public boolean search(String str) {
+		if(str == null || str.length() == 0) {
+			return;
+		}
+		TreeNode temp = rootNode;
+		int n = str.length();
+		int index;
+		for(int i=0; i<n; i++) {
+			index = str.charAt(i) - 'a';
+			if(temp.children[index] == null) {
+				return false
+			}
+			temp = temp.children[index];
+		}
+		return (temp != null && temp.isEndOfWord);
+	}
+}
+
+
+// when you want to search a pattern in a text
+// preprocess text data in Trie DS and search pattern
+
+// https://www.geeksforgeeks.org/pattern-searching-using-trie-suffixes/
 
 -----------------
 
@@ -1230,6 +1279,10 @@ int minBroadcast(int house[], int tower[]) {
 time = O(N)
 space = O(N)
 
+// input is cbacdcbc , output is acdb not adcb
+
+// NOTE : we can also use stack instead of result String
+
 String lexicographicallySmallest() {
 	int count[] = new int[26];
 	boolean visited[] = new boolean[26];
@@ -1247,12 +1300,14 @@ String lexicographicallySmallest() {
 			while(result.length() > 0 && temp > ch && count[temp - 'a'] > 0) {
 				visited[temp - 'a'] = false;
 				result = result.substring(0, result.length()-1);
+				if(result.length() > 0) {
+				    temp = result.charAt(result.length()-1);
+				}
 			}
 			result = result + ch;
 			visited[ch - 'a'] = true;
 		}
 	}
-
 	return result;
 }
 
