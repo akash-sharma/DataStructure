@@ -58,7 +58,9 @@ coin change problem :
 	-> Total number of ways to make sum
 	-> min number of coins to make given sum
 check if Set of non-negative numbers,contains a subset with given sum
+    -> 2D array
 Set of non-negative numbers,Print all subsets with given sum
+    -> traverse 2D array from bottom right
 check if Set of non-negative numbers,contains a subset with sum divisible by m
 gold mine problem
 Rod cutting problem
