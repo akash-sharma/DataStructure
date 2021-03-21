@@ -199,9 +199,10 @@ Find the point where maximum intervals overlap
 
 => backtracking
 => permutation of String
-Kth permutation of String - ABCD
 print all permutation of String - ABCD
 print all permutation of String with repeated characters - ABCDAC
+kth permutation of a number
+Kth permutation of String - ABCD
 find all subsets with given sum in an array with duplicates
 
 Check if one String contains permutation of another String
@@ -1395,7 +1396,7 @@ int excl = 0;
 int incl = arr[0];
 int exclForNext = 0;
 
-for(int i=0; i<n; i++) {
+for(int i=1; i<n; i++) {
 	exclForNext = Math.max(incl, excl);
 	incl = excl + arr[i];
 	excl = exclForNext;
@@ -1451,48 +1452,88 @@ memory = O(n)
 
 
 --------------------------
+
 // print all permutations of an array
-public static List<List<Integer>> permute(int[] nums) {
+public static List<List<Integer>> getAllPermutation(int[] nums) {
     List<List<Integer>> list = new ArrayList<>();
-    // Arrays.sort(nums); // not necessary
-    backtrack(list, new ArrayList<>(), nums);
+    getAllPermutation(list, new ArrayList<>(), nums);
     return list;
 }
 
-private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+private static void getAllPermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums){
     if(tempList.size() == nums.length){
         list.add(new ArrayList<>(tempList));
     } else{
-        for(int i = 0; i < nums.length; i++){
-            if(tempList.contains(nums[i])) continue; // element already exists, skip
+        for(int i = 0; i < nums.length; i++) {
+            if(tempList.contains(nums[i])) {
+                continue;	// element already exists, skip
+            }
             tempList.add(nums[i]);
-            backtrack(list, tempList, nums);
+            getAllPermutation(list, tempList, nums);
             tempList.remove(tempList.size() - 1);
         }
     }
 }
 
+--------------------------
+
 // print all permutations of an array with duplicates
-public static List<List<Integer>> permuteUnique(int[] nums) {
+// https://leetcode.com/problems/permutation-sequence/
+public static List<List<Integer>> getAllUniquePermutation(int[] nums) {
     List<List<Integer>> list = new ArrayList<>();
     Arrays.sort(nums);
-    backtrack(list, new ArrayList<>(), nums, new boolean[nums.length]);
+    getAllUniquePermutation(list, new ArrayList<>(), nums, new boolean[nums.length]);
     return list;
 }
 
-private static void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
+private static void getAllUniquePermutation(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
     if(tempList.size() == nums.length){
         list.add(new ArrayList<>(tempList));
     } else{
         for(int i = 0; i < nums.length; i++){
-            if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) continue;
+            if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) {
+                continue;
+            }
             used[i] = true;
             tempList.add(nums[i]);
-            backtrack(list, tempList, nums, used);
+            getAllUniquePermutation(list, tempList, nums, used);
             used[i] = false;
             tempList.remove(tempList.size() - 1);
         }
     }
+}
+
+--------------------------
+
+// kth permutation of a number
+public static String getKthPermutation(int n, int k) {
+
+    // create an array of factorial lookup
+    int[] factorial = new int[n+1];
+    factorial[0] = 1;
+    for(int i=1; i<=n; i++){
+        factorial[i] = i * factorial[i-1];
+    }
+    // factorial[] = {1, 1, 2, 6, 24, ... n!}
+
+    // create a list of numbers to get indices
+    List<Integer> numbers = new ArrayList<>();
+    for(int i=1; i<=n; i++){
+        numbers.add(i);
+    }
+    // numbers = {1, 2, 3, 4}
+
+    k--;
+
+    StringBuilder result = new StringBuilder();
+    for(int i = 1; i <= n; i++){
+        int index = k / factorial[n-i];
+        result.append(numbers.get(index));
+        numbers.remove(index);
+        k = k - (index * factorial[n-i]);
+    }
+
+    return String.valueOf(result);
 }
 
 --------------------------
