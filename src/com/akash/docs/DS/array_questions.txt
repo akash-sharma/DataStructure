@@ -203,6 +203,7 @@ print all permutation of String - ABCD
 print all permutation of String with repeated characters - ABCDAC
 kth permutation of a number
 Kth permutation of String - ABCD
+check if Set of non-negative numbers, contains a subset with given sum
 find all subsets with given sum in an array with duplicates
 
 Check if one String contains permutation of another String
@@ -1534,6 +1535,38 @@ public static String getKthPermutation(int n, int k) {
     }
 
     return String.valueOf(result);
+}
+
+--------------------------
+
+// find all subsets with given sum in an array with duplicates
+// {10, 1, 2, 7, 6, 1, 5}, sum = 8
+
+public void findAllSubsetSum(int arr[], int sum) {
+	Arrays.sort(arr);
+	List<Integer> tempResult = new ArrayList<>();
+	recur(arr, sum, 0, tempResult);
+}
+
+private void recur(int arr[], int sum, int start, List<Integer> tempResult) {
+	if(sum == 0) {
+	    for(int temp : tempResult) {
+		    System.out.print("" + temp + " , ");
+	    }
+	    System.out.println();
+	    return;
+	}
+	for(int i=start; i<arr.length; i++) {
+	    if(i != start && arr[i] == arr[i-1]){
+		    continue;
+	    }
+	    if(sum < arr[i] ) {
+		    break;
+	    }
+	    tempResult.add(arr[i]);
+	    recur(arr, sum - arr[i], i+1, tempResult);
+	    tempResult.remove(tempResult.size()-1);
+	}
 }
 
 --------------------------
