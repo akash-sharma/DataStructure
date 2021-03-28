@@ -221,6 +221,12 @@ print all permutation of a String in uppercase and lowercase
 
 minimum cost jump, forward = 2, backward 1
 
+
+https://www.geeksforgeeks.org/find-a-tour-that-visits-all-stations/
+https://www.geeksforgeeks.org/sum-of-minimum-elements-of-all-subarrays/
+https://leetcode.com/problems/cut-off-trees-for-golf-event/
+
+
 =======================
 
 // merging two sorted arrays without using extra space

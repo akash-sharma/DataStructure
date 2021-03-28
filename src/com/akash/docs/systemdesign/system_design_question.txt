@@ -344,3 +344,99 @@ disadvantage of using microservices :
 
 
 ==============================
+
+=> Coupon code checkout system
+
+Design a system for assigining promocodes to user while validating few dynamic conditions like
+only 100 users can use a promocode
+only Rs 1000 budget is allocated for a promocode
+
+=>types of dynamic conditions :
+total promocode usage cost
+total promocode usage count
+promocode usage per user
+promocode usage per card
+and many more like this
+
+
+Problem : How to take a lock at promocode level
+-> DB promocode table row level lock
+-> Use distributed cache like redis and set key = promocode
+
+
+
+Approach 1 :
+checkout api
+(1) take a lock at promocode level
+(2) check if any dynamic condition fails from mysql, if fail then return
+(3) If pass then, save order data in mysql
+(4) release lock
+
+Disadvantage of approach 1 :
+(1) Heavy Read and Write operation on single mysql table
+(2) For dynamic conditions, we will have aggregation queries (inner joins), so query will slow down on such big table
+(3) As conditions may increase in future, system will become slower
+
+
+Approach 2 : (store aggregated data in cassandra or some othe data source)
+checkout api
+(1) take a lock at promocode level
+(2) check if any dynamic condition fails from cassandra, if fail then return
+(3) If pass then, save order data in mysql
+(4) save aggregated data in cassandra (sync call)
+(5) release lock
+
+
+Advantage of Approach 2 :
+(1) Storing aggregated data in cassandra will avoid inner joins in mysql
+	cassandra tables should be designed in such a way that supports our system queries
+(2) Saving data in mysql can help us in auditing, machine learning, data analyses
+
+
+Disadvantage of above api
+(1) conditions can increase in future, so api may be more bulky
+(2) different coditions require different locks, applying a single lock will downgrade api performance
+
+
+Approach 3 : (saving data in cassandra will be async)
+checkout api
+
+-> Do an asyn call to cassandra
+-> Take a condition based lock (one lock per condition) in a distributed cache just before saving data in mysql
+-> When data is saved in cassandra condition table (different tables for checking different conditions)
+	then release condition based lock
+
+
+(1) check if any dynamic condition fails from cassandra, if fail then return
+(2) If pass then, take condition based lock, i.e. save (user + promocode + condition) key in redis
+(3) save order data in mysql
+
+(1) In an async call , save aggregated data to cassandra (debizium, kafka-connect, storm consumer)
+(2) When data is saved in cassandra successfully, release condition lock
+	i.e. delete (user + promocode + condition) key from redis
+
+
+
+Advantages of Approach 3 :
+(1) lock is acquired on the basis of (user + promocode + condition),
+	So two seperate promocodes or two seperate users can run parallely.
+	This will be increase its performance
+
+(2) saving data in cassandra is async call, so api responded very fast.
+
+
+Problems of Approach 3 :
+(1) What if data saved in mysql but some error occured while saving it in cassandra
+(2) More tech stack is added in async update (debizium, kafka connect, storm), what if they are down
+	These problems will make system in an inconsistent state
+(3) What should ideal TTL value of (user + promocode + condition) key
+	-> if async system is down and ttl is high, then other users will not be able to use promocodes
+
+Solutions :
+(1) lock will only be released when cassandra is updated successfuly.
+	We can tweek the consistency level of cassandra writes for better performance.
+(2) Async pipeline is dependent on kafka offset commit strategy and at least once approach.
+(3) Also we have to make async packet processing as idempotent.
+(4) If anything goes down, an ideal TTL for blocking user to avoid over use can be 30 minutes.
+
+==========================================
