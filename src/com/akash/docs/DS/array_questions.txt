@@ -770,6 +770,57 @@ priority of operators :
 +, -
 
 ------------------------
+// infix to postfix Expression
+// evaluate expression
+
+    String str = "1+2*3-4+1";
+    int result = evaluate(str);
+
+    public static int evaluate(String expression) {
+        char[] chars = expression.toCharArray();
+
+        Stack<Integer> operands = new Stack<>();
+        Stack<Character> operators = new Stack<>();
+
+        for (int index = 0; index < chars.length; index++) {
+            if (chars[index] >= '0' && chars[index] <= '9') {
+                StringBuffer num = new StringBuffer();
+                while (index < chars.length && chars[index] >= '0' &&chars[index] <= '9') {
+                    num.append(chars[index++]);
+                }
+                operands.push(Integer.parseInt(num.toString()));
+                index--;
+            } else if (chars[index] == '+' || chars[index] == '-' || chars[index] == '*' || chars[index] == '/') {
+                while (!operators.empty() && hasPrecedence(chars[index],operators.peek())) {
+                    operands.push(calculate(operands.pop(), operands.pop(), operators.pop()));
+                }
+                operators.push(chars[index]);
+            }
+        }
+        while (!operators.empty()) {
+            operands.push(calculate(operands.pop(), operands.pop(), operators.pop()));
+        }
+        return operands.pop();
+    }
+
+    private static boolean hasPrecedence(char op1, char op2) {
+        if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-')) {
+            return false;
+        }
+        return true;
+    }
+
+    private static int calculate(int b, int a, char operator) {
+        switch (operator) {
+            case '+' : return a + b;
+            case '-' : return a - b;
+            case '*' : return a * b;
+            case '/' : return a / b;
+        }
+        return 0;
+    }
+
+------------------------
 
 Largest Rectangular Area in a Histogram
 	-> nearest min in left and nearest min in right
