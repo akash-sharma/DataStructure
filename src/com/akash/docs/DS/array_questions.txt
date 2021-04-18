@@ -114,6 +114,7 @@ check if Parenthesis are correct or not, * can be used as any character
 Evaluation of Postfix Expression : 2 3 1 * + 9 -  , 100 200 + 2 / 5 * 7 +
 postfix to infix expression
 infix to postfix Expression : a+b*(c^d-e)^(f+g*h)-i
+evaluate result :  "11+12*3-40/5"
 sort a stack using stack
 sort stack using recursion
 implement two stack in one array
@@ -226,6 +227,12 @@ https://www.geeksforgeeks.org/find-a-tour-that-visits-all-stations/
 https://www.geeksforgeeks.org/sum-of-minimum-elements-of-all-subarrays/
 https://leetcode.com/problems/cut-off-trees-for-golf-event/
 
+
+print all nodes at a distance of k , upward or downward
+find two missing numbers from 1 to n
+evaluate the expression : "4*2-3+6"
+rank of stream of integers
+print compile order of dependencies
 
 =======================
 
@@ -771,7 +778,7 @@ priority of operators :
 
 ------------------------
 // infix to postfix Expression
-// evaluate expression
+// evaluate result :  "11+12*3-40/5"
 
     String str = "1+2*3-4+1";
     int result = evaluate(str);
