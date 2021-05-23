@@ -96,3 +96,67 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.ht
 https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 
 ===================================
+
+==> ES issues and learnings :
+
+index
+5 shard  ---> 1 master and 2 replicas
+each shard --> many segments
+
+=============================
+
+https://www.outcoldman.com/en/archive/2017/07/13/elasticsearch-explaining-merge-settings/
+
+https://www.alibabacloud.com/blog/elasticsearch-distributed-consistency-principles-analysis-1---node_594358
+https://www.alibabacloud.com/blog/elasticsearch-distributed-consistency-principles-analysis-2---meta_594359
+https://alibaba-cloud.medium.com/elasticsearch-distributed-consistency-principles-analysis-3-data-a98cc436bc6b
+
+===============================
+
+properties :
+-> max_merged_segment = 5gb default (merged segment should not be bigger than this size)
+-> max_merge_at_once = 10 default  (how many segments can be merged at once)
+-> max_segments_per_tier = 10 default (after how many segments creation, merge will be triggered)
+
+1 tier has same size of segments, when they merge they move to next tier
+
+merge algo logic :
+-> first calculate which segments are eligible for merging
+-> then calculate sum of segments which are less than max_merged_segment
+
+solution :
+tune merge ->
+merge should be triggered less frequently
+merge segments size should be less
+
+
+max_merge_at_once is set to 5
+max_segments_per_tier is set to 20
+
+Ques => can we delete old data from ES which is not used currently
+
+============================
+
+==> Useful findings :
+
+-> more replica will take more time in write query
+-> If we increase number of shards in an index, then load on single shard will be low comparativily
+
+-> data nodes should be equaly distributed accross all master and slave nodes.
+
+for example :
+if we have 15 shards, 1 primary and 2 replica each
+total = 15 primary + 30 replica shards = 45
+If we have 20 data nodes, then 15 nodes have 2 shards and 5 nodes have 3 shards
+
+
+if we have 15 shards, 1 primary and 1 replica each
+total = 15 primary + 15 replica shards = 30
+If we have 20 data nodes, then 10 nodes have 2 shards and 10 nodes have 3 shards
+
+In this way we have to equally distribute the load on data nodes.
+
+Increasing shards of an index at runtime is not easy.
+You have to make your index as read only and then create a copy of it to another large shard index.
+
+============================
