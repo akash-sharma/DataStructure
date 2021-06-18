@@ -32,6 +32,7 @@ find minimum and maximum element in an array (bubble, selection)
 =>merge sort
 merging two sorted arrays
 merging two sorted arrays without using extra space
+find median for 2 sorted arrays
 merging two sorted linked list
 merging two sorted linked list without using extra space (create a new linked list in sorted order)
 count number of inversions
@@ -245,6 +246,21 @@ let k = n+m
     swap(arr[i], arr[i + gap])
 
 time = (m+n)*log(m+n)
+
+
+=> approach 2
+int n = arr1.length;
+int m = arr2.length;
+int i=0;
+while(arr1[n-1] > arr2[0]) {
+    if(arr1[i] > arr2[0]) {
+        swap(arr1, i, arr2, 0);
+        // fix position for arr2[0] by using insertion sort
+    }
+    i++;
+}
+
+
 
 ----------------
 
