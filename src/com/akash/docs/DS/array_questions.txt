@@ -230,9 +230,11 @@ https://leetcode.com/problems/cut-off-trees-for-golf-event/
 
 
 print all nodes at a distance of k , upward or downward
+    -> find downward nodes of distance k pre order, for upward nodes return distance from node
 find two missing numbers from 1 to n
-evaluate the expression : "4*2-3+6"
+    -> find avg of missing numbers, compute sum of numbers from 1 to avg
 rank of stream of integers
+    -> balanced BST, every node stores count of nodes in its left subtree
 print compile order of dependencies
 
 =======================
