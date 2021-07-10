@@ -92,3 +92,90 @@ curl -X PUT http://localhost:8083/connectors/my_connector_name/pause
 curl -X PUT http://localhost:8083/connectors/my_connector_name/resume
 
 
+=================
+
+https://engineeringblog.yelp.com/2016/08/streaming-mysql-tables-in-real-time-to-kafka.html
+https://wecode.wepay.com/posts/streaming-databases-in-realtime-with-mysql-debezium-kafka
+
+mysql cdc projects : https://github.com/wushujames/mysql-cdc-projects/wiki
+
+kafka connect : https://docs.confluent.io/3.1.1/connect/
+
+Debezium : https://debezium.io/documentation/reference/tutorial.html
+
+Architecture : https://debezium.io/documentation/reference/architecture.html
+
+
+Event driven architecture
+Change data capture Design pattern
+Near real time (NRT) data : how do we provide services with the data they require as soon as possible?
+
+
+
+capturing each database change event, then wrapping it and pushing it to kafka
+
+Duality of Streams and Tables : When database table change events are pushed over a stream to other systems by an order of timestamp.
+
+In a master slave architecture like mysql, master node change events are synced to slave node in an asynchronous manner.
+This synching is achived by pushing every DB change event to a bin log file on master node in an order by timestamp.
+Slave nodes create a replica of binary log file of master binary log file and slave node updates its own DB state.
+
+
+Types of Mysql Replication :
+There are two ways of replicating a MySQL database:
+
+(1) Statement-based replication (SBR)
+(2) Row-based replication (RBR)
+
+Statement-based replication : In this type of replication, sql statements are written to bin log files of master node and then these sql statements are copied to slave node bin log file.
+
+Row-based replication : This type of replication contains actual data modified in rows of a table.
+
+Types of events generated : Insert, Update, Delete and Refresh
+These events contains before and after data to easily identify the types.
+
+GTID : For fail safe replication accross all slave nodes, database requires a unique identier associated with every transaction.
+It is identical across all the servers in a given replication setup. It helps in process of recovery of failure.
+Once a transaction with a given GTID is committed on a given server, any subsequent transaction having the same GTID is ignored by that server. Thus, a transaction committed on the source can be applied no more than once on the replica, which helps to guarantee consistency.
+It was introduced in MySQL 5.6.
+
+
+Debezium is a distributed platform that turns your existing databases into event streams, so applications can see and respond immediately to each row-level change in the databases.
+
+Debezium is built on top of Apache Kafka and provides Kafka Connect compatible connectors that monitor specific database management systems. Debezium provides implementation of kafka connect for various databases like mysql and postgress.
+
+(1) enable row based logs on atleast one mysql slave server
+(2) enable gtid on all mysql servers
+
+
+An example of debezium packet :
+
+{
+  "before": {
+    "id": 1005,
+    "first_name": "Sachin",
+    "last_name": "tendulkar",
+    "email": "sachin@gmail.org"
+  },
+  "after": {
+    "id": 1005,
+    "first_name": "Sachin Ramesh",
+    "last_name": "tendulkar",
+    "email": "sachin@gmail.org"
+  },
+  "source": {
+    "name": "mysql-server-1",
+    "server_id": 226345,
+    "ts_sec": 1265881,
+    "gtid": null,
+    "file": "mysql-bin.000004",
+    "pos": 484,
+    "row": 0,
+    "snapshot": null
+  },
+  "op": "u",
+  "ts_ms": 7462281029529
+}
+
+
+
