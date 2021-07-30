@@ -1,0 +1,70 @@
+final class Person {
+	private String name;
+	private int age;
+	private Metadata meta;
+	
+	
+	 public Person(String name, int age, Metadata meta) {
+	 	this.name = name;
+	 	this.age = age;
+	 	this.meta = meta;
+	 }
+	 
+	 // should not have any setter
+	 
+	 public String getName() {
+	 	return name;
+	 }
+	 
+	 public int getAge() {
+	 	return age;
+	 }
+	 
+	 public Metadata getMeta() {
+	 	return new Metadata(meta);
+	 }
+}
+
+// immutable
+class Metadata {
+	
+}
+
+
+
+top 100 selling products for a heavy right table
+
+product table --> millions rows
+write heavy
+
+product_id, num_of_units_sold, last_updated
+1		100		1
+2		10		1
+3		200		1
+
+
+write update to product --async--> pipeline (storm kafka)  -->   redis 
+
+
+read api <---  redis
+
+
+debezium   --- reads mysql bin logs  --> kafka topic
+
+
+mysql bin logs 	debizium	===    kafka topic
+
+
+kafka -- 
+ 
+
+eventualy consistent
+at least once  -- idompotent
+
+
+what would happen if right occurs on table when there is a index creation going on in mysql table
+
+https://use-the-index-luke.com/sql/dml/insert#:~:text=The%20number%20of%20indexes%20on,a%20table%20involves%20several%20steps.
+
+
+

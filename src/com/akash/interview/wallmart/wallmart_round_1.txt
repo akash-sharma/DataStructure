@@ -1,0 +1,121 @@
+wallmart round 1
+
+Input : arr1 = {2, 3, 10, 6, 4, 8, 1}
+Output : 8
+max diff bw two elements
+larger element appears after smaller element
+
+{2, 1, 3, 1}
+maxdiff = 2 
+
+Input : arr2 = {2, 3, 7, 6, 4, 8, 1}
+Output : 5
+
+Input : arr3 = {8, 7, 6, 5, 4, 3, 2}
+Output : 0
+
+max diff bw two elements
+larger element appears after smaller element
+
+=> smallest number to the left of every number
+
+
+
+int maxDiff(int arr[]) {
+	int diff = 0;
+	for(int i=0; i<arr.length-1; i++) {
+		for(int j=i+1; j<arr.length; j++) {
+			diff = Math.max(arr[j] - arr[i], diff);
+		}
+	}
+	return diff;
+}
+
+time = O(N^2)
+memory = O(1)
+
+
+input  -> 2 1 3 1
+output -> 0 0 1 0  (smallest element to the left)
+
+
+2 1 3 1 5
+
+if find smaller no , push to stack
+else do not push stack and poll
+
+Approach 3:
+
+arr-> 2 1 3 1 5
+min-> 2 1 1 1 1
+max-> 2 2 3 3 5
+
+min till now
+max till now
+
+
+int maxDiff(int arr[]) {
+	int minTillNow = 0;
+	int maxTillNow = 0;
+	int maxDiff = 0;
+	for(int i=0; i<arr.length; i++) {
+		if(arr[i] < minTillNow ) {
+			minTillNow = arr[i];
+		}
+		
+		if(arr[i] - minTillNow > maxDiff) {
+			maxDiff = arr[i] - minTillNow;
+		}
+		
+		/*if(arr[i] > maxTillNow ) {
+			maxTillNow = arr[i];
+			maxDiff = Math.max(maxDiff, arr[i] - minTillNow);
+		}*/
+	}
+	return maxDiff;
+}
+
+
+
+time - O(N)
+memory - O(1)
+
+
+https://www.geeksforgeeks.org/maximum-difference-between-two-elements/
+https://www.geeksforgeeks.org/maximum-difference-sum-elements-two-rows-matrix/
+https://www.geeksforgeeks.org/stock-buy-sell/?ref=lbp
+https://www.geeksforgeeks.org/maximum-profit-by-buying-and-selling-a-stock-at-most-twice-set-2/?ref=rp
+https://www.geeksforgeeks.org/given-an-array-arr-find-the-maximum-j-i-such-that-arrj-arri/?ref=lbp
+
+
+
+================
+google
+
+banglore
+hydrabad
+
+teams :
+google cloud
+pay
+add
+search
+devices
+
+
+(1)
+screening round -- 45 min coding round , DS algo, communication and problem solving, solving approach
+
+(2) virtual 5 rounds
+3 rounds of coding
+1 technical round - system design
+1 non tech
+
+1 email
+upload resume
+
+2 email
+study material
+
+
+

@@ -1,0 +1,176 @@
+
+service 1
+
+api1
+api2
+api3
+
+client1
+client2
+client3
+
+api1 -- client1 
+10 sec -- 100 threashold
+60 sec -- 1000 threshold
+
+
+api2 -- client2
+10 sec -- 50 threashold
+60 sec -- 900 threshold
+
+
+config :
+api , client, window, threshold
+
+global config map (DB / cache this in memory)
+key = api + client + window
+value = threshold
+
+(redis : sorted set)
+data store : timestamps request (config key)
+
+http : too_many_request
+
+
+sorted set redis :
+
+api1_client1_10 :
+ 1 : 1 (time stamp at which request came) -- time of epoch
+ 2 : 2 
+ 3 : 3
+ 5 : 5
+
+
+api1 client1 
+window : 10 sec
+
+
+delete all records before this in the sorted set of redis (currentTime - window)
+then count set size 
+if allowed
+throw errror
+
+
+middleware/gateway (scale, infra)
+
+
+
+service1(data)  	service2 	service3
+
+http api hit(current_request data)
+
+
+
+rateLimiting Service (current_request data)
+config data
+redis 
+
+
+maven repo (library)
+-> logic redis
+-> 
+
+
+=======================
+
+Document template (PlaceHolders and conditions)
+
+
+JSON data
+
+
+Output Document
+
+
+
+.........................
+Some random text {{name}}, {{lastName}}...Some random text
+
+
+{if city = 'Noida'}
+
+Some Random text
+
+{if age <20}
+
+Some Random ABC
+{endif}
+
+{endif}
+...........
+
+
+JSON. Data: {"name" : "Akash", "lastName": "Sharma", "age": 21, "city": Noida}
+
+
+Some random text Akash, Sharma...Some random text
+
+
+Some Random text
+
+...........
+
+
+==============
+String IF_INDEX = "{if";
+string END_INDEX = "{endif}";
+
+String parse(List<String> lines, Map<String, Object> json) {
+		SortedMap<Integer, Integer> mapping = getMapping(lines, json);
+		Iterator itr =  mapping.entrySet().iterator();
+		while(itr.hashNext()) {
+			Map.Entry<Integer,Integer> entry = itr.next();
+			int ifLine = entry.getKey();
+			int endLine = entry.getValue();
+			if(evaluate(ifLine, lines, json)) {
+				
+			}
+		}
+}
+
+private boolean evaluate() {
+	...
+}
+
+
+private SortedMap<Integer, Integer> getMapping(List<String> lines, Map<String, Object> json) {
+
+	int counter = 1;
+	SortedMap<Integer, Integer> ifEndMapping = new TreeMap<>();
+	Stack stack = new Stack();
+	for(String line : lines) {
+		if(line.starts(IF_INDEX)) {
+			stack.push(counter);
+		}
+		if(line.starts(END_INDEX)) {
+			int top = stack.pop();
+			ifEndMapping.put(top, counter);
+		}
+		counter++;
+	}
+	return ifEndMapping;
+}
+
+
+1 if
+2	if
+3	endIf
+4endIf
+5if
+6endIf	
+
+
+
+
+stack 
+Map<Integer, Integer> map -- if else mapping
+	
+	
+if location -- endIf location	
+
+{{ {} }}
+
+ 
+
+
+

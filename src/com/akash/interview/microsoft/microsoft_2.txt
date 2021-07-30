@@ -1,0 +1,109 @@
+Given various tasks as list and an integer as cooling period
+return a list of ordered task execution, such that no event repeats in a single cooling period 
+
+t1,t2,t1,t1,t3,t3..
+
+coolingperiod=2cycles
+
+t1,t1,t1
+
+t1,i,t1,i,t1
+
+class Task {
+	String type;
+	// other keys
+}
+
+// sliding window, time ?
+2
+t1 t2 t1 t3
+(cool+1)
+
+// count every task and take a map
+t1 - 2
+t2 - 3
+t3 - 4
+Map<Task_type, List<Task>> map
+
+if (cool < map.entrySet()) {
+	// cool =3
+	t1 t2 t3 | t1 t2 t3 | t2 t4 e | t4
+} else {
+	// cool = 5
+	t1 t2 t3 e e | t1 t2 t3 e e | t2 t3 e e e | t3
+}
+
+
+t1 - 3
+t3 - 2
+t2 - 1
+cool = 2
+
+t1 t3 t2 | t1 t3 e | t1
+
+List<Task> optimizedProcessingOder(List<Task> inputTasks, int coolingCycles) {
+	if(coolingCycles <= 0) {
+		return inputTasks;
+	}
+	
+	// heap -- ordering of task type : populate an order list
+	
+	// could be in a single map also
+	Map<String, List<Task>> typeToTasksMap = new TreeMap<>();
+	Map<String, Integer> typeCountMap = new HashMap<>();
+	for(Task task : inputTasks) {
+		List<Task> tasks = map.get(task.getType());
+		if(tasks == null) {
+			tasks = new ArrayList<>();
+			map.put(task.getType(), tasks);
+		}
+		tasks.add(task);
+		
+		Integer count = typeCountMap.get(task.getType());
+		if(count == null) {
+			typeCountMap.put(task.getType(), 1);
+		} else {
+			typeCountMap.put(task.getType(), count + 1);
+		}
+	}
+	
+	Set<String> taskTypes = typeCountMap.entrySet().keySet();
+	int countOfTaskType = typeCountMap.entrySet().size();
+	
+	int counter = 0;
+	if(coolingCycles < countOfTaskType) {
+		
+	} else {
+		int taskSize = inputTasks.size();
+		while(taskSize > 0) {
+			for(Task task : orderList) {
+				print(task);
+				counter++;
+				taskSize--;
+			}
+			while(counter < coolingCycles) {
+				print(empty);
+				counter++;
+			}
+			counter = 0;
+		}
+	}
+}
+
+
+(from heap) orderList = t1, t3, t2
+
+t1 - 3
+t3 - 2
+t2 - 1
+cool = 2
+
+t1 t3 t2 | t1 t3 e | t1
+
+
+
+
+
+
+
+

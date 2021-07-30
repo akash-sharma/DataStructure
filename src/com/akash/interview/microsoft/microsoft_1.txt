@@ -1,0 +1,59 @@
+// find all subsets with given sum in an array with duplicates
+
+package com.codility;
+
+import java.lang.*;
+import java.util.*;
+
+// you can also use imports, for example:
+// import java.util.*;
+
+public class Solution {
+
+// f(n, t) = f(n-i, t-i) + f(n-i, t)
+
+// 1, 1, 2,2  : 3
+
+    public static void main(String [] args) {
+        // you can write to stdout for debugging purposes, e.g.
+        //System.out.println("This is a debug message");
+        int arr[] = {10, 1, 2, 7, 6, 1, 5};
+        int target = 8;
+        Arrays.sort(arr);
+       // System.out.println(Arrays.toString(arr));
+        List<Integer> tempResult = new ArrayList<>();
+        recur(arr, target, 0, tempResult);
+    }
+
+    // {}, 3
+    // {1}, 2
+    // {1,1} 1
+    // {1,2} 0
+
+    private static void recur(int arr[], int target, int start, List<Integer> tempResult) {
+       // System.out.println("target : "+target);
+        if(target == 0) {
+            //System.out.println("target is zero");
+            // print this array
+            for(int temp : tempResult) {
+                System.out.print("" + temp + " , ");
+            }
+            System.out.println();
+            return;
+        }
+        for(int i=start; i<arr.length; i++) {
+            if(i!= start && arr[i]==arr[i-1]){
+                continue;
+            }
+            if(target < arr[i] ) {
+                break;
+            }
+            tempResult.add(arr[i]);
+           // System.out.println(tempResult + " "+(i+1) +" target "+(target-arr[i]));
+            recur(arr, target - arr[i], i+1, tempResult);
+            tempResult.remove(tempResult.size()-1);
+            
+        }
+    }
+}
+

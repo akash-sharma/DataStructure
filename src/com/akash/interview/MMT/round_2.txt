@@ -1,0 +1,20 @@
+
+What is the algo behind rate limitor
+An api with various versions has a bug at a unknown version, how to find that version with bug | linear and binary search
+
+design low level and high level BMS : classes or DB tables required
+-> api for booking movie
+-> api for providing theaters in a city
+
+Movie
+Theater
+MovieTheaterMapping
+SeatAllocation
+
+
+thread : threadpool executor, semaphore
+what are the advantages of microservices
+what could we do when a micro service is taking a lot of time or many 5xx
+what is circuit breaker
+
+range of [1..n]  , there is an array of (n-2) unique numbers , find the 2 numbers in constant memory

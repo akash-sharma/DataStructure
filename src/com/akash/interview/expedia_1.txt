@@ -1,0 +1,17 @@
+
+discuss about project
+
+how you connect with kafka
+
+how debizium works
+
+how to configure kafka connect
+
+DS algo
+int n - horizontal bars
+int m - vertical bars
+List<Integer> h - horizontal bars to remove
+List<Integer> v - vertical bars to remove
+After removal of bars, calculate maximum area formed
+
+

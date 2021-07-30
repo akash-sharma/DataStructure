@@ -1,0 +1,83 @@
+Given 2D array of characters and list of words, print those words which are present in 2D array
+
+package com.codility;
+
+// you can also use imports, for example:
+import java.util.*;
+
+public class Solution {
+
+    // n,m
+    // k = number 
+    // mem - O(n*m)
+    // time = O(n*m)
+
+    public static void main(String [] args) {
+        // you can write to stdout for debugging purposes, e.g.
+        //System.out.println("This is a debug message");
+        char arr[][] = {{'a', 'v', 'f'}, 
+                        {'b', 'a', 'n'},
+                        {'i', 'n', 'o'},
+                        {'t', 'd', 't'}};
+        String words[] = {"bit", "and", "van", "ton", "ban", "no", "kit", "point"};
+
+        int rows = arr.length;
+        int columns = arr[0].length;
+
+        List<String> tempWords = new ArrayList<>();
+        // row wise words
+        for(int i=0; i<rows; i++) {
+            String tempWord = "";
+            for(int j = 0 ; j< columns; j++) {
+                tempWord = tempWord + arr[i][j];
+            }
+            tempWords.add(tempWord);
+        }
+        // column wise words
+        
+        for(int i=0; i<columns; i++) {
+            String tempWord = "";
+            for(int j = 0 ; j< rows; j++) {
+                tempWord = tempWord + arr[j][i];
+            }
+            tempWords.add(tempWord);
+        }
+        //System.out.println(tempWords);
+        int counter = 0;
+        for(String word : words) {
+            for(String tempWord : tempWords) {
+                String reverseWord = reverse(word);
+                if(tempWord.contains(word) || tempWord.contains(reverseWord) ) {  // checking string contains substring O(n)
+                    System.out.println(word);
+                    counter++;
+                    break;
+                }
+            }
+        }
+        if(counter == 0) {
+            System.out.println("no matching string");
+        }
+    }
+
+    private static String reverse(String str) {
+        StringBuffer reverse = new StringBuffer("");
+        for(int i = str.length()-1; i>=0; i--) {
+            reverse.append(str.charAt(i));
+        }
+        return reverse.toString();
+    }
+}
+
+// 1st approach
+// searching bit in whole 2D array
+
+// 2nd
+// making all strings of column and rows
+
+// 3rd approach, trie
+
+// a v f
+// v f
+// f
+
+

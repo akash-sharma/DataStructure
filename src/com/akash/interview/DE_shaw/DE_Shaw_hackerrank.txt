@@ -1,0 +1,297 @@
+DE Shaw hackerrank
+
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import com.google.gson.*;
+import java.net.*;
+
+
+
+class Result {
+
+    /*
+     * Complete the 'calculateNAV' function below.
+     *
+     * The function is expected to return a DOUBLE.
+     * The function accepts STRING date as parameter.
+     */
+     
+     private static String startHoldingUrl = "https://raw.githubusercontent.com/arcjsonapi/HoldingValueCalculator/master/paging/holding_start";
+     
+     private static String startMarketPriceUrl = "https://raw.githubusercontent.com/arcjsonapi/HoldingValueCalculator/master/paging/pricing_start";
+
+    private List<Holding> resultHoldings = new ArrayList<>();
+    
+    private Map<String, Double> resultPriceBySecurity = new HashMap<>();
+    
+    private static Gson GSON = new Gson();
+
+    public static double calculateNAV(String date) {
+        
+        Result result = new Result();
+        
+        Double totalPrice = 0.0d;
+        try {
+            result.populateAllHoldings(date, startHoldingUrl);
+        } catch(Exception e) {
+            System.out.println("exception occured in holding api : " + e);
+        }
+        if(result.resultHoldings == null || result.resultHoldings.size() == 0) {
+            return totalPrice;
+        }
+        
+        try {
+            result.populateMarketPriceBySecurity(date, startMarketPriceUrl);
+        } catch(Exception e) {
+            System.out.println("exception occured in price api : " + e);
+        }
+        if(result.resultPriceBySecurity == null || result.resultPriceBySecurity.size() == 0) {
+            return totalPrice;
+        }
+        for(Holding holding : result.resultHoldings) {
+            if(holding != null && holding.getSecurity() != null) {
+                Double price = result.resultPriceBySecurity.get(holding.getSecurity());
+                if(price != null) {
+                    totalPrice = totalPrice + holding.getQuantity() * price;
+                }
+            }
+        }
+        return totalPrice;
+    }
+    
+    private void populateAllHoldings(String date, String holdingUrl) throws Exception {
+        URL url = new URL(holdingUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader( connection.getInputStream()));
+        String finalResponse = "";    
+        String resString = "";
+        while ((resString = in.readLine()) != null) {
+            finalResponse = finalResponse + resString;
+        }
+        in.close();
+         
+         //System.out.println("finalResponse : "+finalResponse);
+        PageHolding pageHoldingRes = GSON.fromJson(finalResponse, PageHolding.class);
+        //System.out.println("date : " + date + "Result.populateAllHoldings() : "+pageHoldingRes);
+        if(pageHoldingRes != null) {
+            
+            List<Holding> holdings = pageHoldingRes.getData();
+            if(holdings == null || holdings.size() == 0) {
+                return;
+            }
+            for(Holding holding : holdings) {
+                if(holding != null && holding.getDate() != null 
+                    && holding.getDate().equals(date)) {
+                    
+                    if(holding.getSecurity() != null && holding.getQuantity() != null) {
+                        // if date is matched then add to global object level holding list
+                        resultHoldings.add(holding);
+                        System.out.println("added holding : "+holding);
+                    }
+                }
+            }
+            
+            String holdingNextUrl = pageHoldingRes.getNextPage();
+            if(holdingNextUrl != null && holdingNextUrl.length() > 0) {
+                populateAllHoldings(date, holdingNextUrl);
+            }
+        }
+    }
+    
+    private void populateMarketPriceBySecurity(String date, String marketPriceUrl) throws Exception {
+        URL url = new URL(marketPriceUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader( connection.getInputStream()));
+        String finalResponse = "";    
+        String resString = "";
+        while ((resString = in.readLine()) != null) {
+            finalResponse = finalResponse + resString;
+        }
+        in.close();
+        
+        PageMarketPrice pageMarketPriceRes = GSON.fromJson(finalResponse, PageMarketPrice.class);
+        //System.out.println("Result.populateMarketPriceBySecurity()" + pageMarketPriceRes);
+        if(pageMarketPriceRes != null) {
+            
+            List<MarketPrice> marketPrices = pageMarketPriceRes.getData();
+            if(marketPrices == null || marketPrices.size() == 0) {
+                return;
+            }
+            for(MarketPrice marketPrice : marketPrices) {
+                if(marketPrice != null && marketPrice.getDate() != null 
+                    && marketPrice.getDate().equals(date)) {
+                    
+                    if(marketPrice.getSecurity() != null && marketPrice.getPrice() != null) {
+                    
+                        // if date is matched then add to global object level map
+                        resultPriceBySecurity.put(marketPrice.getSecurity(), marketPrice.getPrice());
+                        System.out.println("added map :" + marketPrice);
+                    }
+                }
+            }
+            
+            String marketPriceNextUrl = pageMarketPriceRes.getNextPage();
+            if(marketPriceNextUrl != null && marketPriceNextUrl.length() > 0) {
+                populateMarketPriceBySecurity(date, marketPriceNextUrl);
+            }
+        }
+    }
+    
+    private static class Holding {
+        private String date;
+        private String security;
+        private Integer quantity;
+        private String portfolio;
+        
+        public Holding() {}
+        
+        public Holding(String date, String security, Integer quantity, String portfolio) {
+            this.date = date;
+            this.security = security;
+            this.quantity = quantity;
+            this.portfolio = portfolio;
+        }
+        
+        public String getDate() {
+            return date;
+        }
+        
+        public String getSecurity() {
+            return security;
+        }
+        
+        public Integer getQuantity() {
+            return quantity;
+        }
+        
+        public String getPortfolio() {
+            return portfolio;
+        }
+        
+        @Override
+        public String toString() {
+            return "Holding :{ date :"+date+", security :"+security+", quantity :"+quantity + ", portfolio :"+portfolio + " }";
+        }
+    }
+    
+    private static class PageHolding {
+        private int totalRecords;
+        private int recordsPerPage;
+        private int page;
+        private String nextPage;
+        private List<Holding> data;
+        
+        public PageHolding(){}
+        
+        public PageHolding(int totalRecords, int recordsPerPage, int page, String nextPage, List<Holding> data) {
+            this.totalRecords = totalRecords;
+            this.recordsPerPage = recordsPerPage;
+            this.page = page;
+            this.nextPage = nextPage;
+            this.data = data;
+        }
+        
+        public int getTotalRecords() {
+            return totalRecords;
+        }
+        public int getRecordsPerPage() {
+            return recordsPerPage;
+        }
+        public int getPage() {
+            return page;
+        }
+        public String getNextPage() {
+            return nextPage;
+        }
+        public List<Holding> getData() {
+            return data;
+        }
+        
+        @Override
+        public String toString() {
+            return "PageHolding : { totalRecords :"+totalRecords+", recordsPerPage :"+recordsPerPage+", page :"+page + ", nextPage : "+nextPage + ", data : "+data + " }";
+        }
+    }
+    
+    private static class MarketPrice {
+        private String date;
+        private String security;
+        private Double price;
+        
+        public MarketPrice() {}
+        
+        public MarketPrice(String date, String security, Double price) {
+            this.date = date;
+            this.security = security;
+            this.price = price;
+        }
+        
+        public String getDate() {
+            return date;
+        }
+        
+        public String getSecurity() {
+            return security;
+        }
+        
+        public Double getPrice() {
+            return price;
+        }
+        
+        @Override
+        public String toString() {
+            return "MarketPrice : { date :"+date+", security :"+security+", price :"+price + "}";
+        }
+    }
+    
+    private static class PageMarketPrice {
+        private int totalRecords;
+        private int recordsPerPage;
+        private int page;
+        private String nextPage;
+        private List<MarketPrice> data;
+        
+        public PageMarketPrice() {}
+        
+        public PageMarketPrice(int totalRecords, int recordsPerPage, int page, String nextPage, List<MarketPrice> data) {
+            this.totalRecords = totalRecords;
+            this.recordsPerPage = recordsPerPage;
+            this.page = page;
+            this.nextPage = nextPage;
+            this.data = data;
+        }
+        
+        public int getTotalRecords() {
+            return totalRecords;
+        }
+        public int getRecordsPerPage() {
+            return recordsPerPage;
+        }
+        public int getPage() {
+            return page;
+        }
+        public String getNextPage() {
+            return nextPage;
+        }
+        public List<MarketPrice> getData() {
+            return data;
+        }
+        
+        @Override
+        public String toString() {
+            return "PageMarketPrice : { totalRecords :"+totalRecords+", recordsPerPage :"+recordsPerPage+", page :"+page + ", nextPage : "+nextPage + ", data : "+data + " }";
+        }
+    }
+
+}
+
+public class Solution {

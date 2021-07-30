@@ -1,0 +1,8 @@
+round 1 : 
+parking lot system : code plus design patterns
+
+round 2 : 
+(1) get rank of stream of numbers : BST
+(2) compile order of dependencies : topological sort
+
+

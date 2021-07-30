@@ -1,0 +1,99 @@
+
+        
+        String s1 = "apple";
+        String s2 = "apple";
+        
+        String s3 = new String("apple");
+        
+        //s1 == s3.intern();
+        
+        boolean isSameString = (s1 == s2);
+        
+        List<Integer> nums = new ArrayList<>();
+        nums.add(1);
+        nums.add(2);
+        
+        // stream questions
+        
+        nums.stream().mapToInt((num) -> num*num).collect(Collectors.toList());
+        
+        // various lambdas
+        
+        Consumer : void f1(int a)
+        Predicate : boolean f1(int a)
+        Supplier : 
+        Function : M f1(T t)
+        
+        // use of optional
+        
+        optionalObj.isPresent();
+        optionalObj.get()
+        
+        
+        synchronized void f1() {
+            
+        }
+        
+        Lock lock = new ReentrantLock();
+        
+        void f1() {
+            lock.lock();
+            try {
+                ..
+            } finally {
+                
+            }
+        }
+        
+        //public 
+        //protected
+        //default
+        //private
+        
+        // how jvm class loader works
+        // how jvm execution process
+        
+        loads class
+        
+        //1. system
+        //2. boot
+        //3. application
+        
+        // static pool
+        // variables of static class
+        // heap
+        
+        // heap , stack
+        
+        heap global -- object
+        
+        S1 -- object
+        S2
+        S3
+        
+        // how GC works
+        
+        eden space
+        S1 S2
+        tenure
+        
+        // design a micro service system with multi tenancy
+        
+        user
+        merchant
+        
+        tenant_id
+        
+        service : tenant_id
+        
+        // service A --> service B --> service C
+        // approach 1
+        // A creates its own jwt token and pass to B
+        // B created its own jwt token and pass to C
+        // approach 2
+        // A passes a token to B, B passes same token to C
+        // what are the disadvantage of this approach 1
+        // auditing
+        // difficult to change if another service comes
+ 
+

@@ -1,0 +1,81 @@
+vmware
+
+https://www.geeksforgeeks.org/vmware-interview-experience-for-senior-mts/
+
+
+https://www.cio.com/article/3201193/7-reasons-to-switch-to-microservices-and-5-reasons-you-might-not-succeed.html
+
+advantages of using microservices : 
+(1) if one service has some problem, it does not impact the other service
+(2) deployment part is segregated
+(3) ownership of resources(database) is divided, any update is done via http call
+(4) relatively less down time (high resilience)
+(5) horizontal scaling of servers which results in less expense
+
+
+disadvantage of using microservices : 
+(1) sometimes debugging of an issue causes multiple service scanning
+(2) its difficult to make things transactional and complicated business scenarios
+(3) end to end testing is complicated
+(4) keep failures in mind
+(5) high monitoring systems
+
+
+
+Design a lock where there are two functions acquire() and release() and two threads have to use it. How will you write code for it?
+
+MyLock myLock = new MyLock();
+
+// thread1
+myLock.acquire();	// execute
+
+// thread2
+myLock.acquire();	// wait
+
+// thread1
+myLock.release();	// thread2 start execution
+
+
+class MyLock {
+	private Lock lock = new ReentrantLock();
+	private Condition acquireCondition = lock.newCondition();
+	private volatile int counter = 0;
+	private Thread acquiredThread = null;
+	
+	public void acquire() {
+		lock.lock();
+		try {
+			if(counter != 0) {
+				if(acquiredThread != Thread.currentThread()) {
+					while(counter != 0) {
+						acquireCondition.await();
+					}
+				}
+			}
+			counter++;
+			acquiredThread = Thread.currentThread();
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public void release() {
+		lock.lock();
+		try {
+			counter--;
+			if(counter == 0) {
+				acquiredThread = null;
+				acquireCondition.signal();
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+}
+
+
+
+
+
+
+

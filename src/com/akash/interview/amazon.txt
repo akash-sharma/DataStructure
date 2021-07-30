@@ -1,0 +1,167 @@
+public static List<Integer> chooseFleets(List<Integer> wheels) {
+        if(wheels.size() == 0) {
+            return new ArrayList<>();
+        }
+        List<Integer> result = new ArrayList<>();
+        int max = 0;
+        for(Integer num : wheels) {
+            if(num.intValue() > max) {
+                max = num.intValue();
+            }
+        }
+        int memo[] = getCount(max);
+        for(Integer num : wheels) {
+            result.add(memo[num]);
+        }
+        return result;
+    }
+    
+    private static int[] getCount(int n) {
+        
+        int memo[] = new int[n+1];
+        memo[0] = 1;
+        memo[1] = 0;
+        if(n == 1) {
+             return memo;
+        }
+        memo[2] = 1;
+        if(n == 2) {
+             return memo;
+        }
+        memo[3] = 0;
+        if(n == 3) {
+             return memo;
+        }
+        memo[4] = 2;
+        for(int i=5; i<=n; i++) {
+            if(i % 4 == 0) {
+                memo[i] = memo[i-2] + 1;
+            } else if(i % 2 == 0) {
+                memo[i] = memo[i-2];
+            } else {
+                memo[i] = 0;
+            }
+        }
+        return memo;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+
+
+class Result {
+
+    /*
+     * Complete the 'decodeString' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts following parameters:
+     *  1. INTEGER numberOfRows
+     *  2. STRING encodedString
+     */
+
+    public static String decodeString(int numberOfRows, String encodedString) {
+        if(numberOfRows == 1) {
+            return encodedString;
+        }
+        int len = encodedString.length();
+        int rowsCount = len / numberOfRows;
+        char arr[][] = new char[numberOfRows][rowsCount];
+        int rowIndex = 0;
+        for(int i = 0; i<len; i=i+rowsCount) {
+            String temp = encodedString.substring(i, i+rowsCount);
+            arr[rowIndex++] = temp.toCharArray();
+        }
+        for(int i =0; i<arr.length; i++) {
+            for(int j=0; j<arr[0].length; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        int x = 0;
+        int y = 0;
+        int n = numberOfRows;
+        int m = arr[0].length;
+        int colIndex = 0;
+        Dimension dim = new Dimension(x, y);
+        StringBuffer sb = new StringBuffer();
+        
+        while(dim != null) {
+            System.out.println("processing : "+ dim.getX() + " , "+dim.getY() + ", "+colIndex);    
+            char ch = arr[dim.getX()][dim.getY()];
+            if(ch == '_') {
+                sb.append(" ");
+            } else {
+                sb.append(ch);
+            }
+            dim = getDimension(dim, n, m, colIndex);
+            if(dim != null && dim.getX() == 0) {
+                colIndex++;
+            }
+        }
+        return sb.toString();
+    }
+    
+    private static Dimension getDimension(Dimension dim, int n, int m, int colIndex) {
+        
+        int x = dim.getY();
+        int y = dim.getY();
+        System.out.println("getD : "+ x + " , "+y + ", "+colIndex);
+        if(x < n-1 && y < m-1) {
+            System.out.println("A");
+            return new Dimension(x+1, y+1);
+        } else if(x == n-1) {
+            System.out.println("B");
+            colIndex++;
+            return new Dimension(0, colIndex);
+        } else if(y == m-1) {
+            return null;
+        }
+        return null;
+    }
+    
+    private static class Dimension {
+        private int x;
+        private int y;
+        public Dimension(int x, int y) {
+           this.x = x;
+           this.y = y; 
+        }
+        
+        public int getX() {
+            return x;
+        }
+        
+        public int getY() {
+            return y;
+        }
+    }
+
+}
+
+public class Solution {

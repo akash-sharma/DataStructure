@@ -1,0 +1,6 @@
+(1) write a program to sort a linked list
+(2) EMP(name,age,salary) mysql query to get 2 max age employee details
+(3) how to write that query in spring jpa
+(4) what is rest api
+(5) difference bw put and patch
+(6) for create when to use put and when to use post

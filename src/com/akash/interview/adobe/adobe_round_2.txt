@@ -1,0 +1,87 @@
+
+
+        4
+    2B       3           4 -> {4},{2,2},{3,-1,2},{2,2,0}
+      2A  -1 
+     0  -2    2
+     
+2A -> 2B
+2B -> 4
+     
+     
+3
+3,-1
+3,-1,-2
+     
+     
+class Node {
+	int value,
+  Node left;
+  Node right;
+}
+
+List<List<Integer>> result = new ArrayList<>();
+
+void getSumPath(Node node, int sum) {
+	recur(node, sum, new ArrayList<>());
+}
+
+void recur(Node node, int sum, List<Integer> path) {
+	if(node != null) {
+  	List<Integer> newList = // new list with node and path
+    List<>sumPath(path);
+  	if(sum == node.value + ) {
+    	result.add(newlist);
+    }
+    recur(node.left, sum, newList);
+    recur(node.right, sum, newList);
+    
+  }
+}
+
+List<int> sumPath(List<Integer> list) {
+	0..n  => 0-n, 1-n, 2-n
+	// return sum;
+}
+
+
+
+
+List<List<Integer>> result = new ArrayList<>();
+     
+List<List<Integer>> getSumPath(Node node, int sum) {
+	recur(node, sum);
+}
+
+List<List<Integer>> recur(Node node, int sum) {
+	if(node == null) {
+  	return new Arraylist<>();
+  }
+  // leaf node
+  if(node.left == null && node.right == null) {
+  	List<Integer> list = new ArrayList<>();
+    
+    if(node.value == sum) {
+    	result.add();
+    }
+    
+    list.add(node.value);
+    List<List<Integer>> nestedList = new ArrayList<>();
+    nestedList.add(list);
+    return nestedList;
+  }
+  List<List<Integer>> leftPathList = getSumPath(node.left, sum);
+  List<List<Integer>> rightPathList = getSumPath(node.right, sum);
+  // calculate result if found
+  node.value;
+  //3
+	//3,-1
+	//3,-1,-2
+  // when leftPathList contains node.left
+  // merge node.value in a new list
+  // check if this matches sum 
+  // 
+  
+}
+
+

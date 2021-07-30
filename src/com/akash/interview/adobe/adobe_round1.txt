@@ -1,0 +1,96 @@
+security feature
+FE - recieving doc
+conversion file system
+showing result user
+
+
+FE app : authenticates user from BE server
+FE app : upload different types files (file validation can done on both FE and BE)
+
+FileConverion system -> BE system
+
+When user uploads file : 
+
+middleware --> location
+
+BE india  -> S3 region of india
+BE US
+BE uk
+
+BE system 
+	-> will be recieving whole file
+	-> do basic validations
+	-> save that to file S3
+	-> create an entry in mysql for user_id, S3_file_path, time and other details
+	-> return entry id to FE app
+	-> throw packets in kafka / rabbitmq
+	
+Debizium pipeline -> picking from mysql logs (apache storm) -> 
+
+Debizium -> mysql bin logs -> insert, update, delete -> kafka 
+
+kafka (offset value - consumer group)
+
+
+storm pipeline
+	-> read kafka offset save it to some DB , processing
+	-> pick only insert packet
+	-> (pre check) will download file from S3
+	-> (pre check) convert file to pdf
+	-> (pre check) upload pdf file to S3
+	-> save output file S3 path to mysql DB
+	-> save kafka offset to some DB , processed
+	
+BE system (status file api)
+	-> conversion, failed, converted, cancel
+	
+BE system (cancel file api)
+	-> cancel status file
+	
+BE system (download file api)
+	-> when output file S3 path is avaible for that user_id and that upload_id
+	-> file downloaded from s3
+	
+	
+1 - 1
+1 - 2
+	
+	
+processing logic of our packet : exactly_once , at least once, at most once
+
+
+
+100 offset
+
+
+	
+mysql db  -> new entry in new region with new S3 path
+S3 -> input file  -> new s3 path
+
+Migration-Service
+
+user migration
+-> migration user details different BE service (India -> US)
+-> new request will be going region, middleware
+-> migration process
+
+
+
+monitoring params
+-> metric : kafka lag
+-> latency pipeline
+-> BE -> 4xx, 5xx, latency apis
+-> downstream : mysql
+-> time of file conversion
+-> time from upload to conversion (n/w + pipeline)	
+-> percentage of success uploads (bug in conversion algo)  -- idealy 100%
+
+
+retry
+daily cron job --> failure file ids 
+
+
+
+
+
+

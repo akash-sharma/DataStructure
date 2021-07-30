@@ -1,0 +1,65 @@
+
+(Q) product configuration and showing these to end users on the basis of various conditions
+
+storing product data in mysql and ES
+storing static conditions in ES and cache
+storing dynamic conditions in cassandra
+
+
+(Q) Design paytm wallet
+
+load cash
+deduct money
+read cash
+
+
+Db - mysql - indexing on user_id
+
+LB - multiple box
+
+cache - jvm | aerospike
+
+addMoney
+deductMoney
+readMoney
+
+
+readMoney : read jvm cache, read aero cache (update jvm) , mysql (update jvm , update aero)
+
+addMoney : 
+
+Approach 1 :
+mysql , jvm chache, aero (transactional)
+
+mysql - rollback by transactional
+jvm cache - rollback manualy 
+
+
+
+Approach 2 :
+
+-> mysql , jvm cache
+-> async pipeline (debizium Storm kafka) : aero
+
+
+pipeline down : lag in processing 
+aero update error :  retry the packet : lag will increase
+aero is down : retry the packet : lag will increase
+bug storm : retry the packet : lag will increase
+
+-> push it to failur kafka pipeline 
+
+Approach 3 :
+
+-> aero -> kafka 
+
+aero is down
+kafka has not updated to mysql
+
+
+deductMoney : mysql , jvm chache, aero (transactional)
+
+
+
+
+

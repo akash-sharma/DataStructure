@@ -1,0 +1,50 @@
+package com.akash.array;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Permutation {
+
+    public void printAllPermutations(String str) {
+        char charArr[] = str.toCharArray();
+        List<List<Character>> allPermutions = getAllPermutions(charArr, 0, charArr.length - 1);
+        System.out.println(allPermutions);
+    }
+
+    private List<List<Character>> getAllPermutions(char charArr[], int startIndex, int endIndex) {
+        List<List<Character>> allPermutations = new ArrayList();
+        if(startIndex == endIndex) {
+            List<Character> singlePermutation = new ArrayList<>();
+            singlePermutation.add(charArr[startIndex]);
+            allPermutations.add(singlePermutation);
+        } else {
+            for (int i = startIndex; i <= endIndex; i++) {
+                char tempCharacter = charArr[i];
+                swap(startIndex, i, charArr);
+                List<List<Character>> listOfString = getAllPermutions(charArr, startIndex + 1, endIndex);
+                for (List<Character> tempPermutationArr : listOfString) {
+                    // appending tempCharacter to every charArr
+                    // append allPermutations
+                }
+            }
+        }
+        return allPermutations;
+    }
+
+    private void swap(int i, int j, char[] arr) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String args[]) {
+        Permutation ob = new Permutation();
+        ob.printAllPermutations("ABC");
+    }
+}
+
+// ABC --> A(BC) , B(AC) , C(AB)
+// BC --> B(C)
+
+// repetition : ABAC  -- A(BAC)
+// Set<Char>

@@ -1,0 +1,101 @@
+// 3 request types: A, B, C
+// A -> 500 --> p = 500/850
+// B -> 300 --> p = 300/850
+// C -> 50 --> p = 50/850
+// Call requestType() -- 8500 times
+// A --> ~5000
+// B --> ~3000
+// C --> ~500
+// -- 85 times --> A -> ~50, B-> ~30, C->~5
+
+input = A, A, A, B, B, A, B, C, C, A, A, ...
+ 
+class RequestHandler {  
+  
+  private Map<RequestType, Integer> variableCountMap = new HashMap<>();
+  
+  RequestType requestType() {
+    
+    // n is total number of req
+    // m is type of request
+    //time = O(m)
+      //memory = O(n)
+    
+    
+    
+    List<RequestType> tentiveList = RequestType.values;
+    // check if limit exceeds
+    for(RequestType type : RequestType.values()) {
+      Integer alreadyReturnedCount = variableCountMap.get(type);
+      Integer maxCount = globalCountMap.get(type);
+      // check for allowed percentage of request
+      if(maxCount <= alreadyReturnedCount) {
+        tentiveList.remove(type);
+      }
+    }
+    
+    // getting random from tentitive list
+    RequestType type = getRandom(tentiveList);
+    // adding to variable map, to get count of assigned types
+    variableCountMap.put(type, variableCountMap.get(type) + 1);
+    
+    return type;
+  }
+  
+  RequestType getRandom(List<RequestType> list) {
+    // randome value from list
+  }
+}
+
+enum RequestType {
+  A, B, C; 
+}
+
+// globalCountMap = 10
+// total request = 100
+
+
+Iterable<RequestType> observedData;
+
+// actual probability of request types
+Map<RequestType, Integer> globalCountMap = new HashMap<>();
+Map<RequestType, Double> globalProbabilityMap = new HashMap<>();
+for(RequestType type : observedData.entrieSet()) {
+  // count each type of request in a map
+  ..
+}
+// TODO :  calculate and populate globalProbabilityMap
+
+
+
+
+
+
+class RequestTypeMapping {
+  
+  private Map<RequestType, Integer> mapping = new HashMap<>();
+  
+  public void populateMapping() {
+    // validations of populating -> sum of values = 100
+   ....
+  }
+  
+  public Integer getCountByType(RequestType type) {
+    mapping.get(type);
+  }
+}
+
+
+new RequestTypeMapping().populateMapping();
+
+RequestHandler handler = new 
+
+
+
+RequestType requestType = RequestHandler.requestType();
+
+
+8 total
+A A A B B C A A
+
+

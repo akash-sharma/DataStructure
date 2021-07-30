@@ -1,0 +1,73 @@
+package com.codility;
+
+// you can also use imports, for example:
+// import java.util.*;
+
+public class Solution {
+
+    public static void main(String [] args) {
+        // you can write to stdout for debugging purposes, e.g.
+        System.out.println("This is a debug message");
+        int arr[] = {1, 2, 3, 4, -10};
+
+        int maxSum = 0;
+        int sumTillNow = 0;
+        int start = 0;
+        int end = -1;
+        int tempStart = -1;
+        int tempEnd = -1;
+        for(int i=0; i<arr.length; i++) {
+            if(sumTillNow + arr[i] > arr[i]) {
+                sumTillNow = sumTillNow + arr[i];
+            } else {
+            	tempStart = i;
+                tempEnd = i-1;
+                sumTillNow = arr[i];
+            }
+            if(sumTillNow > maxSum) {
+                start = tempStart;
+                end = tempEnd;
+                maxSum = sumTillNow;    
+            }
+        }
+        System.out.println(maxSum);
+    }
+}
+
+
+
+
+
+
+/**
+
+coupon creation
+coupon redemption
+coupon validation
+
+validate
+checkout  -> wtite its transcation to mysql
+
+one coupon is bind to one user
+
+checkout {
+    lock (user_coupon) {
+      //check if data store user coupon
+      -> check from ES
+
+      // 
+      save in mysql transcation  --> async pipeline(storm - coupon, user in ES, unlock(user_coupon) )
+    }
+}
+
+// at the end of pipeline --> unlock(user_coupon)
+
+redis - aerospike
+key = user_coupon 
+ttl = 30 mins ?
+
+
+
+
+*/
+

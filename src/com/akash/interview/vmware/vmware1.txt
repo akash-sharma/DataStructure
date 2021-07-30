@@ -1,0 +1,175 @@
+Student student = new Student(‘Akash’, 40);
+String gender = ‘Male’;
+
+student.setGender = gender;
+
+doSomething(student);
+
+public void doSomething(Student student) {
+   student.setAge = 35;
+   student.setGender = ‘Male’
+   sout(student);
+}
+
+
+'Akash'  --  cp
+'Male'   -- cp
+student  -- heap
+
+
+
+global heap
+
+
+
+S1
+s2
+s3
+
+
+void f1() {
+	Student s1 = new Student();
+	...
+	..
+}
+
+--------------------------
+
+LRU
+
+public class LruCache {
+
+    private Map<String, Object> cacheContext = new ConcurrentHashMap<>();
+    private PriorityQueue<CacheEntry> cacheHeap = new PriorityQueue<CacheEntry>();
+
+    public synchronized void put(String key, Object value) {
+        if(key != null) {
+            //Map.Entry entry = new Map.Entry<>(key, LocalDateTime.now());
+            // CacheEntry
+            cacheContext.put(key, value);
+            cacheHeap.add(entry);
+        }
+    }
+
+    public synchronized Object get(String key) {
+        if(key == null) {
+            return null;
+        }
+        // fetch and update in cacheheap
+        //cacheHeap
+        return cacheContext.get(key);
+    }
+}
+
+class CacheEntry implements Comparable {
+    private String key;
+    private LocalDateTime time;
+
+
+    @Override
+    public int compareTo(Object o) {
+
+        return 0;
+    }
+}
+
+
+--------------------------
+
+Given an array arr[] and a number x, check for pair in arr[] with sum as x
+    arr[] = {0, -1, 2, -3, 1}
+    sum = -2
+    
+Approach 1 :
+-> sort array   O(n logn)
+-> two pointer  O(n)
+
+time - O(n logn)
+memory - O(1)
+
+Approach 2
+time : (n^2)
+memory : O(1)
+
+Approach 3 :
+-> take a hashmap
+sum - arr[i]
+-> iterate over arr[i]
+
+time : O(n)
+memory : O(n)
+
+
+sum = 4
+arr[i] = 2
+
+Map<Integer, Integer>
+key = sum - arr[i]
+value = i
+
+void isPair(int arr[], int sum) {
+	Map<Integer, Integer> map = new HashMap<>();
+	for(int i=0; i<arr.length; i++) {
+		map.put(sum - arr[i], i);
+	}
+	for(int i=0; i<arr.length; i++) {
+		Integer value = map.get(i);
+		if(value != null && value.intValue() != i) {
+			print(arr[i] + "-" + arr[value.intValue()]);
+		}
+	}
+}
+    
+    
+    Integer 
+    
+    -127 -- 128
+    
+----------------------------
+    
+@RestController
+class EmployeeController {
+	
+	@Autowiring
+	private EmployeeService employeeService;
+	
+	@Get
+	public String getEmployee(Long id) {
+		employeeService.get(id)
+	}
+}
+    
+ class EmployeeService {
+ 	private EmployeeDao dao;
+ 
+ }   
+    
+
+class EmployeeDao {
+	
+	masterDao;
+	slaveDao;
+
+}
+
+-------------------
+
+transactional
+
+read1
+write1
+read2
+write2   -- RuntimeException
+write3
+write4
+
+
+
+filter
+
+interceptors
+
+
+
+----------------
+

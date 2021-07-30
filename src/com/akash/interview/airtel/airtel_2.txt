@@ -1,0 +1,181 @@
+
+class Engine {
+
+ int capacity;
+
+ Engine(int capacity) {
+this.capacity = capacity;
+}
+
+ public int getCapacity() {
+return capacity;
+}
+
+public void setCapacity() {
+this.capacity = capacity;
+}
+
+}
+
+class Car {
+
+ String brand;
+Engine engine;
+
+ Car(String brand, Engine engine) {
+this.brand = brand;
+this.engine = engine;
+}
+
+ public String getBrand() {
+return brand;
+}
+
+ public Engine getEngine() {
+return engine;
+}
+}
+
+
+
+List<Car> cars 
+
+
+Car c1 = brand = Toyata, capacity = 1000
+Car c2 = brand = Toyata, capacity = 1000
+
+Map<Car, String> map = new TreeMap<>();
+C1 , rajat
+C2 , akash
+
+
+
+
+final class Car {
+
+ private String brand;
+ private Engine engine;
+
+ Car(String brand, Engine engine) {
+	this.brand = brand;
+	this.engine = engine;
+ }
+
+ public String getBrand() {
+ 	return brand;
+ }
+
+ public Engine getEngine() {
+ 	//create a copy of engine and return
+	return engine;
+ }
+}
+
+
+
+class Engine {
+
+ int capacity;
+
+ Engine(int capacity) {
+this.capacity = capacity;
+}
+
+ public int getCapacity() {
+return capacity;
+}
+
+public void setCapacity() {
+this.capacity = capacity;
+}
+
+}
+
+
+
+Runnable , 
+
+
+
+Executors.fixedThread
+
+10 - 20
+20
+
+
+
+void saveTax(int salary){
+	for(int i=0;i<10;i++){
+		salary = salary * i;
+	}
+	callAnotherMethod(salary);
+}
+
+
+times(callAnotherMethod(eq(0)), 1);
+
+
+void saveTax(int salary){
+	for(int i=0;i<10;i++){
+		salary = salary + i;
+	}
+	callAnotherMethod(salary);
+}
+
+
+
+Design Notification engine
+
+sms, watsapp , telegrap, email, phone
+
+=> Event Notification Service 
+
+BE api : create a unique id, save it to persistent layer, send to kafka
+
+kafka cluster
+topic
+
+
+BE api -> kafka -> consumer (storm) , api watsapp, api sms 
+
+
+json structure sent to kafka
+
+sms 
+{
+ mobile_no : list_of_mobile
+ text : ""
+ priority_flag
+ client_email_list : ""
+}
+
+
+event : unique id , 
+
+
+
+use case : 
+(1) priority notification : ack
+(1) bulk notification
+
+
+
+
+Brokers
+partition
+
+5 brokers
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+railway reservation system
+
+(1) login system for user
+(2) checking availability of ticket bw two station
+(3) booking a ticket
+
+
+services :
+(1) user service
+(2) user sessions
+(3) reservation : search, verify, checkout apis
+(4) admin panel : Train , Station, train_schedule
+
+pipeline : 
+(1) train_schedule
+(2) Ticket table
+
+
+
+user registration
+user - mysql
+
+
+
+user BE service api :
+user registration : create/update, adhar
+maintaning session : 
+
+(3) reservation
+
+train id
+A to B : count of ticket
+
+=> train table
+id, name, total_seats, list_of_station (json)
+
+=> train_schedule
+id, train_id, station_id, arr_time, dep_time, fare
+
+=> Station table
+id, name
+
+=> Ticket
+id, train_id, start_station_id, end_station_id, fare
+
+=> Ticket_counter (cassandra)
+(train_schedule_id, start_station_id, end_station_id), count
+
+-> mysql
+-> ES
+-> cassandra
+
+==> Search (ES)
+-> start_station , end_station, date
+-> list of trains with (availablity, fare)
+query on ES (train availability) 
+query on cassandra (real time data, ticket availability) 
+
+
+A -> B -> C -> D
+
+A -> B , 10, 5
+C -> D , 20, 8
+
+A -> B, trains_id=123, date_time=  
+A -> C, trains_id=123
+A -> D
+B -> 
+
+
+3+2+1 = 6
+
+==> pipeline of storm , debizium kafka, train_schedule table
+populating data from train_schedule to ES
+
+=> verify
+-> if that ticket is available : ES and cass
+
+=> checkout api
+-> similat to verify
+-> check if ticket locked or not 
+-> lock is acquired of ticket (ticket_id) // redis or aerospike , ttl = 15 min, 30 mins
+-> store its entry in Ticket table
+
+===> pipeline oon Ticket table via debezium
+-> updating counter in cassandra Ticket_counter
+-> releasing the lock
+
+
+

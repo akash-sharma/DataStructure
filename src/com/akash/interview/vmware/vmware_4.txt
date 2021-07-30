@@ -1,0 +1,11 @@
+system design principles
+what are ACID principles
+what are SOLID principles
+what is L in SOLID
+what kind of improvements you find in your coding round
+What you have done when you found a bug in release just before deployement
+when you had differences in you and your manager
+when you had differences in your and others design approach
+why you want to leave your company
+why you want to join our company
+why we should we hire you
