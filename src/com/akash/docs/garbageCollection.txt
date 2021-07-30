@@ -1,3 +1,9 @@
+java performance tuning :
+https://youtu.be/8wHx31mvSLY
+https://youtu.be/DoJr5QQYsl8
+https://youtu.be/Io8hEdm6haw
+
+
 GC thread is a daemon thread in JVM which checks for unreachable objects in java,
 and remove them from memory.
 
