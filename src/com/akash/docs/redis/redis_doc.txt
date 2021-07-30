@@ -207,3 +207,28 @@ redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluste
 
 redis-cli -c -h 127.0.0.1 -p 7001
 
+
+=====================================
+
+*** https://redis.io/topics/cluster-tutorial
+
+=> Redis Cluster data sharding
+Redis Cluster does not use consistent hashing, it uses hash slots for each master node
+There are 16384 hash slots which are equally divided
+
+*Every node in a Redis Cluster is responsible for a subset of the hash slots
+current nodes : A B C
+Add new node D
+I need to move some hash slot from nodes A, B, C to D.
+
+Remove node A
+Move hash slots from A to B, C, D
+moving hash slots from a node to another does not have downtime.
+
+=> Redis Cluster master-slave model
+
+Data from master to slave is sent asynchronously
+Redis Cluster is not able to guarantee strong consistency.
+
+client writes data to master -> data saved on master -> master acknoledges -> master propagates data to slaves asynchronoulsy.
+
