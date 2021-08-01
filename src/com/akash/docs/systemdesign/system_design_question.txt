@@ -4,6 +4,8 @@ https://www.educative.io/courses/grokking-the-system-design-interview
 https://www.educative.io/courses/grokking-the-object-oriented-design-interview
 https://www.educative.io/courses/coderust-hacking-the-coding-interview
 
+aws system design : https://www.youtube.com/watch?v=Zw0VV_-U-J0
+
 
 - Rate limiter
 - tiny url system
