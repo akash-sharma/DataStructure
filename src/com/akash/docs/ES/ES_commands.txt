@@ -1,0 +1,310 @@
+
+
+NOTE : add routing key to all queries, but search by timestamp cannot be used with routing key
+
+curl --location --request GET 'http://localhost:9200/index_name/_search' --header 'Content-Type: application/json' --data-raw '{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "userId" : 1556024205 } }
+      ],
+    }
+  }
+}'
+
+
+
+
+curl --location --request GET 'http://localhost:9200/index_name/_search' --header 'Content-Type: application/json' --data-raw '
+{
+  "query": {
+"bool" : {
+    "must" : [
+      {
+        "term" : {
+          "type" : {
+            "value" : "DEAL",
+            "boost" : 1.0
+          }
+        }
+      },
+      {
+        "nested" : {
+          "query" : {
+            "bool" : {
+              "should" : [
+                {
+                  "term" : {
+                    "status" : {
+                      "value" : 1,
+                      "boost" : 1.0
+                    }
+                  }
+                },
+                {
+                  "term" : {
+                    "status" : {
+                      "value" : 9,
+                      "boost" : 1.0
+                    }
+                  }
+                }
+              ],
+              "adjust_pure_negative" : true,
+              "boost" : 1.0
+            }
+          },
+          "path" : "metaData",
+          "ignore_unmapped" : false,
+          "score_mode" : "max",
+          "boost" : 1.0
+        }
+      }
+    ],
+    "adjust_pure_negative" : true,
+    "boost" : 1.0
+  }
+}
+}'
+
+
+
+GET /monthly_index_1-2020.10/_search
+{
+  "query": {
+        "bool": {
+            "must": [
+                {"match": {"AId" : "395513882"}},
+                {"match": {"BId" : "68327288525417"}}
+            ],
+	    "filter" : [
+		{
+			"range" : {
+            			"requestTime" : {
+                			"gte" : "now-3d/d",
+                			"lt" :  "now/d"
+            			}
+        		}
+		}
+	    ]
+        }
+    },
+  "sort": [
+    { "requestTime" : "desc" }
+  ]
+}
+
+
+
+========================
+
+
+GET /monthly_index_1-2020.10/_search
+{  
+   "from":0,
+   "size":10,
+   "query":{  
+      "bool":{  
+         "must":[  
+            {  
+               "match":{  
+                  "header1":{  
+                     "query":"1006534009",
+                     "operator":"OR",
+                     "prefix_length":0,
+                     "max_expansions":50,
+                     "fuzzy_transpositions":true,
+                     "lenient":false,
+                     "zero_terms_query":"NONE",
+                     "auto_generate_synonyms_phrase_query":true,
+                     "boost":1.0
+                  }
+               }
+            },
+            {  
+               "match":{  
+                  "header2":{  
+                     "query":"68327288525417",
+                     "operator":"OR",
+                     "prefix_length":0,
+                     "max_expansions":50,
+                     "fuzzy_transpositions":true,
+                     "lenient":false,
+                     "zero_terms_query":"NONE",
+                     "auto_generate_synonyms_phrase_query":true,
+                     "boost":1.0
+                  }
+               }
+            }
+         ],
+         "filter":[  
+            {  
+               "range":{  
+                  "@timestamp":{  
+                     "from":"2019-10-01T12:31:45.000",
+                     "to":"2019-10-25T12:31:45.000",
+                     "include_lower":true,
+                     "include_upper":true,
+                     "boost":1.0
+                  }
+               }
+            }
+         ],
+         "adjust_pure_negative":true,
+         "boost":1.0
+      }
+   },
+   "sort":[  
+      {  
+         "@timestamp":{  
+            "order":"desc"
+         }
+      }
+   ]
+}
+
+================================
+
+
+BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery()
+          .must(QueryBuilders.matchQuery("header2", pgmId))
+          .must(QueryBuilders.matchQuery("header1", customerId))
+          .filter(QueryBuilders.rangeQuery("@timestamp").gte(validFrom).lte(validTo));
+    LOG.info("queryBuilder : "+queryBuilder);
+    
+    
+    
+======================
+
+    
+get all records of ES based on timestamp range
+
+curl -X GET "localhost:9200/pgpromo-access-2020.08/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "bool":{  
+         "must":[ 
+		{
+		       "range":{  
+			  "@timestamp":{  
+			     "from":"2020-08-26T12:31:45.000",
+			     "to":"2020-08-28T18:31:45.000"
+			  }
+		       }
+		},
+		{"exists":{ "field":"request"}},
+		{"exists":{ "field":"header1"}},
+		{"exists":{ "field":"header2"}},
+	]
+     }
+  }
+}
+'
+
+
+==========================
+
+
+// nested query, should inside a merge
+// pagination (size and from)
+// projection of fields
+
+{ "size" : 4, "from" : 0,
+"_source": ["request"],
+  "query": {
+"bool" : {
+    "must" : [
+	{
+		"bool" : {
+				"should" : [
+					{ "match": { "request" : "/v1/product" } },
+					{ "match": { "request" : "/v2/product" } },
+					{ "match": { "request" : "/v3/product" } }
+				   ]
+			}
+	},
+      {
+        "exists" : {
+          "field" : "header2",
+          "boost" : 1.0
+        }
+      }
+    ],
+    "filter" : [
+      {
+        "range" : {
+          "@timestamp" : {
+            "from" : "2020-08-27T13:32:00.000",
+            "to" : "2020-08-27T15:54:39.251",
+            "include_lower" : true,
+            "include_upper" : true,
+            "boost" : 1.0
+          }
+        }
+      }
+    ],
+    "adjust_pure_negative" : true,
+    "boost" : 1.0
+  }
+}
+}}
+
+
+
+====================
+
+create new ES template for table auditing : 
+
+
+PUT _template/template_my_table_audit 
+{
+  "index_patterns" : [
+      "audit_my_table_*"
+    ],
+    "settings" : {
+      "index" : {
+        "number_of_shards" : "2",
+        "number_of_replicas" : "1",
+        "refresh_interval" : "60s"
+      }
+    },
+    "mappings" : {
+      "doc" : {
+        "_routing" : {
+          "required" : true
+        },
+        "properties" : {
+          "resourceType" : {
+            "type" : "keyword"
+          },
+          "resourceId" : {
+            "type" : "keyword"
+          },
+          "auditType" : {
+            "type" : "keyword"
+          },
+          "resourceUpdatedAt" : {
+            "type" : "date"
+          },
+          "resourceUpdatedBy" : {
+            "type" : "text"
+          },
+          "createdAt" : {
+            "type" : "date"
+          },
+          "updatedFieldInfos" : {
+            "type" : "object",
+            "enabled" : false
+          }
+        }
+      }
+    },
+    "aliases" : {
+      "audit_my_table" : { }
+    }
+}
+
+
+
+======================
+

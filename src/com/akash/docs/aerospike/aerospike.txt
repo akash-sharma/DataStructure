@@ -1,0 +1,151 @@
+aql> insert into emi.emp (PK, name, age) values(12, 'ashok', 20);
+
+---------------
+
+aql> select * from emi.emp;
++---------+-----+
+| name    | age |
++---------+-----+
+| "ashok" | 20  |
++---------+-----+
+
+---------------
+//schema free
+aql> insert into emi.emp (PK, name) values(13, 'ram');
+
+---------------
+
+aql> select * from emi.emp  ;
++---------+-----+
+| name    | age |
++---------+-----+
+| "ram"   |     |
+| "ashok" | 20  |
++---------+-----+
+
+---------------
+// insert list in a column
+insert into emi.emp(PK, name, phones) values(14, 'lakshya', LIST('["12345", "98765"]'))
+
+---------------
+
+aql> select * from emi.emp;
++-----------+----------------------------+-----+
+| name      | phones                     | age |
++-----------+----------------------------+-----+
+| "lakshya" | LIST('["12345", "98765"]') |     |
+| "ram"     |                            |     |
+| "ashok"   |                            | 20  |
++-----------+----------------------------+-----+
+
+
+select * from promo_disk.prime_plans where PK=1;
+
+---------------
+
+=> aerospkie does not have rigid schema.can add new bin types on the fly
+
+namespace == database
+sets  == logical containers in namespace, table
+
+Records == (key + metadata + bins)
+
+metadata contains ttl
+
+Bins consist of a name and a value
+
+
+=> Supports secondary index
+   (also in redis)
+
+=> supports sharding (also in redis)
+
+=> Replication 
+
+Aerospike = selectable replication factor
+
+Redis    =  Master-slave replication info
+	    Multi-master replication
+
+
+=> Aerospike does auto-clustering, auto-sharding, auto-rebalancing 
+   (when cluster state changes) 
+   most of which needs manual steps in other databases.
+
+=> Redis limits the size of your database to the RAM size of your server, 
+   while Aerospike can be configured to use SSD to store information with no speed loss at all.
+
+=> aerospike monitoring console
+
+=> Automatic scaling and failures of nodes in aerospike
+  ** https://www.youtube.com/watch?v=CF83TmR-NME
+
+
+-------------------------
+
+list operations in aerospike
+
+
+ArrayList<String> list = new ArrayList<String>();
+list.add("string1");
+list.add("string2");
+list.add("string3");
+
+Bin bin = new Bin("listbin1", list);
+client.put(params.writePolicy, key, bin);
+
+Record record = client.get(params.policy, key, "listbin1");
+List<?> receivedList = (List<?>) record.getValue(bin.name);
+
+validateSize(3, receivedList.size());
+receivedList.get(0);
+receivedList.get(1);
+receivedList.get(2);
+
+
+-------------------------
+
+https://github.com/aerospike/aerospike-client-java/tree/master/examples/src/com/aerospike/examples
+
+-------------------------
+
+https://www.aerospike.com/docs/architecture/data-distribution.html
+
+==>Partition in aerospike
+
+Aerospike uses a random hashing method to ensure that partitions distribute evenly to the cluster nodes
+
+All of the nodes in the cluster are peers – 
+there is no single database master node that can fail and take the whole database down.
+
+a namespace is a collection of data that has common storage
+Each namespace is divided into 4096 logical partitions, 
+which are evenly distributed between the cluster nodes
+
+==> Replication in aerospike
+
+Aerospike replicates partitions on one or more nodes. 
+One node becomes the data master for reads and writes for a partition, 
+while other nodes store its replica partitions.
+
+Synchronous replication provides a higher level of correctness in the face of no network faults. 
+
+having NO replicated data is replication factor = 1
+i.e. there is only a single copy of the database.
+
+==> Automatic Rebalancing
+
+// TODO : create notes for links
+
+https://www.aerospike.com/docs/architecture/clustering.html
+
+
+// multi mastering architecture
+https://stackoverflow.com/questions/3736969/master-master-vs-master-slave-database-architecture
+
+
+https://www.aerospike.com/docs/architecture/consistency.html
+
+https://www.geeksforgeeks.org/difference-between-mirroring-and-replication/
+
+
