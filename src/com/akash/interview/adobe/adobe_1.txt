@@ -1,0 +1,46 @@
+
+
+campaign auditing team
+
+good project you have worked till now
+how cache slots work in sharding and resharding
+how to make a system where we can change shards at any time
+1. Fix the number of shards
+2. will use the inbuilt hashcode
+
+what is diff bw thread and process
+write a program for producer consumer problem in java
+
+class Solution {
+    public static void main(String args[]) {
+        PC pc = new PC(100);
+        
+    }
+}
+
+class PC {
+
+    private final int size;
+    private volatile List<Integer> items = new ArrayList<>();
+
+    public PC(int size) {
+        this.size = size;
+    }
+
+    
+    public void synchronised add(int value) {
+            while(items.size() == size) {
+                wait();
+            }
+            items.add(value);
+            notifyAll();
+    }
+    
+    public void synchronised remove() {
+        while(items.size()==0) {
+            wait();
+        }
+        items.poll();
+        notifyAll();
+    }
+}

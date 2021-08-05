@@ -1,0 +1,101 @@
+
+Adobe campaign
+	-> open documentation
+
+Journey optimization
+
+
+Input:
+1->2->3->4->5->6
+
+Output
+1->2->3->4->5->6->7
+
+convert linked list without using memory
+
+find mid point 
+reverse second list
+merging of 2nd list in bw of 1st
+
+output:
+1->6->2->5->3->4
+
+
+
+class Node {
+    int value;
+    Node next;
+}
+
+1->2->3->4->5->6
+
+1->2->3->4->5->6->7
+
+Node process(Node node) {
+    
+    if(node.next == null) {
+        return node;
+    }
+
+    Node mid = midNode(node);
+    Node nextHead = mid.next;
+    mid.next = null;
+    
+    nextHead = reverse(nextHead);
+    
+    Node temp = node;
+    while(temp != null) {
+        Node temp2 = temp.next;
+        temp.next = nextHead;
+        nextHead = nextHead.next;
+        temp.next.next = temp2;
+        temp = temp2;
+    }
+    
+    // for odd length
+    if(nextHead != null) {
+        temp.next = nextHead;
+    }
+    
+    return node;
+}
+
+
+       1   2   3  4
+t1 t2  t3 t4
+
+Node reverse(Node nextHead) {
+    Node t1 = null;
+    Node t2 = null;
+    Node t3 = nextHead;
+    Node t4 = nextHead.next;
+    
+    while() {
+        Node temp = t4.next;
+        t4.next = t3;
+        
+        t3 = temp;
+        t4 = temp.next;
+        t1 = t3;
+        t2 = t4;
+    }
+}
+
+Node midNode(Node node) {
+    if(node.next == null) {
+        return node;
+    }
+    Node slow = node;
+    Node fast = null;
+    if(node.next != null && node.next.next != null) {
+        fast = node.next.next;
+    }
+    while(fast.next != null && fast.next.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}
+
+
+
